@@ -1,0 +1,38 @@
+.fade-enter-active, .fade-leave-active
+  transition: all 0.3s
+
+.fade-enter, .fade-leave-to
+  transform: translate3d(100%, 0, 0)
+
+.fl
+  float left
+
+.fr
+  float right
+
+.textCenter
+  text-align center
+
+.textLeft
+  text-align left
+
+.textRight
+  text-align right
+
+@media (-webkit-min-device-pixel-ratio: 1.5),(min-device-pixel-ratio: 1.5)
+  .border-1px
+    &::after
+      -webkit-transform: scaleY(0.7)
+      transform: scaleY(0.7)
+
+@media (-webkit-min-device-pixel-ratio: 2),(min-device-pixel-ratio: 2)
+  .border-1px
+    &::after
+      -webkit-transform: scaleY(0.5)
+      transform: scaleY(0.5)
+
+@media (-webkit-min-device-pixel-ratio: 3),(min-device-pixel-ratio: 3)
+  .border-1px
+    &::after
+      -webkit-transform: scaleY(0.3)
+      transform: scaleY(0.3)
