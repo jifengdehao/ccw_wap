@@ -1,18 +1,134 @@
 /*
-* @Author: WuFengliang
-* @Date: 2017-12-26 23:24:33
-* DeveloperMailbox:   wufengliang@ccw163.com
-* FunctionPoint:  首页模块主页
-*/
+ * @Author: WuFengliang
+ * @Date: 2017-12-26 23:24:33
+ * DeveloperMailbox:   wufengliang@ccw163.com
+ * FunctionPoint:  首页模块主页
+ */
 <template>
   <div>
     <top-bar></top-bar>
     <coupon></coupon>
     <scroller lock-x ref="scroller" height="-50">
       <div>
+        homeIndex
+      <br>
+      homeIndex
+      <br>
+      homeIndex
+      <br>
+      homeIndex
+      <br>
+      homeIndex
+      <br>
+      homeIndex
+      <br>
+      homeIndex
+      <br>
+      homeIndex
+      <br>
+      homeIndex
+      <br>
+      homeIndex
+      <br>
+      homeIndex
+      <br>
+      homeIndex
+      <br>
+      homeIndex
+      <br>
+      homeIndex
+      <br>
+      homeIndex
+      <br>
+      homeIndex
+      <br>
+      homeIndex
+      <br>
+      homeIndex
+      <br>
+      homeIndex
+      <br>
+      homeIndex
+      <br>
+      homeIndex
+      <br>
+      homeIndex
+      <br>
+      homeIndex
+      <br>
+      homeIndex
+      <br>
+      homeIndex
+      <br>
+      homeIndex
+      <br>
+      homeIndex
+      <br>
+      homeIndex
+      <br>
+      homeIndex
+      <br>
+      homeIndex
+      <br>
+      homeIndex
+      <br>
+      homeIndex
+      <br>
+      homeIndex
+      <br>
+      homeIndex
+      <br>
+      homeIndex
+      <br>
+      homeIndex
+      <br>
+      homeIndex
+      <br>
+      homeIndex
+      <br>
+      homeIndex
+      <br>
+      homeIndex
+      <br>
+      homeIndex
+      <br>
+      homeIndex
+      <br>
+      homeIndex
+      <br>
+      homeIndex
+      <br>
+      homeIndex
+      <br>
+      homeIndex
+      <br>
+      homeIndex
+      <br>
+      homeIndex
+      <br>
+      homeIndex
+      <br>
+      homeIndex
+      <br>
+      homeIndex
+      <br>
+      homeIndex
+      <br>
+      homeIndex
+      <br>
+      homeIndex
+      <br>
+      homeIndex
+      <br>
+      homeIndex
+      <br>
+      homeIndex
+      <br>
+      homeIndex
+      End
       </div>
     </scroller>
-    <menu-bar ref="footer"></menu-bar>
+    <menu-bar></menu-bar>
   </div>
 </template>
 <script>
