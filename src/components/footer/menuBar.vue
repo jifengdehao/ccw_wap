@@ -77,7 +77,7 @@ export default {
 }
 
 .menu-bar > li > div > p {
-  font-size: 12px;
+  font-size: 0.6rem;
   margin-top: 0.2rem;
 }
 
@@ -94,33 +94,33 @@ export default {
 }
 
 i.icon-home {
-  background-image: url(../../common/img/tab_home_default.png);
+  background-image: url(../../common/img/menuBar/tab_home_default.png);
 }
 
 i.icon-product {
-  background-image: url(../../common/img/tab_classify_default.png);
+  background-image: url(../../common/img/menuBar/tab_classify_default.png);
 }
 
 i.icon-cart {
-  background-image: url(../../common/img/tab_shopping_default.png);
+  background-image: url(../../common/img/menuBar/tab_shopping_default.png);
 }
 
 i.icon-mine {
-  background-image: url(../../common/img/tab_personal_default.png);
+  background-image: url(../../common/img/menuBar/tab_personal_default.png);
 }
 
 .active i.icon-home {
-  background-image: url(../../common/img/tab_home_selected.png);
+  background-image: url(../../common/img/menuBar/tab_home_selected.png);
 }
 .active i.icon-product {
-  background-image: url(../../common/img/tab_classify_selected.png);
+  background-image: url(../../common/img/menuBar/tab_classify_selected.png);
 }
 
 .active i.icon-cart {
-  background-image: url(../../common/img/tab_shopping_selected.png);
+  background-image: url(../../common/img/menuBar/tab_shopping_selected.png);
 }
 
 .active i.icon-mine {
-  background-image: url(../../common/img/tab_personal_selected.png);
+  background-image: url(../../common/img/menuBar/tab_personal_selected.png);
 }
 </style>

@@ -6,9 +6,9 @@
  */
 <template>
   <div>
-    <scroller lock-x height="-40" lock-x ref="scrollerEvent">
+    <scroller lock-x ref="scrollerEvent">
       <div>
-        homeIndex
+      homeIndex
       <br>
       homeIndex
       <br>
