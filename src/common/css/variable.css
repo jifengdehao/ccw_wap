@@ -1,0 +1,15 @@
+/*
+ * @Author: WuFengliang 
+ * @Date: 2018-01-02 17:52:23 
+ * DeveloperMailbox:   wufengliang@ccw163.com 
+ * FunctionPoint:  路由动画
+ */
+.fade-enter-active,
+.fade-leave-active {
+  transition: all 0.3s;
+}
+
+.fade-enter,
+.fade-leave-to {
+  transition: translate3d(100%, 0, 0);
+}
