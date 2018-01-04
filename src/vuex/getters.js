@@ -1,10 +1,11 @@
 /*
- * @Author: WuFengliang 
- * @Date: 2018-01-02 11:30:04 
- * DeveloperMailbox:   wufengliang@ccw163.com 
+ * @Author: WuFengliang
+ * @Date: 2018-01-02 11:30:04
+ * DeveloperMailbox:   wufengliang@ccw163.com
  * FunctionPoint:  getters
  */
-import { getStore } from './util'
+import {getStore} from './util'
+import state from "./state";
 
 export default {
   name: state => {
@@ -12,5 +13,7 @@ export default {
   },
   isLogin: state => {
     return state.isLogin || getStore(state.isLogin)
-  }
+  },
+  menuBarH: state => state.menuBarH,
+  topBarH: state => state.topBarH
 }

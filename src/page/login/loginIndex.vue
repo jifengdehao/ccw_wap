@@ -34,8 +34,8 @@ export default {
   watch: {}
 }
 </script>
-<style lang="css" scoped>
-@import '../../common/css/reset.styl';
+<style lang="less" scoped>
+@import '../../common/css/reset.less';
 .login {
   position: fixed;
   top: 0;

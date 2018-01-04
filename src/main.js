@@ -4,7 +4,7 @@ import App from './App'
 import store from '@/vuex/'
 import '@/common/js/rem'
 import FastClick from 'fastclick' //  移动端点击延迟300ms
-import '@/common/css/reset.styl' //  重置CSS
+import '@/common/css/reset.less' //  重置CSS
 
 if ('addEventListener' in document) {
   document.addEventListener(
