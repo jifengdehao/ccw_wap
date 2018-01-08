@@ -1,7 +1,7 @@
 /*
- * @Author: WuFengliang 
- * @Date: 2017-12-26 09:22:11 
- * DeveloperMailbox:   wufengliang@ccw163.com 
+ * @Author: WuFengliang
+ * @Date: 2017-12-26 09:22:11
+ * DeveloperMailbox:   wufengliang@ccw163.com
  * FunctionPoint:  登录模块首页
  */
 <template>
@@ -34,8 +34,8 @@ export default {
   watch: {}
 }
 </script>
-<style lang="css" scoped>
-@import '../../common/css/reset.css';
+<style lang="less" scoped>
+@import '../../common/css/reset.less';
 .login {
   position: fixed;
   top: 0;

@@ -1,155 +1,153 @@
 /*
- * @Author: WuFengliang 
- * @Date: 2017-12-26 23:24:33 
- * DeveloperMailbox:   wufengliang@ccw163.com 
- * FunctionPoint:  首页模块主页
- */
+* @Author: WuFengliang
+* @Date: 2017-12-26 23:24:33
+* DeveloperMailbox:   wufengliang@ccw163.com
+* FunctionPoint:  首页模块主页
+*/
 <template>
   <div>
-    <scroller lock-x ref="scrollerEvent">
+    <top-bar></top-bar>
+    <coupon></coupon>
+    <scroller lock-x ref="scroller" height="-50">
       <div>
-      homeIndex
-      <br>
-      homeIndex
-      <br>
-      homeIndex
-      <br>
-      homeIndex
-      <br>
-      homeIndex
-      <br>
-      homeIndex
-      <br>
-      homeIndex
-      <br>
-      homeIndex
-      <br>
-      homeIndex
-      <br>
-      homeIndex
-      <br>
-      homeIndex
-      <br>
-      homeIndex
-      <br>
-      homeIndex
-      <br>
-      homeIndex
-      <br>
-      homeIndex
-      <br>
-      homeIndex
-      <br>
-      homeIndex
-      <br>
-      homeIndex
-      <br>
-      homeIndex
-      <br>
-      homeIndex
-      <br>
-      homeIndex
-      <br>
-      homeIndex
-      <br>
-      homeIndex
-      <br>
-      homeIndex
-      <br>
-      homeIndex
-      <br>
-      homeIndex
-      <br>
-      homeIndex
-      <br>
-      homeIndex
-      <br>
-      homeIndex
-      <br>
-      homeIndex
-      <br>
-      homeIndex
-      <br>
-      homeIndex
-      <br>
-      homeIndex
-      <br>
-      homeIndex
-      <br>
-      homeIndex
-      <br>
-      homeIndex
-      <br>
-      homeIndex
-      <br>
-      homeIndex
-      <br>
-      homeIndex
-      <br>
-      homeIndex
-      <br>
-      homeIndex
-      <br>
-      homeIndex
-      <br>
-      homeIndex
-      <br>
-      homeIndex
-      <br>
-      homeIndex
-      <br>
-      homeIndex
-      <br>
-      homeIndex
-      <br>
-      homeIndex
-      <br>
-      homeIndex
-      <br>
-      homeIndex
-      <br>
-      homeIndex
-      <br>
-      homeIndex
-      <br>
-      homeIndex
-      <br>
-      homeIndex
-      <br>
-      homeIndex
-      <br>
-      homeIndex
-      <br>
-      homeIndex
-      <br>
-      homeIndex
-      End
+        homeIndex
+        <br>
+        homeIndex
+        <br>
+        homeIndex
+        <br>
+        homeIndex
+        <br>
+        homeIndex
+        <br>
+        homeIndex
+        <br>
+        homeIndex
+        <br>
+        homeIndex
+        <br>
+        homeIndex
+        <br>
+        homeIndex
+        <br>
+        homeIndex
+        <br>
+        homeIndex
+        <br>
+        homeIndex
+        <br>
+        homeIndex
+        <br>
+        homeIndex
+        <br>
+        homeIndex
+        <br>
+        homeIndex
+        <br>
+        homeIndex
+        <br>
+        homeIndex
+        <br>
+        homeIndex
+        <br>
+        homeIndex
+        <br>
+        homeIndex
+        <br>
+        homeIndex
+        <br>
+        homeIndex
+        <br>
+        homeIndex
+        <br>
+        homeIndex
+        <br>
+        homeIndex
+        <br>
+        homeIndex
+        <br>
+        homeIndex
+        <br>
+        homeIndex
+        <br>
+        homeIndex
+        <br>
+        homeIndex
+        <br>
+        homeIndex
+        <br>
+        homeIndex
+        <br>
+        homeIndex
+        <br>
+        homeIndex
+        <br>
+        homeIndex
+        <br>
+        homeIndex
+        <br>
+        homeIndex
+        <br>
+        homeIndex
+        <br>
+        homeIndex
+        <br>
+        homeIndex
+        <br>
+        homeIndex
+        <br>
+        homeIndex
+        <br>
+        homeIndex
+        <br>
+        homeIndex
+        <br>
+        homeIndex
+        <br>
+        homeIndex
+        <br>
+        homeIndex
+        <br>
+        homeIndex
+        <br>
+        homeIndex
+        <br>
+        homeIndex
+        <br>
+        homeIndex
+        <br>
+        homeIndex
+        <br>
+        homeIndex
+        <br>
+        homeIndex
+        <br>
+        homeIndex
+        <br>
+        homeIndex
+        End
       </div>
     </scroller>
     <menu-bar></menu-bar>
   </div>
 </template>
 <script>
-import { Scroller } from 'vux'
-import menuBar from '@/components/footer/menuBar'
-export default {
-  name: 'homeIndex',
-  components: { menuBar, Scroller },
-  props: {},
-  data() {
-    return {}
-  },
-  created() {},
-  mounted() {},
-  activited: {},
-  update: {},
-  beforeRouteUpdate: {},
-  methods: {},
-  filter: {},
-  computed: {},
-  watch: {}
-}
+  import {Scroller} from 'vux'
+  import menuBar from '@/components/footer/menuBar'
+  import topBar from '@/components/topBar/topBar'
+  import coupon from '@/components/coupon/coupon'
+
+  export default {
+    name: 'homeIndex',
+    components: {menuBar, Scroller, topBar, coupon},
+    data() {
+      return {
+        isCoupon: true,
+        isTopBar: true
+      }
+    }
+  }
 </script>
-<style lang="css" scoped>
+<style lang="less" scoped type="text/less">
 
 </style>
