@@ -6,15 +6,105 @@
  */
  <template>
    <div>
-     personalIndex
     <menu-bar></menu-bar>
+    <scroller :height="menuBarH" lock-x :scrollbarY="true" ref="scroller">
+      <div>
+        personalIndex
+        <br />
+        personalIndex
+        <br />
+        personalIndex
+        <br />
+        personalIndex
+        <br />
+        personalIndex
+        <br />
+        personalIndex
+        <br />
+        personalIndex
+        <br />
+        personalIndex
+        <br />
+        personalIndex
+        <br />
+        personalIndex
+        <br />
+        personalIndex
+        <br />
+        personalIndex
+        <br />
+        personalIndex
+        <br />
+        personalIndex
+        <br />
+        personalIndex
+        <br />
+        personalIndex
+        <br />
+        personalIndex
+        <br />
+        personalIndex
+        <br />
+        personalIndex
+        <br />
+        personalIndex
+        <br />
+        personalIndex
+        <br />
+        personalIndex
+        <br />
+        personalIndex
+        <br />
+        personalIndex
+        <br />
+        personalIndex
+        <br />
+        personalIndex
+        <br />
+        personalIndex
+        <br />
+        personalIndex
+        <br />
+        personalIndex
+        <br />
+        personalIndex
+        <br />
+        personalIndex
+        <br />
+        personalIndex
+        <br />
+        personalIndex
+        <br />
+        personalIndex
+        <br />
+        personalIndex
+        <br />
+        personalIndex
+        <br />
+        personalIndex
+        <br />
+        personalIndex
+        <br />
+        personalIndex
+        <br />
+        personalIndex
+        <br />
+        personalIndex
+        <br />
+        personalIndex
+        <br />
+        end
+      </div>
+    </scroller>
    </div>
  </template>
  <script>
+import { Scroller } from 'vux'
+import { mapState } from 'vuex'
 import menuBar from '@/components/footer/menuBar'
 export default {
   name: 'personalIndex',
-  components: { menuBar },
+  components: { Scroller, menuBar },
   props: {},
   data() {
     return {}
@@ -26,10 +116,12 @@ export default {
   beforeRouteUpdate: {},
   methods: {},
   filter: {},
-  computed: {},
+  computed: {
+    ...mapState(['menuBarH'])
+  },
   watch: {}
 }
 </script>
- <style lang="css" scoped>
+ <style lang="less" scoped>
 
 </style>
