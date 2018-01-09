@@ -1,8 +1,8 @@
 /*
- * @Author: WuFengliang 
- * @Date: 2017-12-18 15:46:22 
- * DeveloperMailbox:   wufengliang@ccw163.com 
- * FunctionPoint: 路由地址 
+ * @Author: WuFengliang
+ * @Date: 2017-12-18 15:46:22
+ * DeveloperMailbox:   wufengliang@ccw163.com
+ * FunctionPoint: 路由地址
  */
 
 const anyscComponent = name => {
@@ -22,15 +22,24 @@ const cartIndex = anyscComponent('page/cart/cartIndex') //  购物车模块主�
 
 const mineIndex = anyscComponent('page/mine/mineIndex') //  个人中心模块主页
 
+const Location = anyscComponent('page/location/location') // 位置
+
+const addAddress = anyscComponent('page/add-address/add-address') //新增地址
+
 export default [
   {
     path: '/',
-    redirect: { path: '/home' }
+    redirect: {path: '/home'}
   },
   {
     path: '/home',
     name: '首页',
     component: homeIndex
+  },
+  {
+    path: '/location',
+    name: '位置',
+    component: Location
   },
   {
     path: '/product',
@@ -52,5 +61,10 @@ export default [
     name: '登录',
     meta: true,
     component: loginIndex
+  },
+  {
+    path: '/addAddress',
+    name: '新增地址',
+    component: addAddress
   }
 ]

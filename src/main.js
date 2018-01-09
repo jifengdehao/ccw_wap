@@ -4,6 +4,7 @@ import App from './App'
 import store from '@/vuex/'
 import '@/common/js/rem'
 import FastClick from 'fastclick' //  移动端点击延迟300ms
+import VueLazyload from 'vue-lazyload' // 懒加载
 import '@/common/css/reset.less' //  重置CSS
 
 if ('addEventListener' in document) {
@@ -15,6 +16,9 @@ if ('addEventListener' in document) {
     false
   )
 }
+Vue.use(VueLazyload, {
+  loading: require('@/assets/logo.png')
+})
 
 new Vue({
   el: '#app',
