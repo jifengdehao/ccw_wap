@@ -20,6 +20,9 @@ export default {}
   line-height: 2.2rem;
   background-color: #fff;
   text-align: center;
+  font-size: 0.9rem;
+  color: #222;
+  border-bottom: 1px solid #e5e5e5;
   position: fixed;
   top: 0;
   left: 0;

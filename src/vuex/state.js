@@ -9,6 +9,6 @@ let percent = document.documentElement.clientWidth / 375 * 20
 export default {
   name: '', //  登录名
   isLogin: false, //  是否登录
-  menuBarH: percent + 1, //  底部菜单栏高度
-  topBarH: percent * 2.2 //  顶部菜单高度
+  menuBarH: ((percent * 2.45 + 1) * -1).toString(), //  底部菜单栏高度
+  topBarH: (percent * -2.2).toString() //  顶部菜单高度
 }
