@@ -20,7 +20,11 @@ const Location = anyscComponent('page/location/location') // 位置
 
 const addAddress = anyscComponent('page/add-address/add-address') //新增地址
 
+const shopInfo = anyscComponent('page/product/shopInfo') //  店铺详情
+
 const productIndex = anyscComponent('page/product/productIndex') //  产品模块主页
+
+const productInfoList = anyscComponent('page/product/productInfoList') //  二级分类下的商品列表
 
 const cartIndex = anyscComponent('page/cart/cartIndex') //  购物车模块主页
 
@@ -47,6 +51,16 @@ export default [
     path: '/product',
     name: '产品分类',
     component: productIndex
+  },
+  {
+    path: '/shopInfo',
+    name: '店铺详情',
+    component: shopInfo
+  },
+  {
+    path: '/productInfoList',
+    name: '二级分类商品列表',
+    component: productInfoList
   },
   {
     path: '/cart',
