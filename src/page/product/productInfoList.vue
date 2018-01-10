@@ -20,18 +20,20 @@
     <div class="list">
       <ul>
         <li class="productMessage" v-for="(item, index) in 10" :key="index">
-          <div class="productMessageLeft left"><img src="../../common/img/productIndex/3.jpg" alt=""></div>
-          <div class="productMessageRight right">
+          <router-link :to="'/shopInfo'">
+            <div class="productMessageLeft left"><img src="../../common/img/productIndex/3.jpg" alt=""></div>
+            <div class="productMessageRight right">
             <p class="first">美国西北车厘子 2磅装(约900g) 约26-28mm果径 新鲜水果</p>
             <p><span>月销量200</span> <i>|</i> <span>好评率96%</span></p>
             <p>约5斤/份</p>
             <p>清河水果专卖店</p>
             <p class="last">¥30.8</p>
-            <div v-if="showCart" class="cartIcon icon">
+          </div>
+          </router-link>
+           <div v-if="showCart" class="cartIcon icon">
               <img src="../../common/img/productIndex/shopping_ic.png" alt="">
             </div>
-            <div v-else class="fontIcon icon">多规格</div>
-          </div>
+            <div v-else class="fontIcon icon" @click="showChang">多规格</div>
         </li>
         <li class="footer">
           <p >没有更多了</p>
@@ -42,18 +44,36 @@
       <img src="../../common/img/productIndex/shopping_big_ic.png" alt="">
       <p class="smallIcon" v-if="">12</p>
     </div>
+   <div class="alert">
+      <x-dialog class="dialog" v-model="show" >
+        <div class="alertContent clearfix" v-for="(item,index) in 2" :key="index">
+          <h5 >规格：</h5>
+           <checker v-model="demo2" default-item-class="demo2-item" selected-item-class="demo2-item-selected">
+             <checker-item value="1">约1.5斤/份</checker-item>
+             <checker-item value="3">不切</checker-item>
+           </checker>
+        </div>
+        <div class="alertFooter" @click="hideModel">
+         确定{{price}}
+        </div>
+     </x-dialog>
+   </div>
   </div>
 </template>
 <script>
-import { XHeader } from 'vux'
+import { XHeader, XDialog, Checker, CheckerItem } from 'vux'
+// import alert from './productComponents/alert'
 export default {
-  components: { XHeader },
+  components: { XHeader, XDialog, Checker, CheckerItem },
   props: {},
   data() {
     return {
       selected: 0,
-      showCart: true,
-      productName: '你好'
+      showCart: false,
+      show: false,
+      productName: '你好',
+      price: '(￥)',
+      demo2: '1' // 默认选中规格1
     }
   },
   created() {},
@@ -61,6 +81,12 @@ export default {
   methods: {
     sort(index) {
       this.selected = index
+    },
+    showChang() {
+      this.show = true
+    },
+    hideModel() {
+      this.show = false
     }
   },
   filfter: {},
@@ -68,7 +94,7 @@ export default {
   watch: {}
 }
 </script>
-<style lang="less" scoped>
+<style lang="less" >
 #productInfoList {
   height: 100%;
   position: relative;
@@ -125,6 +151,7 @@ export default {
       border-bottom: 0.5px solid #e5e5e5;
       box-sizing: border-box;
       overflow: hidden;
+      position: relative;
       .productMessageLeft {
         width: 4rem;
         height: 4rem;
@@ -151,26 +178,26 @@ export default {
           color: #ff3c00;
           letter-spacing: -0.08px;
         }
-        .icon {
-          position: absolute;
-          right: 0;
-          bottom: 0.1rem;
+      }
+      .icon {
+        position: absolute;
+        right: 0;
+        bottom: 0.8rem;
+      }
+      .cartIcon {
+        img {
+          width: 26/20rem;
         }
-        .cartIcon {
-          img {
-            width: 26/20rem;
-          }
-        }
-        .icon.fontIcon {
-          width: 54/20rem;
-          height: 1.1rem;
-          line-height: 1.1rem;
-          font-size: 0.6rem;
-          border-radius: 100px;
-          color: #fff;
-          background-color: #ffbd52;
-          text-align: center;
-        }
+      }
+      .icon.fontIcon {
+        width: 54/20rem;
+        height: 1.1rem;
+        line-height: 1.1rem;
+        font-size: 0.6rem;
+        border-radius: 100px;
+        color: #fff;
+        background-color: #ffbd52;
+        text-align: center;
       }
     }
     .footer {
@@ -207,6 +234,47 @@ export default {
       color: #ffffff;
       letter-spacing: -0.1px;
       text-align: center;
+    }
+  }
+  .alert {
+    .dialog .weui-dialog {
+      border-radius: 12px;
+      padding: 12px;
+      width: 270/20rem;
+      box-sizing: border-box;
+      .alertContent {
+        padding-bottom: 30px;
+      }
+      .alertFooter {
+        background-color: #ffbd52;
+        border-radius: 3px;
+        height: 40px;
+        line-height: 40px;
+        font-size: 18px;
+        color: #fff;
+      }
+      h5 {
+        font-size: 14px;
+        color: #bcbcbc;
+        font-weight: 400;
+        text-align: left;
+      }
+      .demo2-item {
+        // width: 74px;
+        font-size: 14px;
+        color: #333333;
+        line-height: 30px;
+        padding: 0 12px;
+        border-radius: 15px;
+        box-sizing: border-box;
+        float: left;
+        margin: 6px 10px 0 0;
+        border: 0.5px solid #e5e5e5;
+      }
+      .demo2-item-selected {
+        color: #fff;
+        background-color: #ffbf51;
+      }
     }
   }
 }
