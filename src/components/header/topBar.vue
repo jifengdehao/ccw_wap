@@ -1,11 +1,11 @@
 /*
- * @Author: WuFengliang 
- * @Date: 2018-01-03 10:00:24 
- * DeveloperMailbox:   wufengliang@ccw163.com 
+ * @Author: WuFengliang
+ * @Date: 2018-01-03 10:00:24
+ * DeveloperMailbox:   wufengliang@ccw163.com
  * FunctionPoint:  顶部导航菜单
  */
  <template>
-   <div class="top-bar">
+   <div class="top-bar border-1px">
      {{$route.name}}
      <img src="../../common/img/common/back.png" />
    </div>
@@ -13,7 +13,8 @@
  <script>
 export default {}
 </script>
- <style lang="css" scoped>
+ <style lang="less" scoped>
+   @import "../../common/css/mixin.less";
 .top-bar {
   width: 100%;
   height: 2.2rem;
@@ -22,11 +23,11 @@ export default {}
   text-align: center;
   font-size: 0.9rem;
   color: #222;
-  border-bottom: 1px solid #e5e5e5;
   position: fixed;
   top: 0;
   left: 0;
   z-index: 1;
+  .border-1px(#e5e5e5);
 }
 
 .top-bar img {
@@ -38,5 +39,5 @@ export default {}
   left: 12px;
 }
 </style>
- 
- 
+
+

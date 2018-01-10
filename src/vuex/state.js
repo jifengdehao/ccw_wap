@@ -1,7 +1,7 @@
 /*
- * @Author: WuFengliang 
- * @Date: 2018-01-02 10:57:44 
- * DeveloperMailbox:   wufengliang@ccw163.com 
+ * @Author: WuFengliang
+ * @Date: 2018-01-02 10:57:44
+ * DeveloperMailbox:   wufengliang@ccw163.com
  * FunctionPoint:  state
  */
 let percent = document.documentElement.clientWidth / 375 * 20
