@@ -2,12 +2,14 @@
  * @Author: huShangJun 
  * @Date: 2018-01-08 09:34:44 
  * DeveloperMailbox:   hsjcc@ccw163.com 
- * FunctionPoint: 功能开发点 
+ * FunctionPoint: 店铺详情 
  */
 <template>
   <div id="shopInfo">
+    <!-- 头部大图区域 -->
     <div style="position:absolute;zIndex:1000" >
       <div class="topImg">
+        <!-- 返回上一页图标 -->
       <img src="../../common/img/productIndex/fruits.png" alt="">
       <i class="goback" @click="goback"></i>
       <div class="shopMessage">
@@ -16,12 +18,15 @@
         <rater v-model="countStar" :font-size="12" disabled></rater>
       </div>
     </div>
+    <!-- 公告 -->
     <div class="notic"><span>公告：</span>这里是店铺活动布告！满100元减10元，满200元减30元。</div>
+    <!-- tab栏 -->
     <tab class="tab" >
       <tab-item selected @on-item-click="isShowMessage">店铺</tab-item>
       <tab-item @on-item-click="isShowMessage">评价</tab-item>
     </tab>
     </div>
+    <!-- 店铺信息 -->
     <div v-if="showMessage" class="showMessage">
         <group>
           <cell-box  @click.native="onClick">
@@ -40,12 +45,13 @@
           </cell-box>
         </group>
     </div>
+    <!-- 店铺评价 -->
     <div v-else style="position: absolute;
       top: 0;
       height: 100%;
       padding-top: 14.7rem;
       box-sizing: border-box;
-      zIndex: 10" @click="alert">
+      zIndex: 10">
       <shop-evaluation></shop-evaluation>
     </div>
   </div>

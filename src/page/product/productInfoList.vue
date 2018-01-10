@@ -6,9 +6,11 @@
  */
 <template>
   <div id="productInfoList">
+    <!-- 头部 -->
     <div class="header">
       <x-header :left-options="{backText: ''}" style="background-color:#fff;color: #333"><span>{{productName}}</span></x-header>
     </div>
+    <!-- 一级分类列表 -->
     <div class="nav">
       <ul>
         <li :class="{current:selected==0}" @click="sort(0)"><span>综合排序</span><img src="../../common/img/productIndex/up_ic.png" alt=""></li>
@@ -17,6 +19,7 @@
         <li :class="{current:selected==3}"@click="sort(3)"><span>评价</span></li>
       </ul>
     </div>
+    <!-- 一级分类下面的二级分类产品 -->
     <div class="list">
       <ul>
         <li class="productMessage" v-for="(item, index) in 10" :key="index">
@@ -40,10 +43,12 @@
         </li>
       </ul>
     </div>
+    <!-- 购物车图标 -->
     <div class="bigCart">
       <img src="../../common/img/productIndex/shopping_big_ic.png" alt="">
       <p class="smallIcon" v-if="">12</p>
     </div>
+    <!-- 弹窗 -->
    <div class="alert">
       <x-dialog class="dialog" v-model="show" >
         <div class="alertContent clearfix" v-for="(item,index) in 2" :key="index">
