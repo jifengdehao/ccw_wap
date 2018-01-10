@@ -7,54 +7,56 @@
 <template>
   <transition name="slide">
     <div class="location">
-      <div class="location-f">
-        <div class="header border-1px">
-          <i class="back"></i>
-          <input type="text" class="search" placeholder="请输入收货地址" v-model.trim="search" @keyup.enter="submit"/>
-          <i class="clear" v-show="search" @click.stop="clearSearch"></i>
-        </div>
-        <div class="map-tip">蓝色区域为当前市场配送范围</div>
-        <div class="map"></div>
+      <div class="header border-1px">
+        <i class="back"></i>
+        <input type="text" class="search" placeholder="请输入收货地址" v-model.trim="search" @keyup.enter="submit"/>
+        <i class="clear" v-show="search" @click.stop="clearSearch"></i>
       </div>
-      <div class="location-s">
-        <ul class="list">
-          <li class="item border-1px">
-            <div class="name">黄沙冷仓<span class="current">当前</span></div>
-            <div class="dec">广州市番禺区南桥街道南堤东路836号</div>
-          </li>
-          <li class="item border-1px">
-            <div class="name">黄沙冷仓</div>
-            <div class="dec">广州市番禺区南桥街道南堤东路836号</div>
-          </li>
-          <li class="item border-1px">
-            <div class="name">黄沙冷仓</div>
-            <div class="dec">广州市番禺区南桥街道南堤东路836号</div>
-          </li>
-          <li class="item border-1px">
-            <div class="name">黄沙冷仓</div>
-            <div class="dec">广州市番禺区南桥街道南堤东路836号</div>
-          </li>
-          <li class="item border-1px">
-            <div class="name">黄沙冷仓</div>
-            <div class="dec">广州市番禺区南桥街道南堤东路836号</div>
-          </li>
-          <li class="item border-1px">
-            <div class="name">黄沙冷仓</div>
-            <div class="dec">广州市番禺区南桥街道南堤东路836号</div>
-          </li>
-          <li class="item border-1px">
-            <div class="name">黄沙冷仓</div>
-            <div class="dec">广州市番禺区南桥街道南堤东路836号</div>
-          </li>
-          <li class="item border-1px">
-            <div class="name">黄沙冷仓</div>
-            <div class="dec">广州市番禺区南桥街道南堤东路836号</div>
-          </li>
-          <li class="item border-1px">
-            <div class="name">黄沙冷仓</div>
-            <div class="dec">广州市番禺区南桥街道南堤东路836号</div>
-          </li>
-        </ul>
+      <div class="map-tip">蓝色区域为当前市场配送范围</div>
+      <div class="content">
+        <scroll>
+          <div>
+            <div class="map" id="map"></div>
+            <ul class="list">
+              <li class="item border-1px">
+                <div class="name">黄沙冷仓<span class="current">当前</span></div>
+                <div class="dec">广州市番禺区南桥街道南堤东路836号</div>
+              </li>
+              <li class="item border-1px">
+                <div class="name">黄沙冷仓</div>
+                <div class="dec">广州市番禺区南桥街道南堤东路836号</div>
+              </li>
+              <li class="item border-1px">
+                <div class="name">黄沙冷仓</div>
+                <div class="dec">广州市番禺区南桥街道南堤东路836号</div>
+              </li>
+              <li class="item border-1px">
+                <div class="name">黄沙冷仓</div>
+                <div class="dec">广州市番禺区南桥街道南堤东路836号</div>
+              </li>
+              <li class="item border-1px">
+                <div class="name">黄沙冷仓</div>
+                <div class="dec">广州市番禺区南桥街道南堤东路836号</div>
+              </li>
+              <li class="item border-1px">
+                <div class="name">黄沙冷仓</div>
+                <div class="dec">广州市番禺区南桥街道南堤东路836号</div>
+              </li>
+              <li class="item border-1px">
+                <div class="name">黄沙冷仓</div>
+                <div class="dec">广州市番禺区南桥街道南堤东路836号</div>
+              </li>
+              <li class="item border-1px">
+                <div class="name">黄沙冷仓</div>
+                <div class="dec">广州市番禺区南桥街道南堤东路836号</div>
+              </li>
+              <li class="item border-1px">
+                <div class="name">黄沙冷仓</div>
+                <div class="dec">广州市番禺区南桥街道南堤东路836号</div>
+              </li>
+            </ul>
+          </div>
+        </scroll>
       </div>
       <div class="search-list" v-show="search">
         <ul class="list">
@@ -72,6 +74,9 @@
   </transition>
 </template>
 <script type="text/ecmascript-6">
+  import scroll from '@/components/scroll/scroll'
+  import AMap from 'AMap'   //在页面中引入高德地图
+
   export default {
     data() {
       return {
@@ -87,6 +92,18 @@
       clearSearch() {
         this.search = ''
       }
+    },
+    created() {
+      const map = new AMap.Map('map', {
+        resizeEnable: true,
+        zoom: 10,
+        center: [116.480983, 40.0958]
+      });
+      console.log(map)
+
+    },
+    components: {
+      scroll
     }
   }
 </script>
@@ -96,11 +113,18 @@
 
   .location {
     overflow: hidden;
-    .location-f {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 0;
+    .content {
       position: absolute;
       left: 0;
       right: 0;
-      top: 0;
+      top: 2.2rem;
+      bottom: 0;
+      overflow: hidden;
     }
     .map-tip {
       height: 1.5rem;
@@ -166,15 +190,6 @@
       border-radius: 4px;
       overflow-y: scroll;
     }
-    .location-s {
-      position: absolute;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      top: 16rem;
-      overflow-y: scroll;
-      background-color: #f5f5f5;
-    }
     .list {
       padding: 0 .6rem;
       background-color: #ffffff;
@@ -186,7 +201,7 @@
         padding-left: 1rem;
         padding-top: .5rem;
         box-sizing: border-box;
-        &:last-child{
+        &:last-child {
           .border-none();
         }
         .name {

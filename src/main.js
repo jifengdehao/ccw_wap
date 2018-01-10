@@ -6,6 +6,9 @@ import '@/common/js/rem'
 import FastClick from 'fastclick' //  移动端点击延迟300ms
 import VueLazyload from 'vue-lazyload' // 懒加载
 import '@/common/css/reset.less' //  重置CSS
+import VueScroll from 'better-scroll-list'
+
+Vue.use(VueScroll)
 
 if ('addEventListener' in document) {
   document.addEventListener(

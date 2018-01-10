@@ -16,15 +16,17 @@ const loginIndex = anyscComponent('page/login/loginIndex') //  登录模块主�
 
 const homeIndex = anyscComponent('page/home/homeIndex') //  首页模块主页
 
+const Location = anyscComponent('page/location/location') // 位置
+
+const addAddress = anyscComponent('page/add-address/add-address') //新增地址
+
 const productIndex = anyscComponent('page/product/productIndex') //  产品模块主页
 
 const cartIndex = anyscComponent('page/cart/cartIndex') //  购物车模块主页
 
 const mineIndex = anyscComponent('page/mine/mineIndex') //  个人中心模块主页
 
-const Location = anyscComponent('page/location/location') // 位置
 
-const addAddress = anyscComponent('page/add-address/add-address') //新增地址
 
 export default [
   {
