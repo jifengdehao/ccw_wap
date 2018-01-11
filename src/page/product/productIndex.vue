@@ -52,9 +52,7 @@ export default {
 </script>
 <style lang="less" scoped>
 #product {
-  font-family: PingFangSC-Regular;
   height: 100%;
-  // padding: 0 12/20rem;
   // 在配送范围
   // 不在配送范围
   .notScope {

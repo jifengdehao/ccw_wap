@@ -43,9 +43,10 @@
     components: {
       topBar
     },
+    created() {},
     methods: {
       select() {
-         return this.$router.push('/location')
+        return this.$router.push('/location')
       },
       submit() {
         console.log('form submit')
@@ -92,8 +93,8 @@
         }
       }
       .select {
-        &>input{
-          background: url("../../common/img/common/jump_gray_ic.png")no-repeat right center !important;
+        & > input {
+          background: url("../../common/img/common/jump_gray_ic.png") no-repeat right center !important;
           background-size: 1.2rem 1.2rem !important;
         }
       }
