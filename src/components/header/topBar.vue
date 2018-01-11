@@ -5,23 +5,30 @@
  * FunctionPoint:  顶部导航菜单
  */
  <template>
-   <div class="top-bar border-1px">
+   <div class="top-bar">
      {{$route.name}}
-     <img src="../../common/img/common/back.png" />
+     <img @click="goBack" src="../../common/img/common/back.png" />
    </div>
  </template>
  <script>
-export default {}
+export default {
+  name: 'topBar',
+  methods: {
+    goBack() {
+      this.$router.back()
+    }
+  }
+}
 </script>
  <style lang="less" scoped>
-   @import "../../common/css/mixin.less";
+@import '../../common/css/mixin.less';
 .top-bar {
   width: 100%;
-  height: 2.2rem;
-  line-height: 2.2rem;
+  height: 44px;
+  line-height: 44px;
   background-color: #fff;
   text-align: center;
-  font-size: 0.9rem;
+  font-size: 18px;
   color: #222;
   position: fixed;
   top: 0;
@@ -31,8 +38,8 @@ export default {}
 }
 
 .top-bar img {
-  width: 1rem;
-  height: 1rem;
+  width: 20px;
+  height: 20px;
   vertical-align: middle;
   position: fixed;
   top: 12px;

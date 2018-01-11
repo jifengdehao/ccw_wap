@@ -23,6 +23,7 @@ const productInfoList = anyscComponent('page/product/productInfoList') //  二�
 const cartIndex = anyscComponent('page/cart/cartIndex') //  购物车模块主页
 
 const mineIndex = anyscComponent('page/mine/mineIndex') //  个人中心模块主页
+const myCoupon = anyscComponent('page/mine/myCoupon') //  我的优惠券
 
 const Location = anyscComponent('page/location/location') // 位置
 
@@ -31,7 +32,7 @@ const addAddress = anyscComponent('page/add-address/add-address') //新增地址
 export default [
   {
     path: '/',
-    redirect: {path: '/home'}
+    redirect: { path: '/home' }
   },
   {
     path: '/home',
@@ -54,7 +55,7 @@ export default [
     component: shopInfo
   },
   {
-    path: '/productInfoList', 
+    path: '/productInfoList',
     name: '二级分类商品列表',
     component: productInfoList
   },
@@ -67,6 +68,11 @@ export default [
     path: '/mine',
     name: '个人中心',
     component: mineIndex
+  },
+  {
+    path: '/myCoupon',
+    name: '我的优惠券',
+    component: myCoupon
   },
   {
     path: '/login',
