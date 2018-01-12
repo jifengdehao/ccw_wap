@@ -24,7 +24,7 @@
             <p><span>我的账户</span></p>
           </li>
           <li class="line"></li>
-          <li>
+          <li @click="jumpTo">
             <p><i></i></p>
             <p><span>劵包</span></p>
           </li>
@@ -129,7 +129,12 @@ export default {
   activited: {},
   update: {},
   beforeRouteUpdate: {},
-  methods: {},
+  methods: {
+    //  路由跳转
+    jumpTo() {
+      this.$router.push('/myCoupon')
+    }
+  },
   filter: {},
   computed: {
     ...mapState(['menuBarH'])
@@ -139,7 +144,7 @@ export default {
 </script>
  <style lang="less" scoped>
 .box {
-  padding: 0 0.6rem;
+  padding: 0 12px;
 }
 
 .contain-box {
