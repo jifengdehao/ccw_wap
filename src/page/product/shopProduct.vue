@@ -5,19 +5,19 @@
  * FunctionPoint: 店铺详情 
  */
 <template>
-  <div id="shopInfo">
-     <!-- 头部大图区域 -->
+  <div id="shopProduct">
+    <!-- 头部大图区域 -->
     <div style="position:absolute;zIndex:1000" >
       <div class="topImg">
         <!-- 返回上一页图标 -->
         <img src="../../common/img/productIndex/shop_bg.png" alt="">
         <i class="goback" @click="goback"></i>
-        <div class="shopMessage">
+        <div class="shopMessage" @click="goShopInfo">
           <div class="shopMessageLeft">
             <img src="../../common/img/productIndex/3.jpg" alt="">
           </div>
           <div class="shopMessageRight">
-            <p><span>{{shopName}} </span></p>
+            <p><span>{{shopName}} </span><i class="showIcon" v-if="showIcon"></i></p>
             <rater v-model="countStar" :font-size="13" disabled></rater>
           </div>
         </div>
@@ -26,65 +26,34 @@
       <div class="notic">
         <span>公告：</span>这里是店铺活动布告！满100元减10元，满200元减30元。
       </div>
-    <!-- tab栏 -->
-      <tab class="tab" >
-        <tab-item selected @on-item-click="isShowMessage">店铺</tab-item>
-        <tab-item @on-item-click="isShowMessage">评价</tab-item>
-      </tab>
     </div>
-    <!-- 店铺信息 -->
-    <div v-if="showMessage" class="showMessage">
-        <group>
-          <cell-box >
-            <i class="first"></i>
-            <span>番禺祈福市场</span>
-          </cell-box>
-          <div @click="tel">
-            <cell-box >
-              <i class="second"></i>
-              <span>{{telNub}}</span>
-          </cell-box>
-          </div>
-        </group>
-        <group style="marginTop: 10px;">
-          <cell-box class="lastCell"  disabled is-link>
-            <i class="last"></i>
-            <span>查看商家资质</span>
-          </cell-box>
-        </group>
-    </div>
-    <!-- 店铺评价 -->
-    <div v-else style="position: absolute;
-      top: 0;
-      height: 100%;
-      padding-top: 10.38rem;
-      box-sizing: border-box;
-      zIndex: 10">
-      <shop-evaluation></shop-evaluation>
+      <!-- 产品列表 -->
+      <div class="product">
+        <!-- 一级分类 -->
+        <aside>
+          <ul>
+           <li v-for="(item,index) in 19" :key="index" :class="{current:selected==index}" @click="selectedList(index)">1</li>
+          </ul>
+        </aside>
+        <!-- 二级分类 -->
+        <div class="productList"></div>
     </div>
   </div>
 </template>
 <script>
-import shopEvaluation from './productComponents/shopEvaluation'
-import { Tab, TabItem, Group, CellBox, Rater } from 'vux'
+import { Rater } from 'vux'
 export default {
-  components: {
-    Tab,
-    TabItem,
-    Group,
-    CellBox,
-    Rater,
-    shopEvaluation
-  },
+  components: { Rater },
   props: {},
   data() {
     return {
       index: 0,
+      showIcon: true, // 到店铺详情的箭头
       showMessage: true,
+      selected: 0,
       shopName: '菜城水果店', // 店铺名称
       listTitle: ['店铺', '评价'],
-      countStar: 3 ,// 店铺评价星数
-      telNub: '18876543210'
+      countStar: 3 // 店铺评价星数
     }
   },
   created() {},
@@ -100,9 +69,13 @@ export default {
     goback() {
       this.$router.go(-1)
     },
-    tel(){
-      window.location.href = 'tel:' + this.telNub;
-    }
+    goShopInfo() {
+      this.$router.push('/shopInfo')
+    },
+    selectedList(index){
+      this.selected = index
+    },
+    alert() {}
   },
   filfter: {},
   computed: {},
@@ -110,7 +83,7 @@ export default {
 }
 </script>
 <style lang="less" >
-#shopInfo {
+#shopProduct {
   position: relative;
   height: 100%;
   background-color: #f5f5f5;
@@ -121,7 +94,7 @@ export default {
     left: 12px;
     right: 12px;
   }
- .topImg {
+  .topImg {
     width: 100%;
     img {
       height: 127/20rem;
@@ -151,7 +124,7 @@ export default {
         float: left;
         margin-right: 10px;
         img {
-          width:2.5rem;
+          width: 2.5rem;
           height: 2.5rem;
         }
       }
@@ -184,8 +157,8 @@ export default {
     }
   }
   .notic {
-    height: 1.5rem;
-    line-height: 1.5rem;
+    height: 26/20rem;
+    line-height: 26/20rem;
     margin-bottom: 0.5rem;
     padding-left: 0.6rem;
     font-size: 10px;
@@ -193,55 +166,44 @@ export default {
     letter-spacing: -0.06px;
     background-color: #fff;
   }
-  .tab {
-    height: 2.2rem;
-    .vux-tab-item.vux-tab-selected {
-      color: #ffbd52;
-      border-bottom: 3px solid #ffbd52;
+  .product {
+    height: 100%;
+    padding-top: 163/20rem;
+    // background-color: #fafafa;
+    box-sizing: border-box;
+    aside {
+      float: left;
+      width: 4rem;
+      height: 100%;
+      background-color: #fafafa;
+      overflow: scroll;
+      li {
+        height: 2.5rem;
+        line-height: 2.5rem;
+        text-align: center;
+        font-size: 14px;
+        color: #666666;
+        letter-spacing: -0.08px;
+        border: 0.5px solid #e5e5e5;
+        border-left: none;
+        box-sizing: border-box;
+        margin-top: -1px;
+      }
+      li:nth-of-type(1) {
+        margin-top: 0;
+      }
+      li.current{
+        background-color: #fff;
+        border-left: 2px solid #ffbd52;
+        border-right: none;
+        color: #ffbd52;
+      }
     }
-    .vux-tab-ink-bar {
-      width: 2rem;
-      margin: 0 auto;
-      background-color: #ffbd52 !important;
-    }
-  }
-
-  .showMessage {
-    position: absolute;
-    top: 207.5/20rem;
-    width: 100%;
-    .weui-cell {
-      height: 50px;
-      box-sizing: border-box;
-    }
-    i {
-      display: inline-block;
-      width: 20px;
-      height: 20px;
-      margin-right: 10px;
-      background-position: center;
-    }
-    span {
-      font-size: 14px;
-      color: #333333;
-      letter-spacing: -0.14px;
-    }
-    .first {
-      background: url('../../common/img/productIndex/maps_ic.png') no-repeat;
-      background-size: 12px 15px;
-      background-position: center;
-    }
-    .second {
-      background: url('../../common/img/productIndex/shops_Telephone.png')
-        no-repeat;
-      background-size: 16px 16px;
-      background-position: center;
-    }
-    .last {
-      background: url('../../common/img/productIndex/shops_qualifications.png')
-        no-repeat;
-      background-size: 14px 14px;
-      background-position: center;
+    .productList {
+      width: 295/20rem;
+      height: 100%;
+      margin-left: 4rem;
+      background-color: #fff;
     }
   }
 }

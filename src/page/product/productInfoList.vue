@@ -23,7 +23,7 @@
     <div class="list">
       <ul>
         <li class="productMessage" v-for="(item, index) in 10" :key="index">
-          <router-link :to="'/shopInfo'">
+          <router-link :to="'/shopProduct'">
             <div class="productMessageLeft left"><img src="../../common/img/productIndex/3.jpg" alt=""></div>
             <div class="productMessageRight right">
             <p class="first">美国西北车厘子 2磅装(约900g) 约26-28mm果径 新鲜水果</p>
@@ -103,7 +103,6 @@ export default {
 #productInfoList {
   height: 100%;
   position: relative;
-  font-family: PingFangSC-Regular;
   .header {
     position: absolute;
     width: 100%;
@@ -183,6 +182,9 @@ export default {
           color: #ff3c00;
           letter-spacing: -0.08px;
         }
+        p{
+          margin: 2px;
+        }
       }
       .icon {
         position: absolute;
@@ -233,6 +235,7 @@ export default {
       right: -4/20rem;
       width: 1.2rem;
       height: 1.2rem;
+      line-height: 1.2rem;
       background-color: #ff3c00;
       border-radius: 50%;
       font-size: 16px;

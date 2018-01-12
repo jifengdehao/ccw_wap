@@ -14,11 +14,10 @@
 <script>
 import { XHeader } from 'vux'
 export default {
-  components: {XHeader},
+  components: { XHeader },
   props: {},
-  data () {
-    return {
-    }
+  data() {
+    return {}
   },
   created() {},
   mounted() {},
@@ -29,4 +28,5 @@ export default {
 }
 </script>
 <style lang="less" scoped>
+
 </style>
