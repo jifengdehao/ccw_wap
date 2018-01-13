@@ -6,8 +6,8 @@
  */
 <template>
   <div id="shopInfo">
-     <!-- 头部大图区域 -->
-    <div style="position:absolute;zIndex:1000" >
+    <!-- 头部大图区域 -->
+    <div style="position:absolute;zIndex:1000">
       <div class="topImg">
         <!-- 返回上一页图标 -->
         <img src="../../common/img/productIndex/shop_bg.png" alt="">
@@ -17,47 +17,48 @@
             <img src="../../common/img/productIndex/3.jpg" alt="">
           </div>
           <div class="shopMessageRight">
-            <p><span>{{shopName}} </span></p>
+            <p>
+              <span>{{shopName}} </span>
+            </p>
             <rater v-model="countStar" :font-size="13" disabled></rater>
           </div>
         </div>
-      </div>  
-    <!-- 公告 -->
+      </div>
+      <!-- 公告 -->
       <div class="notic">
         <span>公告：</span>这里是店铺活动布告！满100元减10元，满200元减30元。
       </div>
-    <!-- tab栏 -->
-      <tab class="tab" >
+      <!-- tab栏 -->
+      <tab class="tab">
         <tab-item selected @on-item-click="isShowMessage">店铺</tab-item>
         <tab-item @on-item-click="isShowMessage">评价</tab-item>
       </tab>
     </div>
     <!-- 店铺信息 -->
     <div v-if="showMessage" class="showMessage">
-        <group>
-          <cell-box >
-            <i class="first"></i>
-            <span>番禺祈福市场</span>
-          </cell-box>
-          <div @click="tel">
-            <cell-box >
-              <i class="second"></i>
-              <span>{{telNub}}</span>
-          </cell-box>
-          </div>
-        </group>
-        <group style="marginTop: 10px;">
-          <cell-box class="lastCell"  disabled is-link>
-            <i class="last"></i>
-            <span>查看商家资质</span>
-          </cell-box>
-        </group>
+      <div class="address">
+        <div class="line">
+          <i class="first"></i>
+          <span>番禺祈福市场</span>
+        </div>
+      </div>
+
+      <div class="tel" @click="tel">
+        <i class="second"></i>
+        <span>{{telNub}}</span>
+      </div>
+      <div class="lastCell" is-link @click.native="onClick">
+        <i class="last"></i>
+        <i class="jumpIcon"></i>
+        <span>查看商家资质</span>
+      </div>
+
     </div>
     <!-- 店铺评价 -->
     <div v-else style="position: absolute;
       top: 0;
       height: 100%;
-      padding-top: 10.38rem;
+      padding-top: 10.5rem;
       box-sizing: border-box;
       zIndex: 10">
       <shop-evaluation></shop-evaluation>
@@ -83,7 +84,7 @@ export default {
       showMessage: true,
       shopName: '菜城水果店', // 店铺名称
       listTitle: ['店铺', '评价'],
-      countStar: 3 ,// 店铺评价星数
+      countStar: 3, // 店铺评价星数
       telNub: '18876543210'
     }
   },
@@ -100,8 +101,11 @@ export default {
     goback() {
       this.$router.go(-1)
     },
-    tel(){
-      window.location.href = 'tel:' + this.telNub;
+    tel() {
+      window.location.href = 'tel:' + this.telNub
+    },
+    onClick() {
+      this.$router.push('qualification')
     }
   },
   filfter: {},
@@ -117,11 +121,7 @@ export default {
   .weui-cells {
     margin-top: 0 !important;
   }
-  .weui-cell:before {
-    left: 12px;
-    right: 12px;
-  }
- .topImg {
+  .topImg {
     width: 100%;
     img {
       height: 127/20rem;
@@ -151,7 +151,7 @@ export default {
         float: left;
         margin-right: 10px;
         img {
-          width:2.5rem;
+          width: 2.5rem;
           height: 2.5rem;
         }
       }
@@ -208,17 +208,36 @@ export default {
 
   .showMessage {
     position: absolute;
-    top: 207.5/20rem;
+    top: 210/20rem;
     width: 100%;
     .weui-cell {
       height: 50px;
+      box-sizing: border-box;
+    }
+    .address,
+    .tel,
+    .lastCell {
+      position: relative;
+      height: 50px;
+      line-height: 50px;
+      padding-left: 12px;
+      padding-right: 12px;
+      background-color: #fff;
+      box-sizing: border-box;
+    }
+    .lastCell {
+      margin-top: 10px;
+    }
+    .line {
+      height: 50px;
+      border-bottom: 0.5px solid #e5e5e5;
       box-sizing: border-box;
     }
     i {
       display: inline-block;
       width: 20px;
       height: 20px;
-      margin-right: 10px;
+      vertical-align: middle;
       background-position: center;
     }
     span {
@@ -234,13 +253,23 @@ export default {
     .second {
       background: url('../../common/img/productIndex/shops_Telephone.png')
         no-repeat;
-      background-size: 16px 16px;
+      background-size: 15px 15px;
       background-position: center;
     }
     .last {
       background: url('../../common/img/productIndex/shops_qualifications.png')
         no-repeat;
-      background-size: 14px 14px;
+      background-size: 15px 15px;
+      background-position: center;
+    }
+    .jumpIcon {
+      position: absolute;
+      right: 0;
+      width: 50px;
+      height: 50px;
+      background: url('../../common/img/productIndex/jump_gray_ic.png')
+        no-repeat;
+      background-size: 30px 30px;
       background-position: center;
     }
   }

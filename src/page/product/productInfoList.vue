@@ -56,9 +56,9 @@
       </ul>
     </div>
     <!-- 购物车图标 -->
-    <div class="bigCart">
+    <div class="bigCart" @click="toCart">
       <img src="../../common/img/productIndex/shopping_big_ic.png" alt="">
-      <p class="smallIcon" v-if="">12</p>
+      <p class="smallIcon" v-if="countIcon">12</p>
     </div>
     <!-- 弹窗 -->
     <div class="alert">
@@ -90,7 +90,8 @@ export default {
       show: false,
       productName: '你好',
       price: '(￥)',
-      demo2: '1' // 默认选中规格1
+      demo2: '1', // 默认选中规格1
+      countIcon: true
     }
   },
   created() {},
@@ -104,6 +105,10 @@ export default {
     },
     hideModel() {
       this.show = false
+    },
+    // 点击购物车图标进入购物车
+    toCart(){
+      this.$router.push('cart')
     }
   },
   filfter: {},

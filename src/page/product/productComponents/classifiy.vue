@@ -9,7 +9,7 @@
   <div id="classifiy">
     <!-- 头部搜索 -->
     <div class="classifiyTop">
-      <div class="search">
+      <div class="search" @click="toLocation">
         <!-- <input type="text" /> -->
         <div class="searchIcon">
           <i></i>
@@ -44,6 +44,10 @@ export default {
     // 点击分类
     changeList(index) {
       this.selected = index
+    },
+    // 点击搜索跳转到搜索定位
+    toLocation(){
+      this.$router.push('location')
     }
   },
   filfter: {},

@@ -225,6 +225,7 @@ export default {
             width: 1.25rem;
             height: 1.25rem;
             background: url('../../common/img/productIndex/core_Jump.png');
+            vertical-align: middle;
             background-size: contain;
           }
         }
