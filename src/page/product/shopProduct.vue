@@ -7,7 +7,7 @@
 <template>
   <div id="shopProduct">
     <!-- 头部大图区域 -->
-    <div style="position:absolute;zIndex:1000" >
+    <div style="position:absolute;zIndex:1000">
       <div class="topImg">
         <!-- 返回上一页图标 -->
         <img src="../../common/img/productIndex/shop_bg.png" alt="">
@@ -17,33 +17,95 @@
             <img src="../../common/img/productIndex/3.jpg" alt="">
           </div>
           <div class="shopMessageRight">
-            <p><span>{{shopName}} </span><i class="showIcon" v-if="showIcon"></i></p>
+            <p>
+              <span>{{shopName}} </span>
+              <i class="showIcon" v-if="showIcon"></i>
+            </p>
             <rater v-model="countStar" :font-size="13" disabled></rater>
           </div>
         </div>
-      </div>  
-    <!-- 公告 -->
+      </div>
+      <!-- 公告 -->
       <div class="notic">
         <span>公告：</span>这里是店铺活动布告！满100元减10元，满200元减30元。
       </div>
     </div>
-      <!-- 产品列表 -->
-      <div class="product">
-        <!-- 一级分类 -->
-        <aside>
-          <ul>
-           <li v-for="(item,index) in 19" :key="index" :class="{current:selected==index}" @click="selectedList(index)">1</li>
-          </ul>
-        </aside>
-        <!-- 二级分类 -->
-        <div class="productList"></div>
+    <!-- 产品列表 -->
+    <div class="product">
+      <!-- 一级分类 -->
+      <aside>
+        <ul>
+          <li v-for="(item,index) in 5" :key="index" :class="{current:selected==index}" @click="selectedList(index)">进口水果</li>
+        </ul>
+      </aside>
+      <!-- 二级分类 -->
+      <div class="productList">
+        <ul>
+          <li v-for="(item,index) in 9" :key="index">
+            <router-link :to="'/shopProduct'">
+              <div class="listLeft">
+                <img src="../../common/img/productIndex/3.jpg" alt="">
+              </div>
+              <div class="listRight">
+                <p class="first">越南进口火龙果大果单果</p>
+                <p class="second">
+                  <span>月销量200</span>
+                  <i>|</i>
+                  <span>好评率96%</span>
+                </p>
+                <p class="third">每斤20元</p>
+                <p class="last">¥30.8
+                  <span>约1斤/个</span>
+                </p>
+              </div>
+            </router-link>
+            <div v-if="showCart" class="cartIcon icon">
+              <img src="../../common/img/productIndex/shopping_ic.png" alt="">
+            </div>
+            <div v-else class="fontIcon icon" @click="showChang">多规格</div>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <!-- 购物栏 -->
+    <div class="cartBar">
+      <!-- 提示 -->
+      <p class="prompt" v-if="notSettlement">含有下架商品无法结算</p>
+      <!-- 内容购物车 -->
+      <div class="cartContent">
+        <div class="left">
+          <p class="first">
+            <span>￥</span>30.8</p>
+          <p class="second">差30元免配送费</p>
+        </div>
+        <div class="right" :class="{current: notSettlement}" @click="toCart">去支付</div>
+        <div class="bigCart">
+          <p class="countIcon">21</p>
+        </div>
+      </div>
+
+    </div>
+    <!-- 弹窗 -->
+    <div class="alert">
+      <x-dialog class="dialog" v-model="show">
+        <div class="alertContent clearfix" v-for="(item,index) in 2" :key="index">
+          <h5>规格：</h5>
+          <checker v-model="demo2" default-item-class="demo2-item" selected-item-class="demo2-item-selected">
+            <checker-item value="1">约1.5斤/份</checker-item>
+            <checker-item value="3">不切</checker-item>
+          </checker>
+        </div>
+        <div class="alertFooter" @click="hideModel">
+          确定{{price}}
+        </div>
+      </x-dialog>
     </div>
   </div>
 </template>
 <script>
-import { Rater } from 'vux'
+import { Rater, XDialog, Checker, CheckerItem } from 'vux'
 export default {
-  components: { Rater },
+  components: { Rater, XDialog, Checker, CheckerItem },
   props: {},
   data() {
     return {
@@ -53,7 +115,12 @@ export default {
       selected: 0,
       shopName: '菜城水果店', // 店铺名称
       listTitle: ['店铺', '评价'],
-      countStar: 3 // 店铺评价星数
+      countStar: 3, // 店铺评价星数
+      showCart: false,
+      show: false, // 弹框
+      price: '￥30',
+      demo2: 1,
+      notSettlement: false
     }
   },
   created() {},
@@ -72,8 +139,22 @@ export default {
     goShopInfo() {
       this.$router.push('/shopInfo')
     },
-    selectedList(index){
+    selectedList(index) {
       this.selected = index
+    },
+    // 点击弹出弹框
+    showChang() {
+      this.show = true
+    },
+    // 点击取消弹框
+    hideModel() {
+      this.show = false
+    },
+    // 去购物车结算
+    toCart() {
+      if (this.notSettlement === false) {
+        this.$router.push('cart')
+      }
     },
     alert() {}
   },
@@ -168,7 +249,7 @@ export default {
   }
   .product {
     height: 100%;
-    padding-top: 163/20rem;
+    padding: 163/20rem 0 2.5rem 0;
     // background-color: #fafafa;
     box-sizing: border-box;
     aside {
@@ -192,18 +273,218 @@ export default {
       li:nth-of-type(1) {
         margin-top: 0;
       }
-      li.current{
+      li.current {
         background-color: #fff;
         border-left: 2px solid #ffbd52;
         border-right: none;
         color: #ffbd52;
       }
     }
+    ::-webkit-scrollbar {
+      display: none;
+    }
     .productList {
       width: 295/20rem;
       height: 100%;
       margin-left: 4rem;
+      padding: 0 8px 12px;
       background-color: #fff;
+      overflow: scroll;
+      box-sizing: border-box;
+      li {
+        position: relative;
+        height: 96/20rem;
+        padding: 8px 0;
+        overflow: hidden;
+        box-sizing: border-box;
+        border-bottom: 0.5px solid #e5e5e5;
+        .listLeft {
+          float: left;
+          width: 4rem;
+          height: 4rem;
+          img {
+            width: 100%;
+            height: 100%;
+          }
+        }
+        .listRight {
+          float: left;
+          width: 195/20rem;
+          padding-left: 5px;
+          box-sizing: border-box;
+          .first {
+            font-size: 12px;
+            color: #333333;
+            letter-spacing: -0.07px;
+            line-height: 17px;
+            margin-bottom: 4px;
+          }
+          .second,
+          .third {
+            font-size: 10px;
+            line-height: 18px;
+            color: #999999;
+            letter-spacing: -0.07px;
+          }
+          .third {
+          }
+          .last {
+            font-size: 16px;
+            color: #ff3c00;
+            letter-spacing: -0.08px;
+            line-height: 22px;
+            span {
+              font-size: 10px;
+              line-height: 18px;
+              color: #999999;
+              margin-left: 2px;
+            }
+          }
+        }
+        .icon {
+          position: absolute;
+          right: 0;
+          bottom: 0.4rem;
+        }
+        .cartIcon {
+          img {
+            width: 26/20rem;
+          }
+        }
+        .icon.fontIcon {
+          width: 54/20rem;
+          height: 1.1rem;
+          line-height: 1.1rem;
+          font-size: 0.6rem;
+          border-radius: 100px;
+          color: #fff;
+          background-color: #ffbd52;
+          text-align: center;
+        }
+      }
+    }
+  }
+  .alert {
+    .dialog .weui-dialog {
+      border-radius: 12px;
+      padding: 12px;
+      width: 270/20rem;
+      box-sizing: border-box;
+      .alertContent {
+        padding-bottom: 30px;
+      }
+      .alertFooter {
+        background-color: #ffbd52;
+        border-radius: 3px;
+        height: 40px;
+        line-height: 40px;
+        font-size: 18px;
+        color: #fff;
+      }
+      h5 {
+        font-size: 14px;
+        color: #bcbcbc;
+        font-weight: 400;
+        text-align: left;
+      }
+      .demo2-item {
+        // width: 74px;
+        font-size: 14px;
+        color: #333333;
+        line-height: 30px;
+        padding: 0 12px;
+        border-radius: 15px;
+        box-sizing: border-box;
+        float: left;
+        margin: 6px 10px 0 0;
+        border: 0.5px solid #e5e5e5;
+      }
+      .demo2-item-selected {
+        color: #fff;
+        background-color: #ffbf51;
+      }
+    }
+  }
+  .cartBar {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    .prompt {
+      height: 1.5rem;
+      line-height: 1.5rem;
+      padding-left: 12px;
+      font-size: 12px;
+      color: #ff3c00;
+      background: #fff8ed;
+    }
+    .cartContent {
+      position: relative;
+      height: 2.5rem;
+      line-height: 2.5rem;
+      width: 100%;
+      // overflow: hidden;
+      background-color: #fff;
+      .left {
+        padding-left: 77/20rem;
+        padding-right: 0.4rem;
+        width: 265/20rem;
+        height: 2.5rem;
+        position: relative;
+        box-sizing: border-box;
+        .first {
+          display: inline-block;
+          // width: 2.4rem;
+          font-size: 20px;
+          color: red;
+          span {
+            font-size: 12px;
+          }
+        }
+        .second {
+          float: right;
+          right: 0;
+          font-size: 12px;
+          color: #bbbbbb;
+        }
+      }
+      .right {
+        position: absolute;
+        right: 0;
+        width: 5.5rem;
+        height: 100%;
+        font-size: 18px;
+        color: #ffffff;
+        letter-spacing: -0.1px;
+        text-align: center;
+        background-color: #ffbd52;
+      }
+      .right.current {
+        background-color: #bbb;
+      }
+      .bigCart {
+        position: absolute;
+        left: 12px;
+        top: -6px;
+        width: 2.5rem;
+        height: 2.5rem;
+        background: url('../../common/img/productIndex/shopping_ic.png');
+        // background-color: red;
+        background-size: 100%;
+        .countIcon {
+          position: absolute;
+          right: 0;
+          top: -5px;
+          width: 1rem;
+          height: 1rem;
+          line-height: 1rem;
+          text-align: center;
+          border-radius: 50%;
+          background: #ff3c00;
+          font-size: 14px;
+          color: #ffffff;
+          letter-spacing: -0.09px;
+        }
+      }
     }
   }
 }
