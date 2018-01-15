@@ -1,7 +1,7 @@
 /*
- * @Author: WuFengliang 
- * @Date: 2017-12-26 09:13:11 
- * DeveloperMailbox:   wufengliang@ccw163.com 
+ * @Author: WuFengliang
+ * @Date: 2017-12-26 09:13:11
+ * DeveloperMailbox:   wufengliang@ccw163.com
  * FunctionPoint:  路由配置导出
  */
 import Vue from 'vue'

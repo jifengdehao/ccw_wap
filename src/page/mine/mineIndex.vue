@@ -10,27 +10,27 @@
     <!-- 主体内容区域 -->
     <scroller :height="menuBarH" lock-x ref="scroller">
       <div class="person-contain">
-        <div class="person-header">
-          <img @click="dialog=true" src="" />
-          <ul @click="dialog=true">
+        <div class="person-header" @click="dialog=true">
+          <img src="" />
+          <ul>
             <li>小不点</li>
             <li>13838384381</li>
           </ul>
-          <p><a @click="dialog=true"></a></p>
+          <p><a></a></p>
         </div>
         <ul class="person-my">
           <li>
-            <p><i></i></p>
+            <p>173元</p>
             <p><span>我的账户</span></p>
           </li>
           <li class="line"></li>
-          <li>
-            <p><i></i></p>
+          <li @click="jumpTo">
+            <p>3</p>
             <p><span>劵包</span></p>
           </li>
           <li class="line"></li>
           <li>
-            <p><i></i></p>
+            <p>3</p>
             <p><span>积分账户</span></p>
           </li>
         </ul>
@@ -129,7 +129,12 @@ export default {
   activited: {},
   update: {},
   beforeRouteUpdate: {},
-  methods: {},
+  methods: {
+    //  路由跳转
+    jumpTo() {
+      this.$router.push('/myCoupon')
+    }
+  },
   filter: {},
   computed: {
     ...mapState(['menuBarH'])
@@ -139,7 +144,7 @@ export default {
 </script>
  <style lang="less" scoped>
 .box {
-  padding: 0 0.6rem;
+  padding: 0 12px;
 }
 
 .contain-box {
@@ -163,6 +168,8 @@ export default {
       height: 3rem;
       background-color: #f00;
       border-radius: 50%;
+      border: 2px solid #ffeeaf;
+      box-shadow: 0 0 -4px 4px #ffeeaf outset;
       margin-right: 0.5rem;
     }
     ul {
@@ -201,25 +208,21 @@ export default {
     li:not(.line) {
       flex-grow: 1;
       p {
+        font-size: 16px;
+        letter-spacing: -0.11px;
         text-align: center;
-        i {
-          display: inline-block;
-          width: 1.2rem;
-          height: 1.2rem;
-          background-size: 1.2rem 1.2rem;
-        }
         span {
-          font-size: 10px;
+          display: inline-block;
+          font-size: 20px;
+          color: #222;
+          transform: scale(0.5, 0.5);
         }
       }
-      &:nth-child(1) p i {
-        background-image: url(../../common/img/mine/me_account_ic.png);
+      p:first-child {
+        color: #999;
       }
-      &:nth-child(3) p i {
-        background-image: url(../../common/img/mine/me_coupon_ic.png);
-      }
-      &:nth-child(5) p i {
-        background-image: url(../../common/img/mine/me_integration_ic.png);
+      &:nth-child(1) > p:first-child {
+        color: #ff3c00;
       }
     }
     li.line {
@@ -321,7 +324,6 @@ export default {
     background-size: 100% auto;
     background-image: url(../../common/img/mine/download_img.png);
     background-repeat: no-repeat;
-    transition: all 50s ease-in 0;
     .down-header {
       box-sizing: border-box;
       height: 6.5rem;

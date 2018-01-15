@@ -9,7 +9,7 @@
   <div id="classifiy">
     <!-- 头部搜索 -->
     <div class="classifiyTop">
-      <div class="search">
+      <div class="search" @click="toLocation">
         <!-- <input type="text" /> -->
         <div class="searchIcon">
           <i></i>
@@ -44,6 +44,10 @@ export default {
     // 点击分类
     changeList(index) {
       this.selected = index
+    },
+    // 点击搜索跳转到搜索定位
+    toLocation(){
+      this.$router.push('location')
     }
   },
   filfter: {},
@@ -55,11 +59,10 @@ export default {
 #classifiy {
   position: relative;
   height: 100%;
-  font-family: PingFangSC-Regular;
   .classifiyTop {
     position: absolute;
     width: 100%;
-    height: 64.5/20rem;
+    height: 44/20rem;
     padding: 0 12px;
     background-color: #fff;
     box-sizing: border-box;
@@ -69,7 +72,7 @@ export default {
       width: 100%;
       height: 1.5rem;
       line-height: 1.5rem;
-      margin-top: 28/20rem;
+      margin-top: 8/20rem;
       box-sizing: border-box;
       text-align: center;
       background-color: #f5f5f5;
@@ -101,7 +104,7 @@ export default {
       left: 0;
       width: 94/20rem;
       height: 100%;
-      padding-top: 64.5/20rem;
+      padding-top: 44/20rem;
       padding-bottom: 49/20rem;
       box-sizing: border-box;
       ul {
@@ -131,7 +134,7 @@ export default {
       height: 100%;
       background-color: #f5f5f5;
       overflow: scroll;
-      padding-top: 64.5/20rem;
+      padding-top: 44/20rem;
       padding-bottom: 49/20rem;
       box-sizing: border-box;
     }

@@ -6,58 +6,75 @@
  */
 <template>
   <div id="productInfoList">
+    <!-- 头部 -->
     <div class="header">
-      <x-header :left-options="{backText: ''}" style="background-color:#fff;color: #333"><span>{{productName}}</span></x-header>
+      <x-header :left-options="{backText: ''}" style="background-color:#fff;color: #333">
+        <span>{{productName}}</span>
+      </x-header>
     </div>
+    <!-- 一级分类列表 -->
     <div class="nav">
       <ul>
-        <li :class="{current:selected==0}" @click="sort(0)"><span>综合排序</span><img src="../../common/img/productIndex/up_ic.png" alt=""></li>
-        <li :class="{current:selected==1}" @click="sort(1)"> <span>价格</span><img src="../../common/img/productIndex/down_ic.png" alt=""></li>
-        <li :class="{current:selected==2}" @click="sort(2)"><span>销量</span></li>
-        <li :class="{current:selected==3}"@click="sort(3)"><span>评价</span></li>
+        <li :class="{current:selected==0}" @click="sort(0)">
+          <span>综合排序</span><img src="../../common/img/productIndex/up_ic.png" alt=""></li>
+        <li :class="{current:selected==1}" @click="sort(1)">
+          <span>价格</span><img src="../../common/img/productIndex/down_ic.png" alt=""></li>
+        <li :class="{current:selected==2}" @click="sort(2)">
+          <span>销量</span>
+        </li>
+        <li :class="{current:selected==3}" @click="sort(3)">
+          <span>评价</span>
+        </li>
       </ul>
     </div>
+    <!-- 一级分类下面的二级分类产品 -->
     <div class="list">
       <ul>
         <li class="productMessage" v-for="(item, index) in 10" :key="index">
-          <router-link :to="'/shopInfo'">
+          <router-link :to="'/shopProduct'">
             <div class="productMessageLeft left"><img src="../../common/img/productIndex/3.jpg" alt=""></div>
             <div class="productMessageRight right">
-            <p class="first">美国西北车厘子 2磅装(约900g) 约26-28mm果径 新鲜水果</p>
-            <p><span>月销量200</span> <i>|</i> <span>好评率96%</span></p>
-            <p>约5斤/份</p>
-            <p>清河水果专卖店</p>
-            <p class="last">¥30.8</p>
-          </div>
-          </router-link>
-           <div v-if="showCart" class="cartIcon icon">
-              <img src="../../common/img/productIndex/shopping_ic.png" alt="">
+              <p class="first">美国西北车厘子 2磅装(约900g) 约26-28mm果径 新鲜水果</p>
+              <p>
+                <span>月销量200</span>
+                <i>|</i>
+                <span>好评率96%</span>
+              </p>
+              <p>约5斤/份</p>
+              <p>清河水果专卖店</p>
+              <p class="last">¥30.8</p>
             </div>
-            <div v-else class="fontIcon icon" @click="showChang">多规格</div>
+          </router-link>
+          <div v-if="showCart" class="cartIcon icon">
+            <img src="../../common/img/productIndex/shopping_ic.png" alt="">
+          </div>
+          <div v-else class="fontIcon icon" @click="showChang">多规格</div>
         </li>
         <li class="footer">
-          <p >没有更多了</p>
+          <p>没有更多了</p>
         </li>
       </ul>
     </div>
-    <div class="bigCart">
+    <!-- 购物车图标 -->
+    <div class="bigCart" @click="toCart">
       <img src="../../common/img/productIndex/shopping_big_ic.png" alt="">
-      <p class="smallIcon" v-if="">12</p>
+      <p class="smallIcon" v-if="countIcon">12</p>
     </div>
-   <div class="alert">
-      <x-dialog class="dialog" v-model="show" >
+    <!-- 弹窗 -->
+    <div class="alert">
+      <x-dialog class="dialog" v-model="show">
         <div class="alertContent clearfix" v-for="(item,index) in 2" :key="index">
-          <h5 >规格：</h5>
-           <checker v-model="demo2" default-item-class="demo2-item" selected-item-class="demo2-item-selected">
-             <checker-item value="1">约1.5斤/份</checker-item>
-             <checker-item value="3">不切</checker-item>
-           </checker>
+          <h5>规格：</h5>
+          <checker v-model="demo2" default-item-class="demo2-item" selected-item-class="demo2-item-selected">
+            <checker-item value="1">约1.5斤/份</checker-item>
+            <checker-item value="3">不切</checker-item>
+          </checker>
         </div>
         <div class="alertFooter" @click="hideModel">
-         确定{{price}}
+          确定{{price}}
         </div>
-     </x-dialog>
-   </div>
+      </x-dialog>
+    </div>
   </div>
 </template>
 <script>
@@ -73,7 +90,8 @@ export default {
       show: false,
       productName: '你好',
       price: '(￥)',
-      demo2: '1' // 默认选中规格1
+      demo2: '1', // 默认选中规格1
+      countIcon: true
     }
   },
   created() {},
@@ -87,6 +105,10 @@ export default {
     },
     hideModel() {
       this.show = false
+    },
+    // 点击购物车图标进入购物车
+    toCart(){
+      this.$router.push('cart')
     }
   },
   filfter: {},
@@ -98,7 +120,6 @@ export default {
 #productInfoList {
   height: 100%;
   position: relative;
-  font-family: PingFangSC-Regular;
   .header {
     position: absolute;
     width: 100%;
@@ -165,18 +186,24 @@ export default {
         position: relative;
         width: 259/20rem;
         font-size: 0.5rem;
+        line-height: 0.7rem;
         color: #999999;
         letter-spacing: -0.07px;
         box-sizing: border-box;
         .first {
+          line-height: 17/20rem;
           font-size: 0.6rem;
           color: #333333;
           letter-spacing: -0.07px;
         }
         .last {
           font-size: 0.8rem;
+          line-height: 1.1rem;
           color: #ff3c00;
           letter-spacing: -0.08px;
+        }
+        p {
+          margin: 2px;
         }
       }
       .icon {
@@ -228,6 +255,7 @@ export default {
       right: -4/20rem;
       width: 1.2rem;
       height: 1.2rem;
+      line-height: 1.2rem;
       background-color: #ff3c00;
       border-radius: 50%;
       font-size: 16px;
