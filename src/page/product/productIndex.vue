@@ -7,8 +7,8 @@
 <template>
   <div id="product">
     <!-- 在配送范围内 -->
-    <div style="height: 100%" v-if="isScope"> 
-      <classifi-cation></classifi-cation> 
+    <div style="height: 100%" v-if="isScope">
+      <classifi-cation></classifi-cation>
     </div>
     <!-- 不在配送范围内 -->
     <div class="notScope" v-else>
@@ -19,8 +19,8 @@
         <div class="notScopeImg">
           <img src="../../common/img/productIndex/no_location_ic.png" alt="">
         </div>
-        <p >当前位置未开通配送市场搜搜其他收货地址</p>
-        <div class="toOther">去切换
+        <p>当前位置未开通配送市场搜搜其他收货地址</p>
+        <div class="toOther" @click="toLocation">去切换
         </div>
       </div>
     </div>
@@ -32,7 +32,7 @@ import menuBar from '@/components/footer/menuBar'
 import classifiCation from './productComponents/classifiy'
 export default {
   name: 'productIndex',
-  components: { menuBar, classifiCation},
+  components: { menuBar, classifiCation },
   props: {},
   data() {
     return {
@@ -43,8 +43,11 @@ export default {
   mounted() {},
   activited: {},
   update: {},
-  beforeRouteUpdate: {},
-  methods: {},
+  methods: {
+    toLocation(){
+      this.$router.push('Location')
+    }
+  },
   filter: {},
   computed: {},
   watch: {}

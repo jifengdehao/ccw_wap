@@ -33,7 +33,7 @@
             <span v-for="(item,index) in 3" :key="index">准时送达</span>
           </div> 
           <ul class="imgList">
-              <li class="left" v-for="(img,index) in 3"><img src="../../../common/img/productIndex/3.jpg" alt=""></li>
+              <li class="left" v-for="(img,index) in 3" :key="index"><img src="../../../common/img/productIndex/3.jpg" alt=""></li>
             </ul>
         </div>
         <div class="reply">
@@ -41,7 +41,7 @@
           <div class="replyContent">
             <span>对不起，因为店面紧张而导致人员的疏忽，我们会进一步改善。我们也对您发放抵消券，欢迎再次光临。</span>
              <ul class="imgList">
-              <li class="left" v-for="(img,index) in 3"><img src="../../../common/img/productIndex/3.jpg" alt=""></li>
+              <li class="left" v-for="(img,index) in 3" :key="index"><img src="../../../common/img/productIndex/3.jpg" alt=""></li>
             </ul>
           </div>
         </div>
@@ -128,27 +128,27 @@ export default {
         }
       }
       .evaluationListRight {
-        width: 306/20rem;
+        width: 302/20rem;
         .pinlun {
-          margin-top: 4px;
+          margin-top: 0.2rem;
           font-size: 12px;
           color: #999999;
           letter-spacing: -0.09px;
         }
         .label {
-          margin-top: 4px;
+          margin-top: 0.2rem;
           i {
             display: inline-block;
-            width: 15px;
-            height: 15px;
+            width: 0.75rem;
+            height: 0.75rem;
             background: url('../../../common/img/productIndex/evaluate_label.png')
               no-repeat;
             background-size: contain;
           }
           span {
             font-size: 12px;
-            line-height: 15px;
-            margin-right: 14px;
+            line-height: 0.75rem;
+            margin-right: 0.7rem;
             // margin-bottom: 10px;
             color: #999999;
             vertical-align: top;
@@ -169,8 +169,8 @@ export default {
         float: left;
         width: 100%;
         // height: 161/20rem;
-        padding: 12px;
-        margin-top: 12px; 
+        padding: 0.6rem;
+        margin-top: 0.6rem; 
         box-sizing: border-box;
         background-color: #fafafa;
         h5 {
@@ -178,13 +178,13 @@ export default {
           color: #333333;
         }
         .replyContent {
-          padding: 8px 0 0 32px;
+          padding: 0.4rem 0 0 1.6rem;
           font-size: 12px;
           color: #666666;
           li {
             float: left;
-            margin-right: 8px;
-            margin-top: 10px;
+            margin-right: 0.4rem;
+            margin-top: 0.5rem;
             width: 3.5rem;
             img {
               width: 3.5rem;

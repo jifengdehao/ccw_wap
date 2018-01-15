@@ -12,21 +12,50 @@
       </x-header>
     </div>
     <div class="img">
-      <img src="../../../common/img/productIndex/3.jpg" alt="">
+      <div class="showIndex">
+        <span>{{index}}</span> /
+        <span>{{length}}</span>
+      </div>
+      <swiper :list="demo01_list" :show-dots="false" :height="imgHeigth" style="width:84%;margin:44px  auto;" @on-index-change="changeIndex"></swiper>
     </div>
   </div>
 </template>
 <script>
+import { Swiper, GroupTitle, SwiperItem, XButton, Divider } from 'vux'
+
 import { XHeader } from 'vux'
+const baseList = [
+  {
+    url: 'javascript:',
+    img: 'https://static.vux.li/demo/1.jpg'
+  },
+  {
+    url: 'javascript:',
+    img: 'https://static.vux.li/demo/2.jpg'
+  },
+  {
+    url: '/activity/11',
+    img: 'https://static.vux.li/demo/3.jpg'
+  }
+]
 export default {
-  components: { XHeader },
+  components: { XHeader, Swiper },
   props: {},
   data() {
-    return {}
+    return {
+      demo01_list: baseList,
+      index: 0,
+      length: baseList.length,
+      imgHeigth: '21rem'
+    }
   },
   created() {},
   mounted() {},
-  methods: {},
+  methods: {
+    changeIndex(index) {
+      this.index = index + 1
+    }
+  },
   filfter: {},
   computed: {},
   watch: {}
@@ -59,14 +88,12 @@ export default {
     height: 100%;
     box-sizing: border-box;
     background-color: #333;
-    img {
+    .showIndex {
       position: absolute;
-      top: 50%;
-      left: 50%;
-      width: 315/20rem;
-      height: 421/20rem;
-      background-color: #fff;
-      transform: translate(-50%,-50%);
+      top: 54/20rem;
+      left: 0.5rem;
+      font-size: 12px;
+      color: #ffffff;
     }
   }
 }

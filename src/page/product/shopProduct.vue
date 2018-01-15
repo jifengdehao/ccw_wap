@@ -35,14 +35,14 @@
       <!-- 一级分类 -->
       <aside>
         <ul>
-          <li v-for="(item,index) in 5" :key="index" :class="{current:selected==index}" @click="selectedList(index)">进口水果</li>
+          <li v-for="(item,index) in 25" :key="index" :class="{current:selected==index}" @click="selectedList(index)">进口水果</li>
         </ul>
       </aside>
       <!-- 二级分类 -->
       <div class="productList">
         <ul>
           <li v-for="(item,index) in 9" :key="index">
-            <router-link :to="'/shopProduct'">
+            <router-link :to="'/home'">
               <div class="listLeft">
                 <img src="../../common/img/productIndex/3.jpg" alt="">
               </div>
@@ -216,7 +216,7 @@ export default {
           span {
             float: left;
             line-height: 1.25rem;
-            font-size: 18px;
+            font-size: 0.9rem;
             color: #ffffff;
             letter-spacing: -0.08px;
           }
@@ -295,7 +295,7 @@ export default {
       li {
         position: relative;
         height: 96/20rem;
-        padding: 8px 0;
+        padding: 0.4rem 0;
         overflow: hidden;
         box-sizing: border-box;
         border-bottom: 0.5px solid #e5e5e5;
@@ -311,19 +311,19 @@ export default {
         .listRight {
           float: left;
           width: 195/20rem;
-          padding-left: 5px;
+          padding-left: 0.25rem;
           box-sizing: border-box;
           .first {
             font-size: 12px;
             color: #333333;
             letter-spacing: -0.07px;
-            line-height: 17px;
-            margin-bottom: 4px;
+            line-height: 17/20rem;
+            margin-bottom: 0.2rem;
           }
           .second,
           .third {
             font-size: 10px;
-            line-height: 18px;
+            line-height: 0.9rem;
             color: #999999;
             letter-spacing: -0.07px;
           }
@@ -333,12 +333,12 @@ export default {
             font-size: 16px;
             color: #ff3c00;
             letter-spacing: -0.08px;
-            line-height: 22px;
+            line-height: 1.1rem;
             span {
               font-size: 10px;
-              line-height: 18px;
+              line-height: 0.9rem;
               color: #999999;
-              margin-left: 2px;
+              margin-left: 0.1rem;
             }
           }
         }
