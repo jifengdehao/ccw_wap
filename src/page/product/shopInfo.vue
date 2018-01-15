@@ -47,7 +47,7 @@
         <i class="second"></i>
         <span>{{telNub}}</span>
       </div>
-      <div class="lastCell" is-link @click.native="onClick">
+      <div class="lastCell" is-link @click="onClick">
         <i class="last"></i>
         <i class="jumpIcon"></i>
         <span>查看商家资质</span>
