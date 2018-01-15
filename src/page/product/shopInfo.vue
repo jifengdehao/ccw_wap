@@ -2,50 +2,65 @@
  * @Author: huShangJun 
  * @Date: 2018-01-08 09:34:44 
  * DeveloperMailbox:   hsjcc@ccw163.com 
- * FunctionPoint: 功能开发点 
+ * FunctionPoint: 店铺详情 
  */
 <template>
   <div id="shopInfo">
-    <div style="position:absolute;zIndex:1000" >
+    <!-- 头部大图区域 -->
+    <div style="position:absolute;zIndex:1000">
       <div class="topImg">
-      <img src="../../common/img/productIndex/fruits.png" alt="">
-      <i class="goback" @click="goback"></i>
-      <div class="shopMessage">
-        <img src="../../common/img/productIndex/3.jpg" alt="">
-        <p>{{shopName}}</p>
-        <rater v-model="countStar" :font-size="12" disabled></rater>
+        <!-- 返回上一页图标 -->
+        <img src="../../common/img/productIndex/shop_bg.png" alt="">
+        <i class="goback" @click="goback"></i>
+        <div class="shopMessage">
+          <div class="shopMessageLeft">
+            <img src="../../common/img/productIndex/3.jpg" alt="">
+          </div>
+          <div class="shopMessageRight">
+            <p>
+              <span>{{shopName}} </span>
+            </p>
+            <rater v-model="countStar" :font-size="13" disabled></rater>
+          </div>
+        </div>
       </div>
+      <!-- 公告 -->
+      <div class="notic">
+        <span>公告：</span>这里是店铺活动布告！满100元减10元，满200元减30元。
+      </div>
+      <!-- tab栏 -->
+      <tab class="tab">
+        <tab-item selected @on-item-click="isShowMessage">店铺</tab-item>
+        <tab-item @on-item-click="isShowMessage">评价</tab-item>
+      </tab>
     </div>
-    <div class="notic"><span>公告：</span>这里是店铺活动布告！满100元减10元，满200元减30元。</div>
-    <tab class="tab" >
-      <tab-item selected @on-item-click="isShowMessage">店铺</tab-item>
-      <tab-item @on-item-click="isShowMessage">评价</tab-item>
-    </tab>
-    </div>
+    <!-- 店铺信息 -->
     <div v-if="showMessage" class="showMessage">
-        <group>
-          <cell-box  @click.native="onClick">
-            <i class="first"></i>
-            <span>番禺祈福市场</span>
-          </cell-box>
-            <cell-box  @click.native="onClick" >
-              <i class="second"></i>
-              <span>18876543210</span>
-          </cell-box>
-        </group>
-        <group style="marginTop: 10px;">
-          <cell-box class="lastCell"  disabled is-link>
-            <i class="last"></i>
-            <span>查看商家资质</span>
-          </cell-box>
-        </group>
+      <div class="address">
+        <div class="line">
+          <i class="first"></i>
+          <span>番禺祈福市场</span>
+        </div>
+      </div>
+
+      <div class="tel" @click="tel">
+        <i class="second"></i>
+        <span>{{telNub}}</span>
+      </div>
+      <div class="lastCell" is-link @click.native="onClick">
+        <i class="last"></i>
+        <i class="jumpIcon"></i>
+        <span>查看商家资质</span>
+      </div>
+
     </div>
+    <!-- 店铺评价 -->
     <div v-else style="position: absolute;
       top: 0;
       height: 100%;
-      padding-top: 14.7rem;
+      padding-top: 10.5rem;
       box-sizing: border-box;
-      zIndex: 10" @click="alert">
+      zIndex: 10">
       <shop-evaluation></shop-evaluation>
     </div>
   </div>
@@ -69,7 +84,8 @@ export default {
       showMessage: true,
       shopName: '菜城水果店', // 店铺名称
       listTitle: ['店铺', '评价'],
-      countStar: 3 // 店铺评价星数
+      countStar: 3, // 店铺评价星数
+      telNub: '18876543210'
     }
   },
   created() {},
@@ -85,7 +101,11 @@ export default {
     goback() {
       this.$router.go(-1)
     },
-    alert() {
+    tel() {
+      window.location.href = 'tel:' + this.telNub
+    },
+    onClick() {
+      this.$router.push('qualification')
     }
   },
   filfter: {},
@@ -101,53 +121,65 @@ export default {
   .weui-cells {
     margin-top: 0 !important;
   }
-  .weui-cell:before {
-    left: 12px;
-    right: 12px;
-  }
   .topImg {
+    width: 100%;
     img {
-      width: 100%;
-      height: 210/20rem;
+      height: 127/20rem;
     }
     .goback {
       position: absolute;
-      top: 28/20rem;
-      left: 0.6rem;
+      top: 14/20rem;
+      left: 10/20rem;
       width: 30px;
       height: 30px;
       // background-color: rgba(0, 0, 0, 0.3);
       border-radius: 50%;
-      background-image: url(../../common/img/productIndex/shops_back.png);
-      background-size: 30px;
+      background: url('../../common/img/productIndex/back_white.png') no-repeat;
+      background-size: 25px;
     }
     .shopMessage {
       position: absolute;
-      top: 130px;
+      top: 2.5rem;
       width: 204/20rem;
       height: 3.5rem;
       padding: 12px 10px 0 10px;
       box-sizing: border-box;
       border-bottom-right-radius: 2rem;
       border-top-right-radius: 2rem;
-      background-color: rgba(0, 0, 0, 0.5);
-      img {
+      // background-color: rgba(0, 0, 0, 0.5);
+      .shopMessageLeft {
         float: left;
-        width: 50px;
-        height: 50px;
-        margin-right: 8px;
+        margin-right: 10px;
+        img {
+          width: 2.5rem;
+          height: 2.5rem;
+        }
       }
-      p {
-        line-height: 20px;
-        font-size: 14px;
-        color: #ffffff;
-        letter-spacing: -0.08px;
-      }
-      span {
-        color: #ffffff;
-      }
-      .is-active span {
-        color: #ffbd52;
+      .shopMessageRight {
+        float: left;
+        p {
+          height: 1.25rem;
+          span {
+            float: left;
+            line-height: 1.25rem;
+            font-size: 18px;
+            color: #ffffff;
+            letter-spacing: -0.08px;
+          }
+          .showIcon {
+            display: inline-block;
+            width: 1.25rem;
+            height: 1.25rem;
+            background: url('../../common/img/productIndex/core_Jump.png');
+            background-size: contain;
+          }
+        }
+        span {
+          color: #ffffff;
+        }
+        .is-active span {
+          color: #ffbd52;
+        }
       }
     }
   }
@@ -176,17 +208,36 @@ export default {
 
   .showMessage {
     position: absolute;
-    top: 14.6rem;
+    top: 210/20rem;
     width: 100%;
     .weui-cell {
       height: 50px;
+      box-sizing: border-box;
+    }
+    .address,
+    .tel,
+    .lastCell {
+      position: relative;
+      height: 50px;
+      line-height: 50px;
+      padding-left: 12px;
+      padding-right: 12px;
+      background-color: #fff;
+      box-sizing: border-box;
+    }
+    .lastCell {
+      margin-top: 10px;
+    }
+    .line {
+      height: 50px;
+      border-bottom: 0.5px solid #e5e5e5;
       box-sizing: border-box;
     }
     i {
       display: inline-block;
       width: 20px;
       height: 20px;
-      margin-right: 10px;
+      vertical-align: middle;
       background-position: center;
     }
     span {
@@ -202,13 +253,23 @@ export default {
     .second {
       background: url('../../common/img/productIndex/shops_Telephone.png')
         no-repeat;
-      background-size: 16px 16px;
+      background-size: 15px 15px;
       background-position: center;
     }
     .last {
       background: url('../../common/img/productIndex/shops_qualifications.png')
         no-repeat;
-      background-size: 14px 14px;
+      background-size: 15px 15px;
+      background-position: center;
+    }
+    .jumpIcon {
+      position: absolute;
+      right: 0;
+      width: 50px;
+      height: 50px;
+      background: url('../../common/img/productIndex/jump_gray_ic.png')
+        no-repeat;
+      background-size: 30px 30px;
       background-position: center;
     }
   }

@@ -22,7 +22,7 @@
           <img src="../../../common/img/productIndex/3.jpg" alt="">
         </div>
         <div class="evaluationListRight left clearfix">
-          <div style="width:100%;height:14px">
+          <div style="width:100%;height:18px">
             <span style="font-size: 12px;color: #333333;letter-spacing: -0.09px; float:left">{{name}}</span>
             <span style="font-size: 10px;color: #999999;letter-spacing: -0.08px; float:right">{{date}}</span>
           </div>

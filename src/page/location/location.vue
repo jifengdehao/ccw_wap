@@ -8,15 +8,19 @@
   <transition name="slide">
     <div class="location">
       <div class="header border-1px">
-        <i class="back"></i>
-        <input type="text" class="search" placeholder="请输入收货地址" v-model.trim="search" @keyup.enter="submit"/>
-        <i class="clear" v-show="search" @click.stop="clearSearch"></i>
+        <i class="back" @click="back"></i>
+        <div class="search-content">
+          <input type="text" class="search" placeholder="请输入收货地址" v-model.trim="search" @keyup.enter="submit"/>
+          <i class="clear" v-show="search" @click.stop="clearSearch"></i>
+        </div>
       </div>
       <div class="map-tip">蓝色区域为当前市场配送范围</div>
+      <div class="map" id="map">
+        <!--<i class="icon-location"></i>-->
+      </div>
       <div class="content">
         <scroll>
           <div>
-            <div class="map" id="map"></div>
             <ul class="list">
               <li class="item border-1px">
                 <div class="name">黄沙冷仓<span class="current">当前</span></div>
@@ -91,16 +95,63 @@
       },
       clearSearch() {
         this.search = ''
+      },
+      back() {
+        return this.$router.back()
       }
     },
-    created() {
-      const map = new AMap.Map('map', {
+    mounted() {
+//      const map = new AMap.Map('map', {
+//        resizeEnable: true,
+//        zoom: 10,
+//        center: [116.480983, 40.0958]
+//      });
+//      console.log(map)
+      var map, geolocation;
+      //加载地图，调用浏览器定位服务
+      map = new AMap.Map('map', {
         resizeEnable: true,
-        zoom: 10,
-        center: [116.480983, 40.0958]
+        zoom: 13
       });
-      console.log(map)
+      map.plugin('AMap.Geolocation', function () {
+        geolocation = new AMap.Geolocation({
+          enableHighAccuracy: true,//是否使用高精度定位，默认:true
+          timeout: 10000,          //超过10秒后停止定位，默认：无穷大
+          maximumAge: 0,           //定位结果缓存0毫秒，默认：0
+          convert: true,           //自动偏移坐标，偏移后的坐标为高德坐标，默认：true
+          showButton: true,        //显示定位按钮，默认：true
+          buttonPosition: 'RB',    //定位按钮停靠位置，默认：'LB'，左下角
+          buttonOffset: new AMap.Pixel(10, 20),//定位按钮与设置的停靠位置的偏移量，默认：Pixel(10, 20)
+          showMarker: true,        //定位成功后在定位到的位置显示点标记，默认：true
+          showCircle: true,        //定位成功后用圆圈表示定位精度范围，默认：true
+          panToLocation: true,     //定位成功后将定位到的位置作为地图中心点，默认：true
+          zoomToAccuracy: true      //定位成功后调整地图视野范围使定位位置及精度范围视野内可见，默认：false
+        });
+        map.addControl(geolocation);
+        geolocation.getCurrentPosition();
+//        AMap.event.addListener(geolocation, 'complete', this.onComplete);//返回定位信息
+//        AMap.event.addListener(geolocation, 'error', onError);      //返回定位出错信息
+      });
 
+      //解析定位结果
+      function onComplete(data) {
+        console.log(data)
+        debugger
+        var str = ['定位成功'];
+        str.push('经度：' + data.position.getLng());
+        str.push('纬度：' + data.position.getLat());
+        if (data.accuracy) {
+          str.push('精度：' + data.accuracy + ' 米');
+        }//如为IP精确定位结果则没有精度信息
+        str.push('是否经过偏移：' + (data.isConverted ? '是' : '否'));
+        document.getElementById('tip').innerHTML = str.join('<br>');
+      }
+
+      //解析定位错误信息
+      function onError(data) {
+        document.getElementById('tip').innerHTML = '定位失败';
+        console.log(data);
+      }
     },
     components: {
       scroll
@@ -109,7 +160,6 @@
 </script>
 <style scoped lang="less" type="text/less">
   @import "../../common/css/mixin";
-  @import '~vux/src/styles/close.less';
 
   .location {
     overflow: hidden;
@@ -122,7 +172,7 @@
       position: absolute;
       left: 0;
       right: 0;
-      top: 2.2rem;
+      top: 16rem;
       bottom: 0;
       overflow: hidden;
     }
@@ -138,44 +188,70 @@
     .map {
       height: 12.3rem;
       width: 100%;
+      .icon-location {
+        position: absolute;
+        right: 0;
+        bottom: 1rem;
+        width: 2.4rem;
+        height: 2.4rem;
+        background: #FFFFFF url("../../common/img/location/map_location_ic.png") no-repeat center;
+        background-size: 2.35rem 2.35rem;
+        border-radius: 50%;
+        border: 0.05rem solid #e5e5e5;
+        z-index: 200;
+      }
+    }
+    #tip {
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 200;
     }
     .header {
       height: 2.2rem;
       line-height: 2.2rem;
       display: flex;
-      background-color: #f5f5f5;
+      background-color: #FFFFFF;
       padding-right: .6rem;
       .border-1px(#e5e5e5);
       .back {
         display: inline-block;
-        flex: 0 0 1.7rem;
-        width: 1.7rem;
+        flex: 0 0 2.4rem;
+        width: 2.4rem;
         background: url("../../common/img/common/back.png") no-repeat center;
-        background-size: 70%;
+        background-size: 50%;
       }
-      .search {
+      .search-content {
         flex: 1;
         display: inline-block;
         height: 1.5rem;
-        border: .5px #e5e5e5 solid;
-        border-radius: .2rem;
+        line-height: 1.5rem;
+        border-radius: 4px;
         margin: .35rem 0;
         box-sizing: border-box;
-        background: #ffffff url("../../common/img/location/search.png") no-repeat .4rem center;
+        background: #f5f5f5 url("../../common/img/location/search.png") no-repeat .4rem center;
         background-size: .65rem .65rem;
         padding-left: 1.3rem;
-        font-size: .6rem;
-        color: #999999;
-        padding-right: 2rem;
+        padding-right: 1.5rem;
+        font-size: 0;
+        position: relative;
+        & > input {
+          height: 1.5rem;
+          width: 100%;
+          font-size: .6rem;
+          color: #999999;
+          background-color: #f5f5f5;
+        }
       }
       .clear {
-        position: absolute;
-        right: 1rem;
-        top: .5rem;
+        display: inline-block;
         background: url("../../common/img/location/clean_btn.png") no-repeat center;
         width: 1.2rem;
         height: 1.2rem;
         background-size: .6rem .6rem;
+        position: absolute;
+        right: .15rem;
+        top: .15rem;
       }
     }
     .search-list {
@@ -184,7 +260,7 @@
       left: .6rem;
       right: .6rem;
       bottom: 0;
-      z-index: 20;
+      z-index: 999;
       background: #FFFFFF;
       box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.40);
       border-radius: 4px;
@@ -194,13 +270,13 @@
       padding: 0 .6rem;
       background-color: #ffffff;
       .item {
-        .border-1px(#e5e5e5);
         height: 3rem;
         background: url("../../common/img/location/maps.png") no-repeat left .6rem;
         background-size: .6rem .75rem;
         padding-left: 1rem;
         padding-top: .5rem;
         box-sizing: border-box;
+        .border-1px(#e5e5e5);
         &:last-child {
           .border-none();
         }

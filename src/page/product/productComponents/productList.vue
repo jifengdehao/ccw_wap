@@ -1,7 +1,7 @@
 /*
- * @Author: huShangJun 
- * @Date: 2018-01-04 13:46:43 
- * DeveloperMailbox:   hsjcc@ccw163.com 
+ * @Author: huShangJun
+ * @Date: 2018-01-04 13:46:43
+ * DeveloperMailbox:   hsjcc@ccw163.com
  * FunctionPoint: 商品列表
  */
 <template>
@@ -36,7 +36,7 @@ export default {
   watch: {}
 }
 </script>
-<style lang="less" scoped>
+<style lang="less" scoped type="text/less">
 #productList {
   padding: 0 0.6rem 0.5rem;
   font-family: PingFangSC-Regular;
