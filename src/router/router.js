@@ -21,6 +21,7 @@ const productIndex = anyscComponent('page/product/productIndex') //  产品模�
 const productInfoList = anyscComponent('page/product/productInfoList') //  二级分类下的商品列表
 
 const cartIndex = anyscComponent('page/cart/cartIndex') //  购物车模块主页
+const cartSettlementPage = anyscComponent('page/cart/settlementPage') // 购物车结算页面
 
 const mineIndex = anyscComponent('page/mine/mineIndex') //  个人中心模块主页
 
@@ -62,6 +63,11 @@ export default [
     path: '/cart',
     name: '购物车',
     component: cartIndex
+  },
+  {
+    path: '/settlementPage',
+    name: '填写订单',
+    component: cartSettlementPage
   },
   {
     path: '/mine',
