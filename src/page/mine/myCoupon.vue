@@ -130,7 +130,7 @@ export default {
             font-size: 40px;
           }
         }
-        p:last-child {
+        p:nth-child(2) {
           font-size: 20px;
           margin-left: -25%;
           line-height: 14px;
