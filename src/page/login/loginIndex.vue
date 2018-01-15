@@ -7,16 +7,18 @@
 <template>
   <transition name="fade">
     <div class="login">
+      <top-bar></top-bar>
       loginIndex
       {{name}}
     </div>
   </transition>
 </template>
 <script>
+import topBar from '../../components/header/topBar'
 import { mapGetters } from 'vuex'
 export default {
   name: 'LoginIndex',
-  components: {},
+  components: { topBar },
   props: {},
   data() {
     return {}
