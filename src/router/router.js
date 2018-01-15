@@ -46,12 +46,28 @@ const myCoupon = anyscComponent('page/mine/myCoupon') //  我的优惠券
 export default [
   {
     path: '/',
-    redirect: {path: '/home'}
+    redirect: { path: '/home' }
   },
   {
     path: '/home',
     name: '首页',
     component: homeIndex
+  },
+  {
+    path: '/search',
+    name: '搜索',
+    component: Search,
+    redirect: '/search/goods',
+    children: [
+      {
+        path: 'goods',
+        component: SearchGoods
+      },
+      {
+        path: 'sellers',
+        component: SearchSellers
+      }
+    ]
   },
   {
     path: '/location',
@@ -64,12 +80,21 @@ export default [
     component: productIndex
   },
   {
+    path: '/shopProduct',
+    name: '店铺商品',
+    component: shopProduct
+  },
+  {
     path: '/shopInfo',
     name: '店铺详情',
     component: shopInfo
   },
   {
-    path: '/productInfoList', 
+    path: '/qualification',
+    component: qualification
+  },
+  {
+    path: '/productInfoList',
     name: '二级分类商品列表',
     component: productInfoList
   },
@@ -89,6 +114,11 @@ export default [
     component: mineIndex
   },
   {
+    path: '/myCoupon',
+    name: '我的优惠券',
+    component: myCoupon
+  },
+  {
     path: '/login',
     name: '登录',
     meta: true,
@@ -99,84 +129,4 @@ export default [
     name: '新增地址',
     component: addAddress
   }
-]
-export default [{
-        path: '/',
-        redirect: { path: '/home' }
-    },
-    {
-        path: '/home',
-        name: '首页',
-        component: homeIndex
-    },
-    {
-        path: '/search',
-        name: '搜索',
-        component: Search,
-        redirect: '/search/goods',
-        children: [{
-                path: 'goods',
-                component: SearchGoods
-            },
-            {
-                path: 'sellers',
-                component: SearchSellers
-            }
-        ]
-    },
-    {
-        path: '/location',
-        name: '位置',
-        component: Location
-    },
-    {
-        path: '/product',
-        name: '产品分类',
-        component: productIndex
-    },
-    {
-        path: '/shopProduct',
-        name: '店铺商品',
-        component: shopProduct
-    },
-    {
-        path: '/shopInfo',
-        name: '店铺详情',
-        component: shopInfo
-    },
-    {
-        path: '/qualification',
-        component: qualification
-    },
-    {
-        path: '/productInfoList',
-        name: '二级分类商品列表',
-        component: productInfoList
-    },
-    {
-        path: '/cart',
-        name: '购物车',
-        component: cartIndex
-    },
-    {
-        path: '/mine',
-        name: '个人中心',
-        component: mineIndex
-    },
-    {
-        path: '/myCoupon',
-        name: '我的优惠券',
-        component: myCoupon
-    },
-    {
-        path: '/login',
-        name: '登录',
-        meta: true,
-        component: loginIndex
-    },
-    {
-        path: '/addAddress',
-        name: '新增地址',
-        component: addAddress
-    }
 ]
