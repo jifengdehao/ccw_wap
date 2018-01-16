@@ -21,7 +21,6 @@ export default {
 }
 </script>
  <style lang="less" scoped>
-@import '../../common/css/mixin.less';
 .top-bar {
   width: 100%;
   height: 44px;
@@ -34,14 +33,20 @@ export default {
   top: 0;
   left: 0;
   z-index: 1;
-  .border-1px(#e5e5e5);
+  &:after {
+    content: '';
+    display: block;
+    width: 100%;
+    height: 0;
+    border-bottom: 1px solid #e5e5e5;
+  }
 }
 
 .top-bar img {
   width: 20px;
   height: 20px;
   vertical-align: middle;
-  position: fixed;
+  position: absolute;
   top: 12px;
   left: 12px;
 }
