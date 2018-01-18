@@ -100,12 +100,14 @@
         </div>
       </x-dialog>
     </div>
+    <loading v-model="loading.status" :text="loading.text"></loading>
   </div>
 </template>
 <script>
-import { Rater, XDialog, Checker, CheckerItem } from 'vux'
+import { mapActions, mapState } from 'vuex'
+import { Rater, XDialog, Checker, CheckerItem, Loading } from 'vux'
 export default {
-  components: { Rater, XDialog, Checker, CheckerItem },
+  components: { Rater, XDialog, Checker, CheckerItem, Loading },
   props: {},
   data() {
     return {
@@ -120,12 +122,18 @@ export default {
       show: false, // 弹框
       price: '￥30',
       demo2: 1,
-      notSettlement: false
+      notSettlement: false,
+      isShowLoading: {}
     }
   },
-  created() {},
-  mounted() {},
+  created() {
+    this.showLoading()
+  },
+  mounted() {
+    this.up()
+  },
   methods: {
+    ...mapActions(['startLoding']),
     isShowMessage(index) {
       if (index === 0) {
         this.showMessage = true
@@ -156,10 +164,20 @@ export default {
         this.$router.push('cart')
       }
     },
+    showLoading() {
+      this.startLoding({ status: true, text: '加载..' })
+    },
+    up(){
+        this.startLoding({status: false, text: '加载..'})
+    },
     alert() {}
   },
   filfter: {},
-  computed: {},
+  computed: {
+    ...mapState({
+      loading: state => state.isLoading
+    })
+  },
   watch: {}
 }
 </script>

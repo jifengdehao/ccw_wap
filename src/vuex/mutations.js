@@ -13,5 +13,11 @@ export default {
     state.isLogin = state.name ? true : false
     if (!state.isLogin) return
     setStore('userInfo', content)
-  }
+  },
+   // 修改loding状态
+  updateLoadingStatus(state, status) {
+    console.log(status.text)
+    state.isLoading.status = status.status;
+    state.isLoading.text = status.text;
+  },
 }
