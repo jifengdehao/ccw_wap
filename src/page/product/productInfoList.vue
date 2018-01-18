@@ -28,7 +28,7 @@
       </ul>
     </div>
     <!-- 一级分类下面的二级分类产品 -->
-    <div class="list">
+    <Scroller lock-x class="list">
       <ul>
         <li class="productMessage" v-for="(item, index) in 10" :key="index">
           <router-link :to="'/shopProduct'">
@@ -54,7 +54,7 @@
           <p>没有更多了</p>
         </li>
       </ul>
-    </div>
+    </Scroller>
     <!-- 购物车图标 -->
     <div class="bigCart" @click="toCart">
       <img src="../../common/img/productIndex/shopping_big_ic.png" alt="">
@@ -78,10 +78,10 @@
   </div>
 </template>
 <script>
-import { XHeader, XDialog, Checker, CheckerItem } from 'vux'
+import { XHeader, XDialog, Checker, CheckerItem, Scroller } from 'vux'
 // import alert from './productComponents/alert'
 export default {
-  components: { XHeader, XDialog, Checker, CheckerItem },
+  components: { XHeader, XDialog, Checker, CheckerItem, Scroller },
   props: {},
   data() {
     return {
@@ -107,7 +107,7 @@ export default {
       this.show = false
     },
     // 点击购物车图标进入购物车
-    toCart(){
+    toCart() {
       this.$router.push('cart')
     }
   },
@@ -165,7 +165,6 @@ export default {
     height: 100%;
     padding: 86px 0.6rem 0;
     box-sizing: border-box;
-    overflow: scroll;
     .productMessage {
       height: 127/20rem;
       padding-top: 11/20rem;
@@ -234,9 +233,6 @@ export default {
       color: #888;
       text-align: center;
     }
-  }
-  ::-webkit-scrollbar {
-    display: none;
   }
   .bigCart {
     position: absolute;
