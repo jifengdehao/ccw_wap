@@ -14,5 +14,10 @@ export default {
   isLoading: {
     status: false,  // 是否显示loading
     text: ''  // 显示loading时的文字
-  }    
+  },    
+  loginParams: {
+    isActive: false, //  是否已经开始发送验证码
+    times: 60, //  发送验证码秒数
+    mobileNumber: '' //  手机号
+  }
 }

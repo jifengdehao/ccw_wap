@@ -7,6 +7,7 @@ import FastClick from 'fastclick' //  移动端点击延迟300ms
 import VueLazyload from 'vue-lazyload' // 懒加载
 import '@/common/css/reset.less' //  重置CSS
 import VueScroll from 'better-scroll-list'
+import { ToastPlugin } from 'vux'
 
 Vue.use(VueScroll)
 
@@ -22,6 +23,8 @@ if ('addEventListener' in document) {
 Vue.use(VueLazyload, {
   loading: require('@/assets/logo.png')
 })
+
+Vue.use(ToastPlugin) //  toast弹框
 
 new Vue({
   el: '#app',
