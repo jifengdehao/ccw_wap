@@ -23,8 +23,9 @@ export default {
   },
   created() {
     this.isWebchat()
-    let token = JSON.parse(sessionStorage.getItem('userInfo')).authParam.token
-    if (token.length > 0) {
+    let token = JSON.parse(sessionStorage.getItem('userInfo'))
+
+    if (token != null && token.authParam.token.length > 0) {
       this.$router.push('/home')
     } else {
       if (this.isWebchatBool) {
