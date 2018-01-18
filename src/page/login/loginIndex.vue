@@ -12,15 +12,15 @@
         <div class="main-box">
           <div class="write-box telphone">
             <i></i>
-            <input type="text" placeholder="请输入您的手机号码" v-model="mobileNumber" maxlength="11">
+            <input type="number" placeholder="请输入您的手机号码" v-model="mobileNumber" maxlength="11">
           </div>
           <div class="write-box verification">
             <i></i>
-            <input type="text" placeholder="验证码">
-            <button @click="isTelPhone">获取验证码</button>
+            <input type="text" placeholder="验证码" v-model="loginParams.code">
+            <button :class="{'active':$store.state.loginParams.isActive}" @click="isTelPhone">{{words}}</button>
           </div>
         </div>
-        <div class="operate">立即加入</div>
+        <div class="operate" @click="userLogin">立即加入</div>
       </div>
     </login-slot>
   </div>
@@ -37,7 +37,17 @@ export default {
   data() {
     return {
       mobileNumber: '', //  手机号
-      telRegExp: /^[1][3,4,5,7,8][0-9]{9}$/ //  手机号正则
+      words: '获取验证码', //  验证码文字
+      timer: null, // 定时器句柄
+      telRegExp: /^[1][3,4,5,7,8][0-9]{9}$/, //  手机号正则
+      sentParams: {
+        mobileno: '',
+        type: 2
+      }, //  发送验证码相关参数
+      loginParams: {
+        code: '',
+        mobileno: ''
+      }
     }
   },
   created() {},
@@ -49,10 +59,65 @@ export default {
     //  判断是否是合法手机号
     isTelPhone() {
       if (this.telRegExp.test(this.mobileNumber)) {
-        this.$vux.toast.text('正在发送验证码', 'middle')
+        this.$vux.toast.text('正在发送验证码', 'middle') //  toast弹框
+        sessionStorage.setItem('mobileNumber', this.mobileNumber)
+        this.runClock()
+        this.sendCode()
       } else {
-        alert(2)
+        this.$vux.toast.text('手机号码不正确', 'middle')
       }
+    },
+    //  定时器是否开启
+    runClock() {
+      let times = null
+      if (typeof sessionStorage.getItem('times') == 'object') {
+        //  没有设置times值
+        times = this.$store.state.loginParams.times
+      } else {
+        if (parseInt(sessionStorage.getItem('times')) < 0) {
+          return
+        }
+        this.$store.state.loginParams.times = times = parseInt(
+          sessionStorage.getItem('times')
+        )
+      }
+      this.timer = setInterval(() => {
+        if (times <= 1) {
+          this.words = '获取验证码'
+          this.$store.state.loginParams = {
+            times: 60,
+            isActive: false
+          }
+          sessionStorage.removeItem('isActive')
+          sessionStorage.removeItem('times')
+          clearInterval(this.timer)
+          return
+        }
+        this.words = `${times}s`
+        this.$store.state.loginParams.times = times = parseInt(times) - 1
+        this.$store.state.loginParams.isActive = true
+        sessionStorage.setItem('times', times)
+        sessionStorage.setItem('isActive', true)
+      }, 1000)
+    },
+    //  发送验证码
+    sendCode() {
+      if (this.telRegExp.test(this.mobileNumber)) {
+        this.sentParams.mobileno = this.mobileNumber
+        http.sentCode(this.sentParams).then(data => {
+          console.log(data)
+        })
+      }
+    },
+    //  登录
+    userLogin() {
+      this.loginParams.mobileno = this.mobileNumber
+      http.userLogin(this.loginParams).then(response => {
+        if (response.code == 200) {
+          sessionStorage.setItem('userInfo', JSON.stringify(response.data))
+          this.$router.push('/home')
+        }
+      })
     }
   },
   filter: {},
@@ -126,15 +191,19 @@ export default {
         color: #fff;
         background-color: #ffbd52;
         border-radius: 2px;
-      }
-      button.active {
-        background-color: #bbb;
+        &.active {
+          background-color: #bbb;
+        }
       }
     }
-    input[type='text'] {
+    input[type='text'],
+    input[type='number'] {
       margin-left: 10px;
       font-size: 14px;
       color: #bbb;
+    }
+    input[type='number'] {
+      text-indent: 6px;
     }
   }
 }

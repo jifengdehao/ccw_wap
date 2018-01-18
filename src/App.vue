@@ -23,12 +23,17 @@ export default {
   },
   created() {
     this.isWebchat()
-    if (this.isWebchatBool) {
-      //  微信内置浏览器登录
-      this.$router.push('/webchat')
+    let token = JSON.parse(sessionStorage.getItem('userInfo')).authParam.token
+    if (token.length > 0) {
+      this.$router.push('/home')
     } else {
-      //  H5登录
-      this.$router.push('/login')
+      if (this.isWebchatBool) {
+        //  微信内置浏览器登录
+        this.$router.push('/webchat')
+      } else {
+        //  H5登录
+        this.$router.push('/login')
+      }
     }
   },
   methods: {

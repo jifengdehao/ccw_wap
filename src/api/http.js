@@ -7,6 +7,10 @@
 import * as http from './instance'
 
 /**
+ * 负责人 - By WuFengliang
+ */
+
+/**
  * 判断手机号是否是平台账户
  */
 export const isExist = params => {
@@ -19,3 +23,24 @@ export const isExist = params => {
 export const sentCode = params => {
   return http.g(`/user/sendCode`, params)
 }
+
+/**
+ * 手机登陆认证入口
+ */
+export const userLogin = params => {
+  return http.p(`/user/account`, params)
+}
+
+/**
+ * 用户个人优惠券
+ */
+export const getCoupon = (customerId, marketId, params) => {
+  return http.g(
+    `/personCenter/coupon/${customerId}/${marketId}/listCustomer`,
+    params
+  )
+}
+
+/**
+ * 负责人 - By WuFengliang
+ */

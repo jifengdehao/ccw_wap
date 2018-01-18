@@ -17,8 +17,7 @@ var ax = axios.create({
   withCredentials: true, // 跨域携带证书
   timeout: 30000,
   headers: {
-    CCWTOKEN: '',
-    sign: ''
+    CCWTOKEN: ''
   }
 })
 
@@ -30,20 +29,16 @@ const itr = (type, url, params) => {
   if (Object.keys(params).length > 0) {
     url = type === 'get' ? url + '?' + arg : url
   }
-  let userInfo = JSON.parse(sessionStorage.getItem('user'))
+  let userInfo = JSON.parse(sessionStorage.getItem('userInfo'))
   let token = ''
   if (userInfo) {
+    console.log(userInfo)
     userInfo = typeof userInfo === 'string' ? JSON.parse(userInfo) : userInfo
-    token = userInfo.token ? userInfo.token : ''
+    token = userInfo.authParam.token ? userInfo.authParam.token : ''
   }
-  let sign = ''
-  if (type === 'get' || type === 'delete') {
-    sign = hash(arg + token)
-  } else {
-    sign = hash(JSON.stringify(params) + token)
-  }
+
   ax.defaults.headers.CCWTOKEN = token
-  ax.defaults.headers.sign = sign
+
   return ax[type](url, params)
 }
 
@@ -101,7 +96,7 @@ const base = (type, url, params) => {
           title: '提示',
           content: error.msg
         })
-        reject(response.data)
+        reject(error.data)
       })
   })
 }
