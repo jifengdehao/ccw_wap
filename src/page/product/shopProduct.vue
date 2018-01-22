@@ -167,8 +167,8 @@ export default {
     showLoading() {
       this.startLoding({ status: true, text: '加载..' })
     },
-    up(){
-        this.startLoding({status: false, text: '加载..'})
+    up() {
+      this.startLoding({ status: false, text: '加载..' })
     },
     alert() {}
   },
@@ -335,23 +335,29 @@ export default {
             font-size: 12px;
             color: #333333;
             letter-spacing: -0.07px;
-            line-height: 17/20rem;
+            line-height: 0.85rem;
             margin-bottom: 0.2rem;
           }
           .second,
           .third {
             font-size: 10px;
-            line-height: 0.9rem;
+            line-height: 0.7rem;
             color: #999999;
             letter-spacing: -0.07px;
           }
           .third {
+            display: inline;
+            background: #fff8ed;
+            border: 0.5px solid #ffae28;
+            border-radius: 2px;
+            color: #ffbd52;
           }
           .last {
             font-size: 16px;
             color: #ff3c00;
             letter-spacing: -0.08px;
             line-height: 1.1rem;
+            margin-top: 0.35rem;
             span {
               font-size: 10px;
               line-height: 0.9rem;

@@ -44,3 +44,17 @@ export const getCoupon = (customerId, marketId, params) => {
 /**
  * 负责人 - By WuFengliang
  */
+
+/**
+ * 负责人 -By hushangjun
+ */ 
+/**
+ * 获取一级分类列表
+ */ 
+export const getProductCat = () => {
+  return http.g(`/productCat/cat`)
+}
+
+ /**
+ * 负责人 -By hushangjun
+ */ 

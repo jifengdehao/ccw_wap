@@ -28,6 +28,7 @@
   </div>
 </template>
 <script>
+import * as http from '@/api/http'
 import menuBar from '@/components/footer/menuBar'
 import classifiCation from './productComponents/classifiy'
 export default {
@@ -39,12 +40,13 @@ export default {
       isScope: true // 是否在配送范围内
     }
   },
-  created() {},
+  created() {
+  },
   mounted() {},
   activited: {},
   update: {},
   methods: {
-    toLocation(){
+    toLocation() {
       this.$router.push('Location')
     }
   },

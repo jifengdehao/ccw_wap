@@ -21,24 +21,33 @@
     <div class="classifiyList">
       <aside>
         <ul>
-          <li v-for="(item,index) in 5" :key="index" :class="{current:selected==index}" @click="changeList(index)">新鲜水果</li>
+          <li v-for="(item,index) in preantCat" :key="index" :class="{current:selected==index}" @click="changeList(index)">{{item.name}}</li>
         </ul>
       </aside>
       <section class="classifiyInfo">
-        <product-list></product-list>
+        <product-list ></product-list>
       </section>
     </div>
   </div>
 </template>
 <script>
+import * as http from '@/api/http'
 import productList from './productList'
 export default {
   components: { productList },
   props: {},
   data() {
     return {
-      selected: 0
+      selected: 0,
+      preantCat: []
     }
+  },
+  created() {
+    http.getProductCat().then(res => {
+      if (res.code === 200) {
+        this.preantCat = res.data
+      }
+    })
   },
   methods: {
     // 点击分类
@@ -46,7 +55,7 @@ export default {
       this.selected = index
     },
     // 点击搜索跳转到搜索定位
-    toSearch(){
+    toSearch() {
       this.$router.push('Search')
     }
   },

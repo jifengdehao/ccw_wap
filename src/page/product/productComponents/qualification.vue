@@ -13,8 +13,7 @@
     </div>
     <div class="img">
       <div class="showIndex">
-        <span>{{index}}</span> /
-        <span>{{length}}</span>
+        <span>{{index}}</span> / <span>{{length}}</span>
       </div>
       <swiper :list="demo01_list" :show-dots="false" :height="imgHeigth" style="width:84%;margin:44px  auto;" @on-index-change="changeIndex"></swiper>
     </div>
@@ -44,7 +43,7 @@ export default {
   data() {
     return {
       demo01_list: baseList,
-      index: 0,
+      index: 1,
       length: baseList.length,
       imgHeigth: '21rem'
     }
