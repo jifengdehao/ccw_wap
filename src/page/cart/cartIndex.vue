@@ -6,8 +6,12 @@
  */
 <template>
   <div class="maximum">
+    <div class="top">
+      <div class="top-bar"> {{$route.name}} </div>
+    </div>
     <div class="header">
       <div class="header-position">
+        <i></i>
         <div class="bar">桥南街道</div>
       </div>
     </div>
@@ -17,20 +21,74 @@
       <div class="shop-group-item">
         <div class="shop-name">
           <input type="checkbox" class="check">
-          <h4> <a href="#">祈福水果店</a> </h4>
-          <div class="goback"> <a href="#"><img src="../../common/img/cart/jump_gray_ic.png" alt=""></a>  </div>
+          <h4> <i></i> <a href="#">祈福水果店</a> </h4>
+          <div class="pic"> <a><img src="../../common/img/cart/jump_gray_ic.png" alt=""></a> </div>
         </div>
         <div>
           <swipeout>
-            <swipeout-item @on-close="handleEvents('on-close')" @on-open="handleEvents('on-open')" transition-mode="follow">
+            <swipeout-item @on-close="handleEvents('on-close')" @on-open="handleEvents('on-open')">
               <div slot="right-menu">
-                <swipeout-button @click.native="onButtonClick('delete')" style="background-colo: #FF3C00;" type="warn">删除</swipeout-button>
+                <swipeout-button @click.native="onButtonClick('delete')" style="background-color: #FF3C00" :width="60">删除</swipeout-button>
               </div>
-              <div slot="content" class="demo-content vux-1px-t" style="barckground-color: red">
+              <div slot="content" class="demo-content vux-1px-t">
                 <ul>
-                  <li class="pr">
+                  <li>
                     <div class="shop-info">
-                      <div class="shop-info-img"> <a href="#"> <img src="../../common/img/cart/select_selected_btn.png" alt=""> </a> </div>
+                      <div class="shop-info-img"> <img src="../../common/img/cart/select_selected_btn.png" alt=""> </div>
+                      <div class="shop-info-text"> 
+                        <h4>越南进口红心火龙果2个装大果单果约新鲜水果大果单果</h4>
+                        <div class="shop-brief">  <span>约2斤/份</span> <span>不切</span>  </div> 
+                        <div class="shop-price">
+                          <div class="shop-pices">￥<b class="price">100.00</b> </div>
+                          <div class="shop-arithmetic">
+                            <a href="javascript:void(0);" class="minus"><img src="../../common/img/cart/reduce_ic.png" alt=""></a> <span class="num">1</span> <a href="javascript:void(0);" class="plus"><img src="../../common/img/cart/plus_ic.png" alt=""></a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </swipeout-item>
+          </swipeout>
+
+          <swipeout>
+            <swipeout-item @on-close="handleEvents('on-close')" @on-open="handleEvents('on-open')">
+              <div slot="right-menu">
+                <swipeout-button @click.native="onButtonClick('delete')" style="background-color: #FF3C00" :width="60">删除</swipeout-button>
+              </div>
+              <div slot="content" class="demo-content vux-1px-t">
+                <ul>
+                  <li>
+                    <div class="shop-info">
+                      <div class="shop-info-img"> <img src="../../common/img/cart/select_selected_btn.png" alt=""> </div>
+                      <div class="shop-info-text"> 
+                        <h4>越南进口红心火龙果2个装大果单果约新鲜水果大果单果</h4>
+                        <div class="shop-brief">  <span>约2斤/份</span> <span>不切</span>  </div> 
+                        <div class="shop-price">
+                          <div class="shop-pices">￥<b class="price">100.00</b> </div>
+                          <div class="shop-arithmetic">
+                            <a href="javascript:void(0);" class="minus"><img src="../../common/img/cart/reduce_ic.png" alt=""></a> <span class="num">1</span> <a href="javascript:void(0);" class="plus"><img src="../../common/img/cart/plus_ic.png" alt=""></a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </swipeout-item>
+          </swipeout>
+
+          <swipeout>
+            <swipeout-item @on-close="handleEvents('on-close')" @on-open="handleEvents('on-open')">
+              <div slot="right-menu">
+                <swipeout-button @click.native="onButtonClick('delete')" style="background-color: #FF3C00" :width="60">删除</swipeout-button>
+              </div>
+              <div slot="content" class="demo-content vux-1px-t">
+                <ul>
+                  <li>
+                    <div class="shop-info">
+                      <div class="shop-info-img"> <img src="../../common/img/cart/select_selected_btn.png" alt=""> </div>
                       <div class="shop-info-text"> 
                         <h4>越南进口红心火龙果2个装大果单果约新鲜水果大果单果</h4>
                         <div class="shop-brief">  <span>约2斤/份</span> <span>不切</span>  </div> 
@@ -54,15 +112,16 @@
 
     
     <div class="payment-bar">
-      <div class="price-free">订单总额还差60元，即免配送费</div>
+      <div class="price-free">满 <span>60</span> 元即免配送费</div>
       <div class="bar-price">
         <div class="all-checkbox">
-          <input type="checkbox" class="all-check check">全选
+          <input type="checkbox" class="all-check check">
+          <span>全选</span>
         </div>
         <div class="shop-total">
-          <strong> 总价：<i>￥100</i> </strong> 
+          <strong> 总价：<i>￥588</i> </strong> 
         </div>
-        <button class="settlement disabled" @click="toSettlement">结算<i>(5)</i></button>
+        <button class="yellow" @click="toSettlement">结算<i>&nbsp;(5)</i></button>
       </div>
     </div>
     <menu-bar></menu-bar>
@@ -74,9 +133,10 @@
 import menuBar from '@/components/footer/menuBar'
 import Alert from '@/components/alert/open_alert'
 import { GroupTitle, Swipeout, SwipeoutItem, SwipeoutButton, XButton, CheckIcon } from 'vux'
+import topBar from '@/components/header/topBar'
 export default {
   name: 'cartIndex',
-  components: { menuBar, Alert, GroupTitle, Swipeout, SwipeoutItem, SwipeoutButton, XButton, CheckIcon },
+  components: { menuBar, Alert, GroupTitle, Swipeout, SwipeoutItem, SwipeoutButton, XButton, CheckIcon, topBar },
   props: {},
   data() {
     return {
@@ -103,274 +163,228 @@ export default {
 </script>
 <style lang="less" scoped>
 * {
-  font-family: PingFangSC-Regular;
-  font-weight: 400;
+  font-weight: 200;
 }
-
-.pr {
-  position: relative;
-}
-input[type='checkbox'] {
-  -webkit-appearance: none;
-  outline: none;
-}
-input.check {
-  background: url(../../common/img/cart/select_default_btn.png) no-repeat center
-    left;
-  background-size: 20 / 20rem 20 / 20rem;
-  position: absolute;
-  top: 50%;
-  left: 10 / 20rem;
-  margin-top: -19 / 20rem;
-  width: 20 / 20rem;
-  height: 40 / 20rem;
-}
-input.check:checked {
-  background: url(../../common/img/cart/select_selected_btn.png) no-repeat
-    center left;
-  background-size: 20 / 20rem 20 / 20rem;
-}
-.maximum {
-  height: 100%;
-  background-color: #fafafa;
-  .header {
-    padding: 10 / 20rem 0;
-    .header-position {
-      width: 122 / 20rem;
-      height: 22 / 20rem;
-      line-height: 22 / 20rem;
-      margin: 0 auto;
-      text-align: center;
-      background-color: #ffbd52;
-      border: 4 / 20rem solid #ffda9e;
-      border-radius: 15 / 20rem;
-      color: #ffffff;
-      font-size: 12px;
-    }
-    div.bar:before {
-      content: '';
-      width: 10 / 20rem;
-      height: 12 / 20rem;
-      display: inline-block;
-      vertical-align: middle;
-      margin-right: 8 / 20rem;
-      background: url('../../common/img/cart/location_ic.png') no-repeat center;
-      background-size: 100% 100%;
-    }
-  }
-  .shopping {
-    clear: both;
-    overflow: hidden;
-    height: auto;
-    margin-bottom: 10 / 20rem;
-    padding: 0 12 / 20rem;
-    .shop-group-item {
-      border: 0.5 / 20rem solid #e5e5e5;
-    }
-    .shop-name {
-      height: 40 / 20rem;
-      line-height: 40 / 20rem;
-      padding: 0 10 / 20rem;
-      position: relative;
-    }
-    // .check {
-    //   background: url(../../common/img/cart/select_default_btn.png) no-repeat center left;
-    //   background-size: 20 / 20rem 20 / 20rem;
-    //   position: absolute;
-    //   top: 50%;
-    //   left: 10 / 20rem;
-    //   margin-top: -19 / 20rem;
-    //   width: 20 / 20rem;
-    //   height: 40 / 20rem;
-    // }
-    .shop-name h4 {
-      float: left;
-      background: url(../../common/img/cart/shop_ic.png) no-repeat left center;
-      background-size: 16 / 20rem 16 / 20rem;
-      font-size: 14 / 20rem;
-      font-weight: 400;
-      padding-left: 20 / 20rem;
-      margin-left: 36 / 20rem;
-    }
-    .shop-name h4 > a {
-      color: #333333;
-    }
-    .shop-name .goback > a {
-      position: absolute;
-      top: 0;
-      right: 0;
-      width: 20 / 20rem;
-      height: 20 / 20rem;
-    }
-    .shop-name .goback > a > img {
-      width: 100%;
-      height: 100%;
-    }
-    .shop-info {
-      background: #ffffff;
-      height: 104 / 20rem;
-      padding: 10 / 20rem;
-      box-sizing: border-box;
-      border: 1 / 20rem solid #e5e5e5;
-      border-top: none;
-      border-left: none;
-      z-index: 3;
-      position: relative;
-    }
-    .shop-info .shop-info-img {
-      position: absolute;
-      margin-left: 1rem;
-      width: 80 / 20rem;
-      height: 80 / 20rem;
-    }
-    .shop-info .shop-info-img a > img {
-      width: 100%;
-      height: 100%;
-      display: inline-block;
-    }
-    .shop-info .shop-info-text {
-      margin-left: 112 / 20rem;
-    }
-    .shop-info .shop-info-text h4 {
-      font-size: 12 / 20rem;
-      color: #333333;
-      display: -webkit-box;
-      -webkit-box-orient: vertical;
-      -webkit-line-clamp: 2;
-      overflow: hidden;
-      margin-bottom: 2 / 20rem;
-    }
-    .shop-info .shop-info-text .shop-brief {
-      height: 17 / 20rem;
-      line-height: 17 / 20rem;
-      font-size: 12px;
-      font-weight: 400;
-      color: #999999;
-      white-space: nowrap;
-      margin-bottom: 10 / 20rem;
-    }
-    .shop-info .shop-info-text .shop-brief span {
-      margin-right: 12 / 20rem;
-    }
-    .shop-info .shop-info-text .shop-price {
-      height: 24 / 20rem;
-      line-height: 24 / 20rem;
-      position: relative;
-    }
-    .shop-info .shop-info-text .shop-price .shop-pices {
-      color: #ff3c00;
-      font-size: 16 / 20rem;
-    }
-    .shop-info .shop-info-text .shop-arithmetic {
-      position: absolute;
-      right: 0px;
-      top: 0;
-      width: 80 / 20rem;
-      height: 100%;
-      border: 0.5 / 20rem solid #e5e5e5;
-      border-radius: 4 / 20rem;
-      box-sizing: border-box;
-      white-space: nowrap;
-    }
-    .shop-info .shop-info-text .shop-arithmetic .minus {
-      border-right: 0.5 / 20rem solid #e5e5e5;
-    }
-    .shop-info .shop-info-text .shop-arithmetic a {
-      display: inline-block;
-      width: 23 / 20rem;
-      height: 23 / 20rem;
-      text-align: center;
-      // font-size: 16 / 20rem;
-      vertical-align: top;
-    }
-    .shop-info .shop-info-text .shop-arithmetic a > img {
-      width: 100%;
-      height: 100%;
-    }
-    .shop-info .shop-info-text .shop-arithmetic .num {
-      width: 32 / 20rem;
-      height: 100%;
-      font-size: 14px;
-      text-align: center;
-      border: none;
-      display: inline-block;
-      box-sizing: border-box;
-      vertical-align: top;
-      margin: 0 -6 / 20rem;
-    }
-    .shop-info .shop-info-text .shop-arithmetic .plus {
-      border-left: 0.5 / 20rem solid #e5e5e5;
-    }
-  }
-  .payment-bar {
-    clear: both;
-    overflow: hidden;
+input[type='checkbox'] { -webkit-appearance: none; outline: none; }
+input.check {  background: url(../../common/img/cart/select_default_btn.png) no-repeat center left; background-size: 18 / 20rem 18 / 20rem; position: absolute; top: 50%; left: 10 / 20rem; margin-top: -19 / 20rem; width: 20 / 20rem; height: 40 / 20rem; }
+input.check:checked { background: url(../../common/img/cart/select_selected_btn.png) no-repeat center left; background-size: 18 / 20rem 18 / 20rem; }
+// 头部
+.top {
+  height: 44 / 20rem;
+  .top-bar {
     width: 100%;
-    height: 80 / 20rem;
+    height: 44px;
+    line-height: 44px;
+    background-color: #fff;
+    text-align: center;
+    font-size: 18px;
+    color: #222;
     position: fixed;
-    bottom: 50 / 20rem;
-    z-index: 66;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    &:after {
+      content: '';
+      display: block;
+      width: 100%;
+      height: 0;
+      border-bottom: 1px solid #e5e5e5;
+    }
   }
-  .payment-bar .price-free {
-    height: 30 / 20rem;
-    line-height: 30 / 20rem;
-    background-color: #fff8ed;
-    color: #ff3c00;
-    font-size: 12 / 20rem;
+}
+// 地址定位
+.header {
+  height: 33 / 20rem;
+  .header-position {
+    line-height: 33 / 20rem;
+    color: #999999;
+    font-size: 14px;
+    display: flex; 
+    justify-content: center; 
+    align-items: center;
+    background-color: #FAFAFA;
+  }
+  .header-position i {
+    width: 12.8 / 20rem;
+    height: 16.8 / 20rem;
+    background: url(../../common/img/cart/shopping_location_ic.png) no-repeat center;
+    background-size: 100% 100%;
+    margin-right: 8.6 / 20rem;
+  }
+}
+// 商品列表
+.shopping {
+  .shop-group-item {
+    padding: 0 12 / 20rem;
+  }
+  .shop-name {
+    position: relative;
+    height: 40 / 20rem;
+    line-height: 40 / 20rem;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+  }
+  .shop-name h4 {
+    font-size: 14px;
+    color: #333333;
+  }
+  .shop-name h4 > i {
+    width: 16 / 20rem;
+    height: 16 / 20rem;
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 45px;
+    background: url(../../common/img/cart/shop_ic.png) no-repeat center;
+    background-size: 100% 100%;
+    margin-right: 4px;
+  }
+  .shop-name > .pic {
+    position: absolute;
+    right: 0;
+    top: -1px;
+  }
+  .shop-name > .pic > a  {
+    width: 18px;
+    height: 24px;
+    display: inline-block;
+  }
+  .shop-name > .pic > a > img {
+    width: 100%;
+    height: 100%;
+  }
+  .shop-info {
+    position: relative;
+    border-top: 0.5px solid #E5E5E5;
+    padding: 10px 0;
+  }
+  .shop-info-img {
+    position: absolute;
+    top: 10px;
+    left: 35px;
+    width: 70.5 / 20rem;
+    height: 70.5 / 20rem;
+    border: 1px solid red;
+  }
+  .shop-info-img > img {
+    width: 100%;
+    height: 100%;
+  }
+  .shop-info-text {
+    margin-left: 120px;
+    font-size: 12px;
+    color: #333333;
+  }
+  .shop-info-text > h4 {
+    line-height: 16 / 20rem;
+    margin-bottom: 4px;
+  }
+  .shop-info-text .shop-brief {
+    height: 17 / 20rem;
+    color: #999999;
+    margin-bottom: 6 / 20rem;
+  }
+  .shop-info-text .shop-brief > span:first-child {
+    margin-right: 12 / 20rem;
+  }
+  .shop-info-text .shop-price {
+    height: 22 / 20rem;
+    line-height: 22 / 20rem;
+  }
+  .shop-info-text .shop-price > .shop-pices {
+    font-size: 16px;
+    color: #FF3C00;
+  }
+  .shop-info-text .shop-price > .shop-arithmetic {
+    position: absolute;
+    right: 0;
+    bottom: 10 / 20rem;
+    width: 80 / 20rem;
+    border: 0.5 / 20rem solid #EEEEEE;
+    border-radius: 2px;
+  }
+  .shop-info-text .shop-price > .shop-arithmetic > a {
+    width: 20 / 20rem;
+    height: 22 / 20rem;
+    display: inline-block;
+  }
+  .shop-info-text .shop-price > .shop-arithmetic > a > img {
+    width: 100%;
+    height: 100%;
+    vertical-align: middle;
+  }
+  .shop-info-text .shop-price > .shop-arithmetic > .num {
+    width: 32 / 20rem;
+    display: inline-block;
     text-align: center;
   }
-  .payment-bar .bar-price {
-    background-color: #ffffff;
-    height: 50 / 20rem;
+  .shop-info-text .shop-price > .shop-arithmetic > a.minus {
+    border-right: 0.5 / 20rem solid #EEEEEE;
   }
-  .payment-bar .bar-price .all-checkbox {
+  .shop-info-text .shop-price > .shop-arithmetic > a.plus {
+    border-left: 0.5 / 20rem solid #EEEEEE;
+  }
+}
+
+// 底部金额
+.payment-bar {
+  position: fixed;
+  left: 0;
+  bottom: 50 / 20rem;
+  width: 100%;
+  z-index: 3;
+  .price-free {
+    height: 30 / 20rem;
+    line-height: 30 / 20rem;
+    font-size: 12px;
+    color: #FFFFFF;
+    background-color: #6B4F4F;
+    opacity: 0.74;
+    filter: alpha(opacity=50);
+    text-align: center;
+  }
+  .price-free > span {
+     color: #F0CC27;
+     font-size: 20px;
+  }
+  .bar-price {
+    height: 50 / 20rem;
     line-height: 50 / 20rem;
-    float: left;
-    padding-left: 30 / 20rem;
+    background-color: #FFFFFF;
+    position: relative;
+  }
+  .all-checkbox > span {
+    margin-left: 33 / 20rem;
     font-size: 12px;
     color: #999999;
   }
-  .payment-bar .bar-price .all-checkbox input {
-    margin-top: -5 / 20rem;
+  .shop-total {
+    position: absolute;
+    right: 130 / 20rem;
+    top: 0;
+    font-size: 16px;
   }
-  .payment-bar .bar-price .shop-total {
-    float: left;
-    -webkit-box-flex: 1;
-    box-flex: 1;
-    line-height: 50 / 20rem;
-    margin-left: 94 / 20rem;
-    margin-right: 20 / 20rem;
-  }
-  .payment-bar .bar-price .shop-total strong {
-    display: block;
-    font-size: 16 / 20rem;
-    color: #222222;
-    font-weight: 400;
-  }
-  .payment-bar .bar-price .shop-total strong i {
+  .shop-total > strong > i {
     font-style: normal;
-    color: #ff0000;
-    font-size: 18 / 20rem;
+    font-size: 18px;
+    color: #FF3C00;
   }
-  .payment-bar .settlement {
-    display: inline-block;
-    font-family: PingFangSC-Light;
-    font-weight: 400;
-    float: right;
+  .bar-price > button {
+    position: absolute;
+    right: 0;
+    top: 0;
     width: 110 / 20rem;
     height: 50 / 20rem;
-    line-height: 50 / 20rem;
-    text-align: center;
-    color: #fff;
-    font-size: 18 / 20rem;
-    background: #ffbd52;
+    font-size: 18px;
+    color: #ffffff;
+    background-color: #bbbbbb;
   }
-  .payment-bar .settlement i {
+  .bar-price > button > i {
     font-style: normal;
-    font-size: 10 / 20rem;
+    font-size: 12px;
   }
-  .disabled {
-    background-color: #BBBBBB !important;
+  .yellow {
+    background-color: #FFBD52 !important;
   }
 }
 </style>

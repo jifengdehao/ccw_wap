@@ -38,6 +38,9 @@ const productInfoList = anyscComponent('page/product/productInfoList') //  二�
 
 const cartIndex = anyscComponent('page/cart/cartIndex') //  购物车模块主页
 const cartSettlementPage = anyscComponent('page/cart/settlementPage') // 购物车结算页面
+const cartmyCoupon = anyscComponent('page/cart/cart_my_coupon') //  我的优惠券
+const paymentSuccess = anyscComponent('page/cart/payment_success') // 支付成功页面
+const cartMyProduct = anyscComponent('page/cart/cart_my_product') // 我的购买商品页面
 
 const mineIndex = anyscComponent('page/mine/mineIndex') //  个人中心模块主页
 const myCoupon = anyscComponent('page/mine/myCoupon') //  我的优惠券
@@ -104,9 +107,24 @@ export default [
     component: cartIndex
   },
   {
+    path: '/cartMyCoupon',
+    name: '选择优惠券',
+    component: cartmyCoupon
+  },
+  {
     path: '/settlementPage',
     name: '填写订单',
     component: cartSettlementPage
+  },
+  {
+    path: '/paymentSuccess',
+    name: '订单支付成功',
+    component: paymentSuccess
+  },
+  {
+    path: '/cartMyProduct',
+    name: '商品列表',
+    component: cartMyProduct
   },
   {
     path: '/mine',
