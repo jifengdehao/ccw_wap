@@ -4,12 +4,29 @@
 
 const path = require('path')
 
+const devTarget = 'http://192.168.0.151:30110/customer'
+
 module.exports = {
   dev: {
     // Paths
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
-    proxyTable: {},
+    proxyTable: {
+      '/user': {
+        target: devTarget,
+        changeOrigin: true,
+        pathRewrith: {
+          '^/user': '/user'
+        }
+      },
+      '/productCat': {
+        target: devTarget,
+        changeOrigin: true,
+        pathRewrith: {
+          '^/productCat': '/productCat'
+        }
+      }
+    },
 
     // Various Dev Server settings
     host: '0.0.0.0', // can be overwritten by process.env.HOST

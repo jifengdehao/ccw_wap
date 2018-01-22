@@ -6,13 +6,15 @@
  */
 
 const anyscComponent = name => {
-    //  异步加载组件
-    return resolve => require([`@/${name}`], resolve)
+  //  异步加载组件
+  return resolve => require([`@/${name}`], resolve)
 }
 
 const menuBar = anyscComponent('components/footer/menuBar') //  底部菜单栏
 
 const loginIndex = anyscComponent('page/login/loginIndex') //  登录模块主页
+
+const webChat = anyscComponent('page/login/webChat') //  微信登录
 
 const homeIndex = anyscComponent('page/home/homeIndex') //  首页模块主页
 
@@ -28,7 +30,9 @@ const addAddress = anyscComponent('page/add-address/add-address') //新增地址
 
 const shopInfo = anyscComponent('page/product/shopInfo') //  店铺详情shopProduct
 
-const qualification = anyscComponent('page/product/productComponents/qualification') //  店铺详情shopProdutComponentsponnet
+const qualification = anyscComponent(
+  'page/product/productComponents/qualification'
+) //  店铺详情shopProdutComponentsponnet
 
 const shopProduct = anyscComponent('page/product/shopProduct') //  店铺产品
 
@@ -45,12 +49,7 @@ const cartMyProduct = anyscComponent('page/cart/cart_my_product') // 我的购�
 const mineIndex = anyscComponent('page/mine/mineIndex') //  个人中心模块主页
 const myCoupon = anyscComponent('page/mine/myCoupon') //  我的优惠券
 
-
 export default [
-  {
-    path: '/',
-    redirect: { path: '/home' }
-  },
   {
     path: '/home',
     name: '首页',
@@ -141,6 +140,12 @@ export default [
     name: '登录',
     meta: true,
     component: loginIndex
+  },
+  {
+    path: '/webchat',
+    name: '升级Vip',
+    meta: true,
+    component: webChat
   },
   {
     path: '/addAddress',

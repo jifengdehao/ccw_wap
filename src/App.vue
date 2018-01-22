@@ -14,7 +14,41 @@
   </div>
 </template>
 <script type="text/ecmascript-6">
-  export default {
-    name: 'app'
+export default {
+  name: 'app',
+  data() {
+    return {
+      isWebchatBool: false //  是否是微信登录
+    }
+  },
+  created() {
+    this.isWebchat()
+    let loginInfo =
+      this.$store.state.loginInfo || sessionStorage.getItem('userInfo')
+
+    let token = JSON.parse(JSON.parse(loginInfo.toString()))
+
+    if (token != null && token.authParam.token.length > 0) {
+      this.$router.push('/home')
+    } else {
+      if (this.isWebchatBool) {
+        //  微信内置浏览器登录
+        this.$router.push('/webchat')
+      } else {
+        //  H5登录
+        this.$router.push('/login')
+      }
+    }
+  },
+  methods: {
+    //  是否是微信登录
+    isWebchat() {
+      let ua = window.navigator.userAgent.toLowerCase()
+      if (ua.match(/MicroMessenger/i) == 'micromessenger') {
+        this.isWebchatBool = true
+      }
+      this.isWebchatBool = false
+    }
   }
+}
 </script>

@@ -114,6 +114,7 @@
  <script>
 import { Scroller } from 'vux'
 import { mapState } from 'vuex'
+import * as http from '@/api/http'
 import menuBar from '@/components/footer/menuBar'
 export default {
   name: 'personalIndex',

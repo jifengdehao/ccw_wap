@@ -1,130 +1,50 @@
 /*
  * @Author: WuFengliang 
- * @Date: 2018-01-02 11:40:58 
+ * @Date: 2018-01-02 11:40:39 
  * DeveloperMailbox:   wufengliang@ccw163.com 
- * FunctionPoint:  axios相关请求方法
+ * FunctionPoint:  http相关功能点接口
  */
-import axios from 'axios'
-import hash from 'js-md5'
-import qs from 'qs'
+import * as http from './instance'
 
-import Vue from 'vue'
-import { AlertPlugin } from 'vux'
-Vue.use(AlertPlugin)
+/**
+ * 负责人 - By WuFengliang
+ */
 
-var ax = axios.create({
-  baseURL: process.env.BASE_API,
-  withCredentials: true, // 跨域携带证书
-  timeout: 30000,
-  headers: {
-    CCWTOKEN: '',
-    sign: ''
-  }
-})
-
-const itr = (type, url, params) => {
-  if (typeof params !== 'object') {
-    params = {}
-  }
-  let arg = qs.stringify(params)
-  if (Object.keys(params).length > 0) {
-    url = type === 'get' ? url + '?' + arg : url
-  }
-  let userInfo = JSON.parse(sessionStorage.getItem('user'))
-  let token = ''
-  if (userInfo) {
-    userInfo = typeof userInfo === 'string' ? JSON.parse(userInfo) : userInfo
-    token = userInfo.token ? userInfo.token : ''
-  }
-  let sign = ''
-  if (type === 'get' || type === 'delete') {
-    sign = hash(arg + token)
-  } else {
-    sign = hash(JSON.stringify(params) + token)
-  }
-  ax.defaults.headers.CCWTOKEN = token
-  ax.defaults.headers.sign = sign
-  return ax[type](url, params)
+/**
+ * 判断手机号是否是平台账户
+ */
+export const isExist = params => {
+  return http.p(`/user/mobileNumber/`, params)
 }
 
-const base = (type, url, params) => {
-  return new Promise((resolve, reject) => {
-    itr(type, url, params)
-      .then(response => {
-        switch (response.data.code) { //  http状态码
-          case 200:
-            resolve(response.data)
-            break
-          case 9010:
-            Vue.$vux.alert.show({
-              title: '提示',
-              content: response.data.msg,
-              onShow() {},
-              onHide() {
-                //  点击确定具体操作
-              }
-            })
-            break
-          case 9030:
-            Vue.$vux.alert({
-              title: '提示',
-              content: response.data.msg,
-              onShow() {},
-              onHide() {
-                console.log('状态码9030')
-              }
-            })
-            break
-          case 9090:
-            Vue.$vux.alert({
-              title: '提示',
-              content: '您已在其他设备登录',
-              onShow() {},
-              onHide() {
-                console.log('状态码9090')
-              }
-            })
-            break
-          default:
-            Vue.$vux.alert({
-              title: '提示',
-              content: response.data.msg,
-              onShow() {},
-              onHide() {
-                console.log('错误')
-              }
-            })
-            reject(response.data)
-        }
-      })
-      .catch(msg => {
-        Vue.$vux.alert({
-          title: '提示',
-          content: msg
-        })
-      })
-  })
+/**
+ * 根据手机号请求发送验证码
+ */
+export const sentCode = params => {
+  return http.g(`/user/sendCode`, params)
 }
 
-export const g = (url, params) => {
-  return base('get', url, params)
+/**
+ * 手机登陆认证入口
+ */
+export const userLogin = params => {
+  return http.p(`/user/account`, params)
 }
 
-export const p = (url, params) => {
-  return base('post', url, params)
+/**
+ * 用户个人优惠券
+ */
+export const getCoupon = (customerId, marketId, params) => {
+  return http.g(
+    `/personCenter/coupon/${customerId}/${marketId}/listCustomer`,
+    params
+  )
 }
 
-export const d = (url, params) => {
-  return base('delete', url, params)
-}
+/**
+ * 负责人 - By WuFengliang
+ */
 
-export const u = (url, params) => {
-  return base('put', url, params)
-}
-export const pa = (url, params) => {
-  return base('patch', url, params)
-}
-
-export const op = (url, params) => {
-  return base('options', url, params)
+export const getProducts = params => {
+  return http.g(`/productCat/cat`, params)
 }
