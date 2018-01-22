@@ -19,5 +19,6 @@ export default {
     isActive: false, //  是否已经开始发送验证码
     times: 60, //  发送验证码秒数
     mobileNumber: '' //  手机号
-  }
+  },
+  loginInfo: null //  登录后相关信息
 }
