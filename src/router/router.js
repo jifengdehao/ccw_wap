@@ -48,10 +48,6 @@ const myCoupon = anyscComponent('page/mine/myCoupon') //  我的优惠券
 
 export default [
   {
-    path: '/',
-    redirect: { path: '/home' }
-  },
-  {
     path: '/home',
     name: '首页',
     component: homeIndex

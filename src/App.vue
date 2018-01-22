@@ -23,7 +23,10 @@ export default {
   },
   created() {
     this.isWebchat()
-    let token = JSON.parse(sessionStorage.getItem('userInfo'))
+    let loginInfo =
+      this.$store.state.loginInfo || sessionStorage.getItem('userInfo')
+
+    let token = JSON.parse(JSON.parse(loginInfo.toString()))
 
     if (token != null && token.authParam.token.length > 0) {
       this.$router.push('/home')

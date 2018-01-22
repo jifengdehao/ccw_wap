@@ -44,3 +44,7 @@ export const getCoupon = (customerId, marketId, params) => {
 /**
  * 负责人 - By WuFengliang
  */
+
+export const getProducts = params => {
+  return http.g(`/productCat/cat`, params)
+}

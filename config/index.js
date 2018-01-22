@@ -18,6 +18,13 @@ module.exports = {
         pathRewrith: {
           '^/user': '/user'
         }
+      },
+      '/productCat': {
+        target: devTarget,
+        changeOrigin: true,
+        pathRewrith: {
+          '^/productCat': '/productCat'
+        }
       }
     },
 
