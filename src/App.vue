@@ -26,7 +26,7 @@ export default {
     let loginInfo =
       this.$store.state.loginInfo || sessionStorage.getItem('userInfo')
 
-    let token = JSON.parse(JSON.parse(loginInfo.toString()))
+    let token = JSON.parse(JSON.parse(loginInfo))
 
     if (token != null && token.authParam.token.length > 0) {
       this.$router.push('/home')
