@@ -34,15 +34,15 @@
           <router-link :to="'/shopProduct'">
             <div class="productMessageLeft left"><img src="../../common/img/productIndex/3.jpg" alt=""></div>
             <div class="productMessageRight right">
-              <p class="first">美国西北车厘子 2磅装(约900g) 约26-28mm果径 新鲜水果</p>
-              <p>
+              <p class="first">美国西北车厘子 2磅装(约900g) </p>
+              <p class="second">
                 <span>月销量200</span>
-                <i>|</i>
+                <i class="border"></i>
                 <span>好评率96%</span>
               </p>
-              <p>约5斤/份</p>
-              <p>清河水果专卖店</p>
-              <p class="last">¥30.8</p>
+              <p class="third">清河水果专卖店</p>
+              <p class="fourth"><span>每斤20元</span></p>
+              <p class="last">¥30.8 <span>约0.5斤/份</span></p>
             </div>
           </router-link>
           <div v-if="showCart" class="cartIcon icon">
@@ -166,43 +166,73 @@ export default {
     padding: 86px 0.6rem 0;
     box-sizing: border-box;
     .productMessage {
-      height: 127/20rem;
-      padding-top: 11/20rem;
+      height: 6.5rem;
+      padding-top: 0.5rem;
       border-bottom: 0.5px solid #e5e5e5;
       box-sizing: border-box;
       overflow: hidden;
       position: relative;
       .productMessageLeft {
-        width: 4rem;
-        height: 4rem;
-        margin-right: 0.6rem;
+        width: 4.5rem;
+        height: 4.5rem;
+        margin-right: 0.4rem;
         img {
-          width: 4rem;
-          height: 4rem;
+          width: 4.5rem;
+          height: 4.5rem;
         }
       }
       .productMessageRight {
         position: relative;
-        width: 259/20rem;
-        font-size: 0.5rem;
-        line-height: 0.7rem;
-        color: #999999;
-        letter-spacing: -0.07px;
+        width: 253/20rem;
         box-sizing: border-box;
         .first {
-          line-height: 17/20rem;
-          font-size: 0.6rem;
+          line-height: 1rem;
+          font-size: 0.7rem;
           color: #333333;
-          letter-spacing: -0.07px;
-        }
-        .last {
-          font-size: 0.8rem;
-          line-height: 1.1rem;
-          color: #ff3c00;
           letter-spacing: -0.08px;
         }
+        .second,
+        .third {
+          font-size: 0.6rem;
+          line-height: 0.85rem;
+          color: #999999;
+          letter-spacing: -0.07px;
+        }
+        .third {
+          color: #666;
+        }
+        .fourth {
+          font-size: 0.5rem;
+          line-height: 0.7rem;
+          color: #ffbd52;
+          letter-spacing: -0.07px;
+          span {
+            background: #fff8ed;
+            border: 0.5px solid #ffae28;
+            border-radius: 2px;
+          }
+        }
+        .last {
+          font-size: 0.9rem;
+          line-height: 1.25rem;
+          color: #ff3c00;
+          letter-spacing: -0.08px;
+          span {
+            font-size: 10px;
+            color: #666666;
+            letter-spacing: -0.07px;
+            margin-left: 4px;
+          }
+        }
+        .border {
+          display: inline-block;
+          width: 1px;
+          height: 0.4rem;
+          margin: 0 2px;
+          background-color: #bbb;
+        }
         p {
-          margin: 2px;
+          margin-bottom: 4px;
         }
       }
       .icon {

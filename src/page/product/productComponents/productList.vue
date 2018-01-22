@@ -6,7 +6,7 @@
  */
 <template>
   <div id="productList">
-    <div class="listSection" v-for="(item,index) in 3">
+    <div class="listSection" v-for="(item,index) in 3" :key="index">
       <p class="smallTitle">冰鲜海产</p>
       <ul class="infoList clearfix">
         <li v-for="(imgUrl,index) in 7" :key="index" @click="toProductInfoList">
