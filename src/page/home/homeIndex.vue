@@ -41,20 +41,18 @@
       <!--<market-list></market-list>-->
       <!--</div>-->
       <!--</scroll>-->
-      <vue-scroll ref="scroll"
-                  :click="true"
-                  :pullUpLoad="false"
-                  :scrollbar="false"
-                  @pulling-down="pullingDown">
-        <slide :showDot="false">
-          <div v-for="(item,index) in demo03_list">
-            <a :href="item.url">
-              <img :src="item.img">
-            </a>
-          </div>
-        </slide>
-        <market-list></market-list>
-      </vue-scroll>
+      <scroll>
+        <div>
+          <slide :showDot="false">
+            <div v-for="(item,index) in demo03_list">
+              <a :href="item.url">
+                <img :src="item.img">
+              </a>
+            </div>
+          </slide>
+          <market-list></market-list>
+        </div>
+      </scroll>
     </div>
     <menu-bar></menu-bar>
   </div>

@@ -10,19 +10,21 @@ const anyscComponent = name => {
   return resolve => require([`@/${name}`], resolve)
 }
 
-const menuBar = anyscComponent('components/footer/menuBar') //  底部菜单栏
-
 const loginIndex = anyscComponent('page/login/loginIndex') //  登录模块主页
 
 const webChat = anyscComponent('page/login/webChat') //  微信登录
 
-const homeIndex = anyscComponent('page/home/homeIndex') //  首页模块主页
+const homeIndex = anyscComponent('page/home/homeIndex') //  入口主页
+
+const index = anyscComponent('page/index/index') //首页
 
 const Location = anyscComponent('page/location/location') // 位置
 
 const Search = anyscComponent('page/search/search') // 搜索
 
 const SearchGoods = anyscComponent('page/search/goods') // 搜索商品
+
+const GoodDetails = anyscComponent('page/good-details/good-details') // 商品详情
 
 const SearchSellers = anyscComponent('page/search/sellers') // 搜索档口
 
@@ -41,9 +43,11 @@ const productIndex = anyscComponent('page/product/productIndex') //  产品模�
 const productInfoList = anyscComponent('page/product/productInfoList') //  二级分类下的商品列表
 
 const cartIndex = anyscComponent('page/cart/cartIndex') //  购物车模块主页
+
 const cartSettlementPage = anyscComponent('page/cart/settlementPage') // 购物车结算页面
 
 const mineIndex = anyscComponent('page/mine/mineIndex') //  个人中心模块主页
+
 const myCoupon = anyscComponent('page/mine/myCoupon') //  我的优惠券
 
 export default [
@@ -53,8 +57,13 @@ export default [
   },
   {
     path: '/home',
-    name: '首页',
+    name: '入口',
     component: homeIndex
+  },
+  {
+    path: '/index',
+    name: '首页',
+    component: index
   },
   {
     path: '/search',
@@ -76,6 +85,11 @@ export default [
     path: '/location',
     name: '位置',
     component: Location
+  },
+  {
+    path: '/goods/:id',
+    name: '商品详情',
+    component: GoodDetails
   },
   {
     path: '/product',
