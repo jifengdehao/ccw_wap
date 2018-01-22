@@ -29,7 +29,7 @@ export default {
     let token = JSON.parse(JSON.parse(loginInfo))
 
     if (token != null && token.authParam.token.length > 0) {
-      this.$router.push('/home')
+      //  don't something
     } else {
       if (this.isWebchatBool) {
         //  微信内置浏览器登录
