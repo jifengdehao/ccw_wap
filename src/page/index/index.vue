@@ -29,7 +29,7 @@
           <li class="tab-item"><span :class="{'active':Type===7}" @click="selectType(7)">水产海鲜</span></li>
         </ul>
       </div>
-      <i class="icon-menu"></i>
+      <i class="icon-menu" @click="openClassify"></i>
     </div>
     <div class="tab-container">
       <scroll>
@@ -41,52 +41,119 @@
               </a>
             </div>
           </slide>
-          <div class="market">
-            <div class="title" @click="showMarket = !showMarket">
-              <span>清河菜市场</span><span class="options">切换</span>
-            </div>
-            <ul class="list" v-show="showMarket">
-              <li class="item border-top-1px">清河菜市场1</li>
-              <li class="item border-top-1px">清河菜市场2</li>
-              <li class="item border-top-1px">清河菜市场3</li>
+          <!--<div class="market">-->
+          <!--<div class="title" @click="showMarket = !showMarket">-->
+          <!--<span>清河菜市场</span><span class="options">切换</span>-->
+          <!--</div>-->
+          <!--<ul class="list" v-show="showMarket">-->
+          <!--<li class="item border-top-1px">清河菜市场1</li>-->
+          <!--<li class="item border-top-1px">清河菜市场2</li>-->
+          <!--<li class="item border-top-1px">清河菜市场3</li>-->
+          <!--</ul>-->
+          <!--</div>-->
+          <div class="seller">
+            <div class="title"></div>
+            <ul class="store-list">
+              <li class="item border-1px">
+                <div class="item-img">
+                  <i class="status"></i>
+                  <img src="../../assets/logo.png" alt="">
+                </div>
+                <div class="item-content">
+                  <div class="name">
+                    <span class="recommend">清河鲜果1号店</span>
+                    <span class="love">1000</span>
+                  </div>
+                  <div class="star">
+                    <rater :active-color="starColor"
+                           :fontSize="starFontSize"
+                           :disabled="starDisabled"
+                           v-model="star"></rater>
+                    <span class="num">月售&nbsp;1000</span>
+                  </div>
+                  <div class="dec">本店自2017年6月开始，开店时间延至7点半，欢迎新老客户下单！</div>
+                </div>
+              </li>
+              <li class="item border-1px">
+                <div class="item-img">
+                  <i class="seller-close"></i>
+                  <img src="../../assets/logo.png" alt="">
+                </div>
+                <div class="item-content">
+                  <div class="name">
+                    <span class="recommend">清河鲜果1号店</span>
+                    <span class="love">1000</span>
+                  </div>
+                  <div class="star">
+                    <rater :active-color="starColor"
+                           :fontSize="starFontSize"
+                           :disabled="starDisabled"
+                           v-model="star"></rater>
+                    <span class="num">月售&nbsp;1000</span>
+                  </div>
+                  <div class="dec">本店自2017年6月开始，开店时间延至7点半，欢迎新老客户下单！</div>
+                </div>
+              </li>
+              <li class="item border-1px">
+                <div class="item-img">
+                  <img src="../../assets/logo.png" alt="">
+                </div>
+                <div class="item-content">
+                  <div class="name">
+                    <span class="recommend">清河鲜果1号店</span>
+                    <span class="love">1000</span>
+                  </div>
+                  <div class="star">
+                    <rater :active-color="starColor"
+                           :fontSize="starFontSize"
+                           :disabled="starDisabled"
+                           v-model="star"></rater>
+                    <span class="num">月售&nbsp;1000</span>
+                  </div>
+                  <div class="dec">本店自2017年6月开始，开店时间延至7点半，欢迎新老客户下单！</div>
+                </div>
+              </li>
             </ul>
           </div>
-          <ul class="store-list">
-            <li class="item border-1px">
-              <div class="item-img">
-                <img src="../../assets/logo.png" alt="">
-              </div>
-              <div class="item-content">
-                <div class="name">清河鲜果1号店<span class="recommend">推荐</span></div>
-                <div class="star">
-                  <rater :active-color="starColor" :fontSize="starFontSize" :disabled="starDisabled"
-                         v-model="star"></rater>
-                </div>
-                <div class="volume">月售<span class="num">1000</span>关注<span class="num">1000</span></div>
-                <div class="dec">本店自2017年6月开始，开店时间延至7点半，欢迎新老客户下单！</div>
-              </div>
-            </li>
-            <li class="item border-1px">
-              <div class="item-img">
-                <img src="../../assets/logo.png" alt="">
-              </div>
-              <div class="item-content">
-                <div class="name">清河鲜果1号店<span class="recommend">推荐</span></div>
-                <div class="star">
-                  <rater :active-color="starColor" :fontSize="starFontSize" :disabled="starDisabled"
-                         v-model="star"></rater>
-                </div>
-                <div class="volume">月售<span class="num">1000</span>关注<span class="num">1000</span></div>
-                <div class="dec">本店自2017年6月开始，开店时间延至7点半，欢迎新老客户下单！</div>
-              </div>
-            </li>
-          </ul>
         </div>
       </scroll>
     </div>
-    <div class="classify">
+    <div class="classify" v-show="isShowClassify">
       <div class="mask"></div>
-      <div class="content"></div>
+      <div class="content">
+        <div class="title border-1px">全部品类</div>
+        <i class="icon-close" @click="closeClassify"></i>
+        <ul class="list clearfix">
+          <li class="item">
+            <img src="../../common/img/index/home_fruit@2x.png" alt=""/>
+            <p>新鲜水果</p>
+          </li>
+          <li class="item">
+            <img src="../../common/img/index/home_fruit@2x.png" alt=""/>
+            <p>新鲜水果</p>
+          </li>
+          <li class="item">
+            <img src="../../common/img/index/home_fruit@2x.png" alt=""/>
+            <p>新鲜水果</p>
+          </li>
+          <li class="item">
+            <img src="../../common/img/index/home_fruit@2x.png" alt=""/>
+            <p>新鲜水果</p>
+          </li>
+          <li class="item">
+            <img src="../../common/img/index/home_fruit@2x.png" alt=""/>
+            <p>新鲜水果</p>
+          </li>
+          <li class="item">
+            <img src="../../common/img/index/home_fruit@2x.png" alt=""/>
+            <p>新鲜水果</p>
+          </li>
+          <li class="item">
+            <img src="../../common/img/index/home_fruit@2x.png" alt=""/>
+            <p>新鲜水果</p>
+          </li>
+        </ul>
+      </div>
     </div>
     <m-footer></m-footer>
   </div>
@@ -97,6 +164,8 @@
   import Slide from '@/components/slide/slide';
   import BScroll from 'better-scroll';
   import {Rater} from 'vux';
+  import {mapGetters} from 'vuex';
+  import * as api from '@/api/http'
 
   const baseList = [{
     id: 0,
@@ -123,9 +192,11 @@
         showMarket: false,
         starDisabled: false,
         starColor: '#FFBD52',
-        starFontSize: 13,
-        star: 5,
-        Type: 0
+        starFontSize: 12,
+        star: 4,
+        Type: 0,
+        isShowClassify: false,
+        swiperList: []
       }
     },
     components: {
@@ -133,6 +204,15 @@
       mFooter,
       Slide,
       Rater
+    },
+    computed: {
+      ...mapGetters([
+        'location',
+        'market'
+      ])
+    },
+    created() {
+      this.getBanner(0);
     },
     mounted() {
       this.$nextTick(() => {
@@ -162,6 +242,21 @@
       },
       selectType(type) {
         this.Type = type
+      },
+      closeClassify() {
+        this.isShowClassify = false
+      },
+      openClassify() {
+        this.isShowClassify = true
+      },
+      // 获取轮播图
+      getBanner(type) {
+        api.getBanner(type).then((res) => {
+          if (res.data) {
+            console.log(res)
+            this.swiperList = res.data
+          }
+        })
       }
     }
   }
@@ -171,12 +266,10 @@
 
   .index {
     .header {
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
       overflow: hidden;
       background-color: #FFFFFF;
+      z-index: 10000;
+      position: relative;
       .content {
         position: relative;
         height: 2.2rem;
@@ -241,7 +334,6 @@
       }
     }
     .tab {
-      margin-top: 2.2rem;
       height: 1.9rem;
       line-height: 1.9rem;
       background: #F4F4F4;
@@ -330,9 +422,29 @@
           .border-none();
         }
         .item-img {
-          width: 5.5rem;
-          height: 5.5rem;
-          flex: 0 0 5.5rem;
+          width: 6.35rem;
+          height: 4.4rem;
+          flex: 0 0 6.35rem;
+          position: relative;
+          border-radius: .1rem;
+          .seller-close {
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            top: 0;
+            background: rgba(0, 0, 0, 0.35) url("../../common/img/index/home_close_ic.png") no-repeat center .7rem;
+            background-size: 1.8rem 1.8rem;
+          }
+          .status {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 1.8rem;
+            height: 1.8rem;
+            background: url("../../common/img/index/tab_rest_ic.png") no-repeat;
+            background-size: contain;
+          }
           & > img {
             width: 100%;
             height: 100%;
@@ -340,68 +452,111 @@
         }
         .item-content {
           flex: 1;
-          padding-left: .5rem;
+          padding-left: .6rem;
           .name {
-            font-size: .8rem;
-            line-height: .8rem;
             display: flex;
             align-items: center;
+            justify-content: space-between;
             .recommend {
-              font-size: .6rem;
-              color: #FFBD52;
-              margin-left: .5rem;
-              border: 1px solid #FFBD52;
-              border-radius: 4px;
-              width: 1.6rem;
+              padding-right: 1.7rem;
+              background: url("../../common/img/index/home_recommend_ic.png") no-repeat right center;
+              background-size: 1.4rem .7rem;
+              font-size: .7rem;
               line-height: .8rem;
-              height: .8rem;
-              text-align: center;
+            }
+            .love {
+              font-size: .6rem;
+              color: #999999;
+              background: url("../../common/img/index/home_follow_ic.png") no-repeat left center;
+              background-size: .6rem .6rem;
+              padding-left: .6rem;
+              float: right;
+              line-height: .8rem;
             }
           }
           .star {
-            font-size: 0;
-            margin: .4rem 0;
+            font-size: .6rem;
+            margin: .6rem 0;
+            color: #999999;
+            line-height: .6rem;
+            .num {
+              margin-left: .4rem;
+            }
           }
           .dec {
             color: #999999;
-            font-size: .6rem;
-            line-height: .9rem;
-          }
-          .volume {
-            font-size: .65rem;
-            line-height: .7rem;
-            margin-bottom: .4rem;
-            .num {
-              color: #789edc;
-              margin: 0 .3rem;
-            }
+            font-size: .55rem;
+            line-height: .8rem;
           }
         }
       }
     }
-    .classify{
+    .classify {
       position: fixed;
       left: 0;
       right: 0;
       bottom: 0;
-      top:0;
+      top: 0;
       z-index: 999;
       overflow: hidden;
-      .mask{
+      .mask {
         height: 100%;
         width: 100%;
         opacity: 0.35;
         background-color: #000000;
         z-index: 1000;
       }
-      .content{
+      .content {
         z-index: 1001;
         background-color: #FFFFFF;
         position: fixed;
-        top:2.2rem;
+        top: 2.2rem;
         left: 0;
         right: 0;
         bottom: 12rem;
+        .title {
+          height: 2.2rem;
+          line-height: 2.2rem;
+          text-align: center;
+          font-size: .8rem;
+          .border-1px();
+        }
+        .icon-close {
+          background: url("../../common/img/index/home_clean_btn.png") no-repeat center;
+          display: inline-block;
+          width: .8rem;
+          height: .8rem;
+          background-size: contain;
+          position: absolute;
+          right: .6rem;
+          top: .6rem;
+        }
+        .list {
+          .item {
+            width: 33.33%;
+            float: left;
+            padding: .8rem;
+            box-sizing: border-box;
+            text-align: center;
+            & > img {
+              width: 2.5rem;
+              height: 2.5rem;
+            }
+            & > p {
+              margin-top: .35rem;
+              font-size: .6rem;
+            }
+          }
+        }
+      }
+    }
+    .seller {
+      .title {
+        width: 6rem;
+        height: 1.5rem;
+        margin: .8rem auto;
+        background: url("../../common/img/index/home_chosen_ic.png") no-repeat center;
+        background-size: contain;
       }
     }
   }

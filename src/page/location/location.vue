@@ -129,8 +129,8 @@
         });
         map.addControl(geolocation);
         geolocation.getCurrentPosition();
-//        AMap.event.addListener(geolocation, 'complete', this.onComplete);//返回定位信息
-//        AMap.event.addListener(geolocation, 'error', onError);      //返回定位出错信息
+        AMap.event.addListener(geolocation, 'complete', this.onComplete);//返回定位信息
+        AMap.event.addListener(geolocation, 'error', onError);      //返回定位出错信息
       });
 
       //解析定位结果

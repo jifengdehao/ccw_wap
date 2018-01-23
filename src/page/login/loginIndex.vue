@@ -56,6 +56,12 @@ export default {
   update: {},
   beforeRouteUpdate: {},
   methods: {
+    //  检测当前是否登录
+    checkIsLogin() {
+      if (this.$store.state.loginInfo != null) {
+        this.$router.back()
+      }
+    },
     //  判断是否是合法手机号
     isTelPhone() {
       if (this.telRegExp.test(this.mobileNumber)) {
@@ -114,7 +120,9 @@ export default {
       this.loginParams.mobileno = this.mobileNumber
       http.userLogin(this.loginParams).then(response => {
         if (response.code == 200) {
-          sessionStorage.setItem('userInfo', JSON.stringify(response.data))
+          let loginInfo = JSON.stringify(response.data)
+          this.$store.state.loginInfo = loginInfo
+          sessionStorage.setItem('userInfo', JSON.stringify(loginInfo))
           this.$router.push('/home')
         }
       })
