@@ -111,7 +111,7 @@ export default {
       if (this.telRegExp.test(this.mobileNumber)) {
         this.sentParams.mobileno = this.mobileNumber
         http.sentCode(this.sentParams).then(data => {
-          console.log(data)
+          
         })
       }
     },

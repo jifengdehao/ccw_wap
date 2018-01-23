@@ -54,7 +54,18 @@ export const getCoupon = (customerId, marketId, params) => {
 export const getProductCat = () => {
   return http.g(`/productCat/cat`)
 }
-
+/**
+ * 获取二级或三级分类列表
+ */ 
+export const getSecondProductCat = (parentLevel,marketId) => {
+  return http.g(`/productCat/secondCat/${parentLevel}/${marketId}`)
+}
+/**
+ * 获取产品id下面的市场的产品列表
+ */ 
+export const getNearProducts = (marketId,params) => {
+  return http.g(`/homePage/nearProducts/${marketId}`,params)
+}
  /**
  * 负责人 -By hushangjun
  */ 

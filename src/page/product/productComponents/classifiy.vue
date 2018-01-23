@@ -21,11 +21,11 @@
     <div class="classifiyList">
       <aside>
         <ul>
-          <li v-for="(item,index) in preantCat" :key="index" :class="{current:selected==index}" @click="changeList(index)">{{item.name}}</li>
+          <li v-for="(item,index) in preantCat" :key="index" :class="{current:selected==index}" @click="changeList(index,item.spCategory_id)">{{item.name}}</li>
         </ul>
       </aside>
       <section class="classifiyInfo">
-        <product-list ></product-list>
+        <product-list :productData="productData"></product-list>
       </section>
     </div>
   </div>
@@ -39,7 +39,10 @@ export default {
   data() {
     return {
       selected: 0,
-      preantCat: []
+      preantCat: [], // 一级分类列表
+      parentLevel: 1, // 父类ID
+      marketId: 143,  // 菜市场id
+      productData: []  // 一级分类下面的获取的数据
     }
   },
   created() {
@@ -48,15 +51,32 @@ export default {
         this.preantCat = res.data
       }
     })
+    if(this.selected === 0){
+      this.preantCat = 1
+      this.getSecondCat()
+    }
+  },
+  mounted () {
+    
   },
   methods: {
     // 点击分类
-    changeList(index) {
+    changeList(index,id) {
       this.selected = index
+      this.parentLevel = id
+      this.getSecondCat()
     },
     // 点击搜索跳转到搜索定位
     toSearch() {
       this.$router.push('Search')
+    },
+    // 获取二级分类和三级分类
+    getSecondCat(){
+      http.getSecondProductCat(this.parentLevel,this.marketId).then(res => {
+        if(res.code === 200){
+          this.productData = res.data
+        }
+      })
     }
   },
   filfter: {},

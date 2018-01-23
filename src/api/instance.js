@@ -32,7 +32,7 @@ const itr = (type, url, params) => {
   let userInfo = JSON.parse(sessionStorage.getItem('userInfo'))
   let token = ''
   if (userInfo) {
-    console.log(userInfo)
+    // console.log(userInfo)
     userInfo = typeof userInfo === 'string' ? JSON.parse(userInfo) : userInfo
     token = userInfo.authParam.token ? userInfo.authParam.token : ''
   }

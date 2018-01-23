@@ -9,7 +9,7 @@
     <!-- 头部 -->
     <div class="header">
       <x-header :left-options="{backText: ''}" style="background-color:#fff;color: #333">
-        <span>{{productName}}</span>
+        <span>{{queryString}}</span>
       </x-header>
     </div>
     <!-- 一级分类列表 -->
@@ -78,6 +78,7 @@
   </div>
 </template>
 <script>
+import * as http from '@/api/http' 
 import { XHeader, XDialog, Checker, CheckerItem, Scroller } from 'vux'
 // import alert from './productComponents/alert'
 export default {
@@ -88,31 +89,57 @@ export default {
       selected: 0,
       showCart: false,
       show: false,
-      productName: '你好',
-      price: '(￥)',
+      price: '(￥'+'143)',
       demo2: '1', // 默认选中规格1
-      countIcon: true
+      countIcon: true,
+      marketId: 143,  // 市场id
+      params: {
+        queryString: this.queryString, // 商品名称
+        rankFlag: 'default', // 排序标记,default默认,price 价格,monthSale 月销量,goodRate 好评
+        order: 0, // 升序降序,0降序 1升序
+        pageNum: 1,
+        pageSize: 10,
+      }
     }
   },
-  created() {},
+  created() {
+    this.getNearProducts()
+  },
   mounted() {},
   methods: {
     sort(index) {
+      
       this.selected = index
     },
+    // 弹出弹窗
     showChang() {
       this.show = true
     },
+    // 隐藏弹框
     hideModel() {
       this.show = false
     },
     // 点击购物车图标进入购物车
     toCart() {
       this.$router.push('cart')
+    },
+    // 获取产品列表
+    getNearProducts(){
+      http.getNearProducts(this.marketId,this.params).then(res => {
+        if(res.code === 200){
+          console.log('====================================')
+          console.log(res)
+          console.log('====================================')
+        }
+      })
     }
   },
   filfter: {},
-  computed: {},
+  computed: {
+    queryString(){
+      return this.$route.query.queryString
+    }
+  },
   watch: {}
 }
 </script>
