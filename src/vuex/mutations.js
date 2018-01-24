@@ -1,11 +1,12 @@
 /*
- * @Author: WuFengliang 
- * @Date: 2018-01-02 10:57:33 
- * DeveloperMailbox:   wufengliang@ccw163.com 
+ * @Author: WuFengliang
+ * @Date: 2018-01-02 10:57:33
+ * DeveloperMailbox:   wufengliang@ccw163.com
  * FunctionPoint:  mutations
  */
 
-import { setStore, getStore, removeStore } from './util'
+import {setStore, getStore, removeStore} from './util'
+import * as types from './mutation-types'
 
 export default {
   //  是否登录
@@ -13,5 +14,12 @@ export default {
     state.isLogin = state.name ? true : false
     if (!state.isLogin) return
     setStore('userInfo', content)
+  },
+  [types.SET_LOCATION](state, location) {
+    state.location = location
+  },
+  [types.SET_MARKET](state, market) {
+    state.market = market
   }
 }
+

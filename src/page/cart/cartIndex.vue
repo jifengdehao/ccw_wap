@@ -126,7 +126,7 @@ export default {
       if (type === 'add') {
         // this.count++
         const login = JSON.parse(JSON.parse(window.sessionStorage.getItem('userInfo')))
-        console.log(login.cust_id)
+        console.log(this.$store.state.market)
       }
     }
   },

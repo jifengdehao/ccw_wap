@@ -15,5 +15,7 @@ export default {
     return state.isLogin || getStore(state.isLogin)
   },
   menuBarH: state => state.menuBarH,
-  topBarH: state => state.topBarH
+  topBarH: state => state.topBarH,
+  location: state => state.location,
+  market: state => state.market
 }
