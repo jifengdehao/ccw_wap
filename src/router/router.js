@@ -107,7 +107,7 @@ export default [
   },
   {
     path: '/cartMyCoupon',
-    name: '选择优惠券',
+    name: '我的优惠券',
     component: cartmyCoupon
   },
   {

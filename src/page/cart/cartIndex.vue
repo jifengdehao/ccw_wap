@@ -9,6 +9,7 @@
     <div class="top">
       <div class="top-bar"> {{$route.name}} </div>
     </div>
+    <div v-if="showCartContent">
     <div class="header">
       <div class="header-position">
         <i></i>
@@ -41,7 +42,7 @@
                         <div class="shop-price">
                           <div class="shop-pices">￥<b class="price">100.00</b> </div>
                           <div class="shop-arithmetic">
-                            <a href="javascript:void(0);" class="minus"><img src="../../common/img/cart/reduce_ic.png" alt=""></a> <span class="num">1</span> <a href="javascript:void(0);" class="plus"><img src="../../common/img/cart/plus_ic.png" alt=""></a>
+                            <a href="javascript:void(0);" class="minus"><img src="../../common/img/cart/reduce_ic.png" alt="" @click="addProduce('reduce')"></a> <span class="num">{{ count }}</span> <a href="javascript:void(0);" class="plus" @click="addProduce('add')"><img src="../../common/img/cart/plus_ic.png" alt=""></a>
                           </div>
                         </div>
                       </div>
@@ -52,63 +53,10 @@
             </swipeout-item>
           </swipeout>
 
-          <swipeout>
-            <swipeout-item @on-close="handleEvents('on-close')" @on-open="handleEvents('on-open')">
-              <div slot="right-menu">
-                <swipeout-button @click.native="onButtonClick('delete')" style="background-color: #FF3C00" :width="60">删除</swipeout-button>
-              </div>
-              <div slot="content" class="demo-content vux-1px-t">
-                <ul>
-                  <li>
-                    <div class="shop-info">
-                      <div class="shop-info-img"> <img src="../../common/img/cart/select_selected_btn.png" alt=""> </div>
-                      <div class="shop-info-text"> 
-                        <h4>越南进口红心火龙果2个装大果单果约新鲜水果大果单果</h4>
-                        <div class="shop-brief">  <span>约2斤/份</span> <span>不切</span>  </div> 
-                        <div class="shop-price">
-                          <div class="shop-pices">￥<b class="price">100.00</b> </div>
-                          <div class="shop-arithmetic">
-                            <a href="javascript:void(0);" class="minus"><img src="../../common/img/cart/reduce_ic.png" alt=""></a> <span class="num">1</span> <a href="javascript:void(0);" class="plus"><img src="../../common/img/cart/plus_ic.png" alt=""></a>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </li>
-                </ul>
-              </div>
-            </swipeout-item>
-          </swipeout>
-
-          <swipeout>
-            <swipeout-item @on-close="handleEvents('on-close')" @on-open="handleEvents('on-open')">
-              <div slot="right-menu">
-                <swipeout-button @click.native="onButtonClick('delete')" style="background-color: #FF3C00" :width="60">删除</swipeout-button>
-              </div>
-              <div slot="content" class="demo-content vux-1px-t">
-                <ul>
-                  <li>
-                    <div class="shop-info">
-                      <div class="shop-info-img"> <img src="../../common/img/cart/select_selected_btn.png" alt=""> </div>
-                      <div class="shop-info-text"> 
-                        <h4>越南进口红心火龙果2个装大果单果约新鲜水果大果单果</h4>
-                        <div class="shop-brief">  <span>约2斤/份</span> <span>不切</span>  </div> 
-                        <div class="shop-price">
-                          <div class="shop-pices">￥<b class="price">100.00</b> </div>
-                          <div class="shop-arithmetic">
-                            <a href="javascript:void(0);" class="minus"><img src="../../common/img/cart/reduce_ic.png" alt=""></a> <span class="num">1</span> <a href="javascript:void(0);" class="plus"><img src="../../common/img/cart/plus_ic.png" alt=""></a>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </li>
-                </ul>
-              </div>
-            </swipeout-item>
-          </swipeout>
         </div>
       </div> 
     </div>
-  
+    
 
     
     <div class="payment-bar">
@@ -124,8 +72,24 @@
         <button class="yellow" @click="toSettlement">结算<i>&nbsp;(5)</i></button>
       </div>
     </div>
+    </div>
     <menu-bar></menu-bar>
-    <Alert></Alert> 
+    <Alert></Alert>
+    <!-- 购物车空白页 -->
+    <div class="cartIndex-blank" v-if="showCartBlank">
+      <div class="blank-pic">
+        <img src="../../common/img/cart/no_commodity_ic.png" alt="">
+        <p>还没有添加任何商品</p>
+      </div>
+    </div>
+    <!-- 购物车加载失败 -->
+    <div class="load-failure" v-if="showLoad">
+      <div class="load-pic">
+        <img src="../../common/img/cart/no_network.png" alt="">
+        <p>网络不太顺畅哦！</p>
+        <button>重新加载</button>
+      </div>
+    </div>
   </div>
 
 </template>
@@ -140,8 +104,10 @@ export default {
   props: {},
   data() {
     return {
-      disabled: false,
-      checkProduct: false
+      showCartContent: true, // 显示购物车内容
+      showCartBlank: false, // 显示购物车空白页
+      showLoad: false, // 购物车加载失败
+      count: 0, // 购物车数量
     }
   },
   created() {},
@@ -154,6 +120,14 @@ export default {
     },
     handleEvents (type) {
       console.log('event: ', type)
+    },
+    // 购物车数量增加/ 减少
+    addProduce(type) {
+      if (type === 'add') {
+        // this.count++
+        const login = JSON.parse(JSON.parse(window.sessionStorage.getItem('userInfo')))
+        console.log(login.cust_id)
+      }
     }
   },
   filter: {},
@@ -387,4 +361,14 @@ input.check:checked { background: url(../../common/img/cart/select_selected_btn.
     background-color: #FFBD52 !important;
   }
 }
+
+// 购物车空白页
+.cartIndex-blank { width: 100%; height: 100%; background-color: #ffffff; position: fixed; top: 0; left: 0; display: flex; justify-content: center; align-items: center; }
+.blank-pic > img{ width: 100 / 20rem; height: 100 / 20rem; margin-bottom: 28 / 20rem; }
+.blank-pic > p { font-size: 12px; color: #999999; }
+// 加载购物车失败
+.load-failure { width: 100%; height: 100%; background-color: #ffffff; position: fixed; top: 0; left: 0; display: flex; justify-content: center; align-items: center; }
+.load-pic > img { width: 100 / 20rem; height: 100 / 20rem; margin-bottom: 14 / 20rem; margin-left: 26 / 20rem; }
+.load-pic > p { font-size: 12px; color: #999999; margin-bottom: 24 / 20rem; margin-left: 26 / 20rem; }
+.load-pic > button { width: 140 / 20rem; height: 44 / 20rem; background-color: #FFBD52; border-radius: 4px; font-size: 18px; color: #ffffff; }
 </style>

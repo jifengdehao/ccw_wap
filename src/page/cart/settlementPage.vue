@@ -25,7 +25,7 @@
       <div class="group-item-lack">
         <ul>
           <li style="border-bottom: 0.5px solid #E5E5E5;">
-            <p class="lacking">商品缺货时您需要 <a href="#" @click="onOutProduct">其他商品继续配送(部分商品退款) <strong>&gt;</strong> </a> </p>
+            <p class="lacking">商品缺货时您需要 <a href="javascript:void(0)" @click="onOutProduct">其他商品继续配送(部分商品退款) </a> </p>
           </li>
           <li>
             <p class="distributionTime">选择配送时间 <a href="#">两小时达 <strong>&gt;</strong> </a>  </p>

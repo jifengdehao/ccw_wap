@@ -16,5 +16,5 @@ export default {
     times: 60, //  发送验证码秒数
     mobileNumber: '' //  手机号
   },
-  loginInfo: null //  登录后相关信息
+  loginInfo: null, //  登录后相关信息
 }
