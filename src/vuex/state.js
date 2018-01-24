@@ -17,6 +17,6 @@ export default {
     mobileNumber: '' //  手机号
   },
   loginInfo: null, //  登录后相关信息
-  location: {},   // 位置相关
-  market:{}
+  location: null,   // 位置相关
+  market: null
 }

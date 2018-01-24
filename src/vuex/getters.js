@@ -5,7 +5,7 @@
  * FunctionPoint:  getters
  */
 import {getStore} from './util'
-import state from "./state";
+
 
 export default {
   name: state => {
@@ -16,6 +16,10 @@ export default {
   },
   menuBarH: state => state.menuBarH,
   topBarH: state => state.topBarH,
-  location: state => state.location,
-  market: state => state.market
+  location: state => {
+    return state.location || JSON.parse(getStore('location'))
+  },
+  market: state => {
+    return state.market || JSON.parse(getStore('market'))
+  }
 }
