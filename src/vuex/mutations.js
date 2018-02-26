@@ -24,6 +24,11 @@ export default {
   [types.SET_MARKET](state, market) {
     setStore('market', JSON.stringify(market))
     state.market = market
+  },
+  // 保存登录之后的个人信息
+  [types.SET_USER](state, user) {
+    setStore('userInfo', JSON.stringify(user))
+    state.market = user
   }
 }
 

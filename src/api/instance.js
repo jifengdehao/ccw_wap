@@ -1,7 +1,7 @@
 /*
- * @Author: WuFengliang 
- * @Date: 2018-01-02 11:40:58 
- * DeveloperMailbox:   wufengliang@ccw163.com 
+ * @Author: WuFengliang
+ * @Date: 2018-01-02 11:40:58
+ * DeveloperMailbox:   wufengliang@ccw163.com
  * FunctionPoint:  axios相关请求方法
  */
 import axios from 'axios'

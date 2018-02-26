@@ -16,7 +16,8 @@ export default {
     times: 60, //  发送验证码秒数
     mobileNumber: '' //  手机号
   },
+  user: null, //  登录的个人信息
   loginInfo: null, //  登录后相关信息
   location: null,   // 位置相关
-  market: null
+  market: null  // 菜市场
 }

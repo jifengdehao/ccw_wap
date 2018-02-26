@@ -132,7 +132,7 @@
       //获取附近的菜市场，不在配送范围内
       getNearMarket(params) {
         api.getNearMarket(params).then((res) => {
-          if (res.data) {
+          if (res.code === 200) {
             console.log(res);
             this.marketList = res.data
           }
@@ -147,7 +147,7 @@
       getBanner() {
         const type = 1
         api.getBanner(type).then((res) => {
-          if (res.data) {
+          if (res.code === 200) {
             this.swiperList = res.data
           }
         })

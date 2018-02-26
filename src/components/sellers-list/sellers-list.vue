@@ -117,7 +117,7 @@
 
   export default {
     props: {
-      data: {
+      sellers: {
         type: Array,
         default: []
       }

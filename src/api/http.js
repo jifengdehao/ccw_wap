@@ -101,3 +101,105 @@ export const getBanner = params => {
 export const getIndexStore = params => {
   return http.g(`/homePage/shopsByMarketId/${params}`)
 }
+/**
+ * 2018/2/22
+ * author: zhangwenlong
+ * email: zhangwenlong@ccw163.com
+ * 功能模块: 首页商品搜索(猜你喜欢)
+ */
+export const getLikeProductsData = (params, marketId) => {
+  return http.g(`/homePage/hotSaleProducts/${marketId}`, params)
+}
+/**
+ * 2018/2/22
+ * author: zhangwenlong
+ * email: zhangwenlong@ccw163.com
+ * 功能模块: 首页店铺搜索(猜你喜欢)
+ */
+export const getLikeSellersData = (params, marketId) => {
+  return http.g(`/homePage/hotShops/${marketId}`, params)
+}
+
+/**
+ * 2018/2/23
+ * author: zhangwenlong
+ * email: zhangwenlong@ccw163.com
+ * 功能模块: 商品详情
+ */
+export const getProductDetails = productId => {
+  return http.g(`/homePage/productDesc/${productId}`)
+}
+/**
+ * 2018/2/23
+ * author: zhangwenlong
+ * email: zhangwenlong@ccw163.com
+ * 功能模块: 商品评价
+ */
+export const getProductRemarks = productId => {
+  return http.g(`/homePage/productRemarks/${productId}`)
+}
+
+/**
+ * 2018/2/23
+ * author: zhangwenlong
+ * email: zhangwenlong@ccw163.com
+ * 功能模块: 热门搜索关键子 type ==> 1 店铺关键子 2 商品关键字
+ */
+export const getHotSearchTag = type => {
+  return http.g(`/homePage/searchContent/hotSearchTag`, type)
+}
+
+/**
+ * 2018/2/23
+ * author: zhangwenlong
+ * email: zhangwenlong@ccw163.com
+ * 功能模块: 获得用户保存的所有地址
+ */
+export const getCustomAddress = custId => {
+  return http.g(`/homePage/custAddrs/${custId}`)
+}
+/**
+ * 2018/2/23
+ * author: zhangwenlong
+ * email: zhangwenlong@ccw163.com
+ * 功能模块: 保存收货信息
+ */
+export const postCustomAddress = params => {
+  return http.p('/homePage/addr', params)
+}
+/**
+ * 2018/2/23
+ * author: zhangwenlong
+ * email: zhangwenlong@ccw163.com
+ * 功能模块: 修改收货地址信息
+ */
+export const putCustomAddress = params => {
+  return http.u('/homePage/addr', params)
+}
+/**
+ * 2018/2/23
+ * author: zhangwenlong
+ * email: zhangwenlong@ccw163.com
+ * 功能模块: 删除用户收货地址
+ */
+export const delCustomAddress = (custId, addrId) => {
+  return http.p(`/homePage/addr/${custId}/${addrId}`)
+}
+/**
+ * 2018/2/23
+ * author: zhangwenlong
+ * email: zhangwenlong@ccw163.com
+ * 功能模块: 获取用户默认收货地址
+ */
+export const getDefaultCustomAddress = (custId, marketId) => {
+  return http.g(`/homePage/addr/${custId}/${marketId}`)
+}
+/**
+ * 2018/2/23
+ * author: zhangwenlong
+ * email: zhangwenlong@ccw163.com
+ * 功能模块: 获取全部配送范围
+ */
+export const getDeliverArea = (params) => {
+  return http.g('/homePage/deliverArea', params)
+}

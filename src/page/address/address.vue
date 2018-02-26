@@ -18,26 +18,26 @@
       <scroll>
         <div>
           <swipeout>
-            <swipeout-item transition-mode="follow" :threshold=".5">
+            <swipeout-item transition-mode="follow" :threshold=".5" v-for="(item,index) in customAddress" :key="index">
               <div slot="right-menu">
-                <swipeout-button type="warn" @click.native="onButtonClick('del')">删除</swipeout-button>
+                <swipeout-button type="warn" @click.native="onButtonClick(item)">删除</swipeout-button>
               </div>
               <div slot="content" class="address-item border-1px">
-                <div class="name">菜城<span class="tel">159 4546 4907</span></div>
-                <div class="adr">广州市番禺区南桥街道南堤东路836号</div>
-                <i class="icon-edit"></i>
+                <div class="name">{{item.receiver}}<span class="tel">{{item.contactNumber}}</span></div>
+                <div class="adr">{{item.addr}}</div>
+                <i class="icon-edit" @click="modifyAddress(item)"></i>
               </div>
             </swipeout-item>
-            <swipeout-item transition-mode="follow" :threshold=".5">
-              <div slot="right-menu">
-                <swipeout-button type="warn">删除</swipeout-button>
-              </div>
-              <div slot="content" class="address-item border-1px">
-                <div class="name">菜城<span class="tel">159 4546 4907</span></div>
-                <div class="adr">广州市番禺区南桥街道南堤东路836号</div>
-                <i class="icon-edit"></i>
-              </div>
-            </swipeout-item>
+            <!--<swipeout-item transition-mode="follow" :threshold=".5">-->
+            <!--<div slot="right-menu">-->
+            <!--<swipeout-button type="warn">删除</swipeout-button>-->
+            <!--</div>-->
+            <!--<div slot="content" class="address-item border-1px">-->
+            <!--<div class="name">菜城<span class="tel">159 4546 4907</span></div>-->
+            <!--<div class="adr">广州市番禺区南桥街道南堤东路836号</div>-->
+            <!--<i class="icon-edit"></i>-->
+            <!--</div>-->
+            <!--</swipeout-item>-->
           </swipeout>
         </div>
       </scroll>
@@ -56,12 +56,15 @@
   import Scroll from '@/components/scroll/scroll'
   import mHeader from '@/components/header/m-header'
   import {Swipeout, SwipeoutItem, SwipeoutButton} from 'vux'
+  import * as api from '@/api/http.js'
+  import {mapGetters} from 'vuex'
 
   export default {
     data() {
       return {
         search: '',
-        addressList: [1, 2]
+        addressList: [1, 2],
+        customAddress: []
       }
     },
     components: {
@@ -72,12 +75,45 @@
       SwipeoutButton,
       mHeader
     },
+    computed: {
+      ...mapGetters([
+        'user'
+      ])
+    },
+    created() {
+      this.getCustomAddress()
+    },
     methods: {
       clearSearch() {
         this.search = '';
       },
-      onButtonClick(type) {
-        console.log(type)
+      // 跳转到修改地址页
+      modifyAddress(item) {
+        this.$router.push('/address/' + item.addrId)
+      },
+      // 删除收货地址
+      onButtonClick(item) {
+        console.log(item)
+        let userInfo = JSON.parse(this.user)
+        api.delCustomAddress(userInfo.cust_id, item.addrId).then((res) => {
+          if (res.code === 200) {
+            console.log(res.data)
+            if (res.data) {
+              this.getCustomAddress()
+            }
+          }
+        })
+      },
+      // 获取用户所有的收货地址
+      getCustomAddress() {
+        let userInfo = JSON.parse(this.user)
+        console.log(userInfo)
+        api.getCustomAddress(userInfo.cust_id).then((res) => {
+          if (res.code === 200) {
+            console.log(res.data)
+            this.customAddress = res.data
+          }
+        })
       }
     }
   }
@@ -88,7 +124,7 @@
   .address {
     background-color: #f5f5f5;
     height: 100%;
-    .m-header{
+    .m-header {
       .border-none();
       background-color: #f5f5f5;
     }

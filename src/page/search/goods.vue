@@ -7,7 +7,7 @@
 <template>
   <div class="goods">
     <template v-if="searchResult">
-      <div class="tab vux-1px-b">
+      <div class="tab border-1px">
         <div class="tab-item" :class="{'active':selectType===0}" @click="select(0)">综合排序<span class="icon"></span>
         </div>
         <div class="tab-item" :class="{'active':selectType===1}" @click="select(1)">价格<span class="icon"></span>
@@ -62,7 +62,6 @@
 </script>
 <style scoped lang="less" type="text/less">
   @import "../../common/css/mixin";
-  @import '~vux/src/styles/1px.less';
 
   .goods {
     .content {
@@ -78,6 +77,7 @@
       line-height: 2rem;
       display: flex;
       background: #FAFAFA;
+      .border-1px();
       .tab-item {
         flex: 1;
         color: #999999;

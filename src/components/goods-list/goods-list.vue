@@ -5,84 +5,44 @@
 * 功能：商品列表
 */
 <template>
-  <ul class="goods-list">
-    <li class="item border-1px">
+  <ul class="goods-list" v-if="goods.length>0">
+    <router-link :to="{path:'/goods/'+item.productId}"
+                 v-for="item in goods"
+                 :key="item.productId"
+                 tag="li"
+                 class="item border-1px">
       <div class="item-img">
-        <img src="../../common/img/productIndex/3.jpg" alt="">
+        <img v-lazy="item.proImgUrl">
       </div>
       <div class="item-content">
-        <div class="name">越南进口红心火龙果2个装大果单果约新鲜水果大越南</div>
-        <div class="sales">月销量200&nbsp;&nbsp;|&nbsp;&nbsp;好评率96%</div>
-        <div class="spec">约0.5斤/份</div>
-        <div class="seller">清河水果专卖店</div>
-        <div class="price">¥30.8</div>
+        <div class="name">{{item.productName}}</div>
+        <div class="sales">月销量{{item.monthSalesAmount}}&nbsp;&nbsp;|&nbsp;&nbsp;好评率{{item.goodRemarkRate * 100}}%</div>
+        <div class="spec">约{{item.items | capitalize}}</div>
+        <div class="seller">{{item.shopName}}</div>
+        <div class="price">¥{{item.price / 100}}</div>
         <div class="selectIcon" v-if="selectGood" @click="changSelectStatus"></div>
         <div class="selectGood" v-else @click="selectSpec">多规格</div>
       </div>
-    </li>
-    <li class="item border-1px">
-      <div class="item-img">
-        <img src="../../common/img/productIndex/3.jpg" alt="">
-      </div>
-      <div class="item-content">
-        <div class="name">越南进口红心火龙果2个装大果单果约新鲜水果大越南</div>
-        <div class="sales">月销量200&nbsp;&nbsp;|&nbsp;&nbsp;好评率96%</div>
-        <div class="spec">约0.5斤/份</div>
-        <div class="seller">清河水果专卖店</div>
-        <div class="price">¥30.8</div>
-        <div class="selectIcon" v-if="selectGood"></div>
-        <div class="selectGood" v-else>多规格</div>
-      </div>
-    </li>
-    <li class="item border-1px">
-      <div class="item-img">
-        <img src="../../common/img/productIndex/3.jpg" alt="">
-      </div>
-      <div class="item-content">
-        <div class="name">越南进口红心火龙果2个装大果单果约新鲜水果大越南</div>
-        <div class="sales">月销量200&nbsp;&nbsp;|&nbsp;&nbsp;好评率96%</div>
-        <div class="spec">约0.5斤/份</div>
-        <div class="seller">清河水果专卖店</div>
-        <div class="price">¥30.8</div>
-        <div class="selectIcon" v-if="selectGood"></div>
-        <div class="selectGood" v-else>多规格</div>
-      </div>
-    </li>
-    <li class="item border-1px">
-      <div class="item-img">
-        <img src="../../common/img/productIndex/3.jpg" alt="">
-      </div>
-      <div class="item-content">
-        <div class="name">越南进口红心火龙果2个装大果单果约新鲜水果大越南</div>
-        <div class="sales">月销量200&nbsp;&nbsp;|&nbsp;&nbsp;好评率96%</div>
-        <div class="spec">约0.5斤/份</div>
-        <div class="seller">清河水果专卖店</div>
-        <div class="price">¥30.8</div>
-        <div class="selectIcon" v-if="selectGood"></div>
-        <div class="selectGood" v-else>多规格</div>
-      </div>
-    </li>
-    <li class="item border-1px">
-      <div class="item-img">
-        <img src="../../common/img/productIndex/3.jpg" alt="">
-      </div>
-      <div class="item-content">
-        <div class="name">越南进口红心火龙果2个装大果单果约新鲜水果大越南</div>
-        <div class="sales">月销量200&nbsp;&nbsp;|&nbsp;&nbsp;好评率96%</div>
-        <div class="spec">约0.5斤/份</div>
-        <div class="seller">清河水果专卖店</div>
-        <div class="price">¥30.8</div>
-        <div class="selectIcon" v-if="selectGood"></div>
-        <div class="selectGood" v-else>多规格</div>
-      </div>
-    </li>
+    </router-link>
   </ul>
 </template>
 <script type="text/ecmascript-6">
   export default {
+    props: {
+      goods: {
+        type: Array,
+        default: []
+      }
+    },
     data() {
       return {
         selectGood: true
+      }
+    },
+    filters: {
+      capitalize: function (value) {
+        if (!value) return ''
+        return value[0].names
       }
     },
     methods: {
@@ -90,7 +50,7 @@
         this.selectGood = false
       },
       selectSpec() {
-        this.$emit('selectSpec','item')
+        this.$emit('selectSpec', 'item')
       }
     }
   }
@@ -119,6 +79,7 @@
       }
       .item-content {
         padding-left: .6rem;
+        flex: 1;
         position: relative;
         .name {
           font-size: 12px;

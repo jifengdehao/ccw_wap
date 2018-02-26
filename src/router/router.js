@@ -55,7 +55,14 @@ const mineIndex = anyscComponent('page/mine/mineIndex') //  个人中心模块�
 
 const myCoupon = anyscComponent('page/mine/myCoupon') //  我的优惠券
 
+const Test = anyscComponent('page/test/test') //  测试
+
 export default [
+  {
+    path: '/test',
+    name: '测试',
+    component: Test
+  },
   {
     path: '/home',
     name: '入口',
@@ -69,18 +76,7 @@ export default [
   {
     path: '/search',
     name: '搜索',
-    component: Search,
-    redirect: '/search/goods',
-    children: [
-      {
-        path: 'goods',
-        component: SearchGoods
-      },
-      {
-        path: 'sellers',
-        component: SearchSellers
-      }
-    ]
+    component: Search
   },
   {
     path: '/address',
@@ -113,7 +109,7 @@ export default [
     component: shopProduct
   },
   {
-    path: '/shopInfo',
+    path: '/shopInfo/:id',
     name: '店铺详情',
     component: shopInfo
   },
