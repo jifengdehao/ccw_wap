@@ -9,7 +9,7 @@
     <!-- 头部 -->
     <div class="header">
       <x-header :left-options="{backText: ''}" style="background-color:#fff;color: #333">
-        <span>{{queryString}}</span>
+        <span>{{params.queryString}}</span>
       </x-header>
     </div>
     <!-- 一级分类列表 -->
@@ -30,25 +30,25 @@
     <!-- 一级分类下面的二级分类产品 -->
     <Scroller lock-x class="list">
       <ul>
-        <li class="productMessage" v-for="(item, index) in 10" :key="index">
+        <li class="productMessage" v-for="(item, index) in listData" :key="index">
           <router-link :to="'/shopProduct'">
-            <div class="productMessageLeft left"><img src="../../common/img/productIndex/3.jpg" alt=""></div>
+            <div class="productMessageLeft left"><img :src="item.proImgUrl" alt="商品图片"></div>
             <div class="productMessageRight right">
-              <p class="first">美国西北车厘子 2磅装(约900g) </p>
+              <p class="first">{{item.productName}}</p>
               <p class="second">
-                <span>月销量200</span>
+                <span>月销量 {{item.monthSalesAmount}}</span>
                 <i class="border"></i>
-                <span>好评率96%</span>
+                <span>好评率{{item.goodRemarkRate*100}}%</span>
               </p>
-              <p class="third">清河水果专卖店</p>
-              <p class="fourth"><span>每斤20元</span></p>
-              <p class="last">¥30.8 <span>约0.5斤/份</span></p>
+              <p class="third">{{item.shopName}}</p>
+              <p class="fourth"><span>每斤{{item.price}}元</span></p>
+              <p class="last">¥{{item.items[0].curPrice}} <span>约{{item.items[0].names}}</span></p>
             </div>
           </router-link>
-          <div v-if="showCart" class="cartIcon icon">
+          <div v-if="!item.items.length === 1" class="cartIcon icon">
             <img src="../../common/img/productIndex/shopping_ic.png" alt="">
           </div>
-          <div v-else class="fontIcon icon" @click="showChang">多规格</div>
+          <div v-else class="fontIcon icon" @click="showChang(item.items)">多规格</div>
         </li>
         <li class="footer">
           <p>没有更多了</p>
@@ -63,11 +63,11 @@
     <!-- 弹窗 -->
     <div class="alert">
       <x-dialog class="dialog" v-model="show">
-        <div class="alertContent clearfix" v-for="(item,index) in 2" :key="index">
+        <div class="alertContent clearfix" v-for="(item,index) in alertData" :key="index">
           <h5>规格：</h5>
           <checker v-model="demo2" default-item-class="demo2-item" selected-item-class="demo2-item-selected">
-            <checker-item value="1">约1.5斤/份</checker-item>
-            <checker-item value="3">不切</checker-item>
+            <checker-item value="1">{{item.names}}</checker-item>
+            <checker-item value="2">不切</checker-item>
           </checker>
         </div>
         <div class="alertFooter" @click="hideModel">
@@ -78,7 +78,7 @@
   </div>
 </template>
 <script>
-import * as http from '@/api/http' 
+import * as http from '@/api/http'
 import { XHeader, XDialog, Checker, CheckerItem, Scroller } from 'vux'
 // import alert from './productComponents/alert'
 export default {
@@ -89,16 +89,18 @@ export default {
       selected: 0,
       showCart: false,
       show: false,
-      price: '(￥'+'143)',
+      price: '(￥' + '143)',
       demo2: '1', // 默认选中规格1
       countIcon: true,
-      marketId: 143,  // 市场id
+      marketId: 141, // 市场id
+      listData: [], // 获取的数据
+      alertData: [],
       params: {
-        queryString: this.queryString, // 商品名称
+        queryString: this.$route.query.queryString, // 商品名称
         rankFlag: 'default', // 排序标记,default默认,price 价格,monthSale 月销量,goodRate 好评
         order: 0, // 升序降序,0降序 1升序
         pageNum: 1,
-        pageSize: 10,
+        pageSize: 10
       }
     }
   },
@@ -108,12 +110,29 @@ export default {
   mounted() {},
   methods: {
     sort(index) {
-      
+      switch (index) {
+        case 0:
+          this.params.rankFlag = 'default'
+          break
+        case 1:
+          this.params.rankFlag = 'price'
+          break
+        case 2:
+          this.params.rankFlag = 'monthSale'
+          break
+        case 3:
+          this.params.rankFlag = 'goodRate'
+          break
+      }
       this.selected = index
+      this.getNearProducts()
     },
     // 弹出弹窗
-    showChang() {
+    showChang(data) {
       this.show = true
+      // if (data.length > 1) {
+        this.alertData = data
+      // }
     },
     // 隐藏弹框
     hideModel() {
@@ -124,22 +143,16 @@ export default {
       this.$router.push('cart')
     },
     // 获取产品列表
-    getNearProducts(){
-      http.getNearProducts(this.marketId,this.params).then(res => {
-        if(res.code === 200){
-          console.log('====================================')
-          console.log(res)
-          console.log('====================================')
+    getNearProducts() {
+      http.getNearProducts(this.marketId, this.params).then(res => {
+        if (res.code === 200) {
+          this.listData = res.data.records
         }
       })
     }
   },
   filfter: {},
-  computed: {
-    queryString(){
-      return this.$route.query.queryString
-    }
-  },
+  computed: {},
   watch: {}
 }
 </script>

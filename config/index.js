@@ -25,6 +25,13 @@ module.exports = {
         pathRewrith: {
           '^/productCat': '/productCat'
         }
+      },
+      '/homePage': {
+        target: devTarget,
+        changeOrigin: true,
+        pathRewrith: {
+          '^/homePage': '/homePage'
+        }
       }
     },
 
