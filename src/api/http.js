@@ -42,6 +42,13 @@ export const getCoupon = (customerId, marketId, params) => {
 }
 
 /**
+ * 用户端个人中心
+ */
+export const getUserCenter = (custId, params) => {
+  return http.g(`/personCenter/${custId}`, params)
+}
+
+/**
  * 负责人 - By WuFengliang
  */
 

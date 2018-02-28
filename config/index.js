@@ -32,6 +32,13 @@ module.exports = {
         pathRewrith: {
           '^/homePage': '/homePage'
         }
+      },
+      '/personCenter': {
+        target: devTarget,
+        changeOrigin: true,
+        pathRewrith: {
+          '^/personCenter': '/personCenter'
+        }
       }
     },
 

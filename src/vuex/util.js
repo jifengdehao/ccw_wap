@@ -11,7 +11,7 @@ export const setStore = (name, content) => {
  */
 export const getStore = name => {
   if (!name) return
-  return window.localStorage.getItem(name)
+  return window.sessionStorage.getItem(name)
 }
 
 /**
@@ -19,5 +19,5 @@ export const getStore = name => {
  */
 export const removeStore = name => {
   if (!name) return
-  window.localStorage.removeItem(name)
+  return window.sessionStorage.removeItem(name)
 }
