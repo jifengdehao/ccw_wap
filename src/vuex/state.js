@@ -12,6 +12,6 @@ export default {
   menuBarH: ((percent * 2.45 + 1) * -1).toString(), //  底部菜单栏高度
   topBarH: (percent * -2.2).toString(), //  顶部菜单高度
   loginInfo: null, //  登录后相关信息
-  location: {},   // 位置相关
-  market:{}
+  location: null,   // 位置相关
+  market: null
 }

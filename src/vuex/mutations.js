@@ -17,10 +17,14 @@ export default {
   SET_LOGINPHONE(state, phone) {
     state.loginParams.mobileNumber = phone
   },
+  // 保存位置信息
   [types.SET_LOCATION](state, location) {
+    setStore('location', JSON.stringify(location))
     state.location = location
   },
+  // 保存菜市场
   [types.SET_MARKET](state, market) {
+    setStore('market', JSON.stringify(market))
     state.market = market
   }
 }

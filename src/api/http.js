@@ -97,3 +97,14 @@ export const getRecommendMarkets = params => {
 export const getBanner = params => {
   return http.g(`/homePage/coverBanners/${params}`)
 }
+
+/**
+ * 2018/1/24
+ * author: zhangwenlong
+ * email: zhangwenlong@ccw163.com
+ * 功能模块: 首页获取精选档口
+ */
+
+export const getIndexStore = params => {
+  return http.g(`/homePage/shopsByMarketId/${params}`)
+}

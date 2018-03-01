@@ -18,7 +18,7 @@
             <slide :showDot="false">
               <div v-for="item in swiperList">
                 <a :href="item.linkUrl">
-                  <img @load="loadImage" :src="item.picUrl" class="needsclick">
+                  <img @load="loadImage" :src="item.picUrl" class="needsclick"/>
                 </a>
               </div>
             </slide>
@@ -57,21 +57,7 @@
   import AMap from 'AMap'   //在页面中引入高德地图
   import * as api from '@/api/http' // http模块
   import {mapMutations} from 'vuex'
-
-  const baseList = [{
-    url: 'javascript:',
-    img: 'https://static.vux.li/demo/1.jpg',
-    title: '送你一朵fua'
-  }, {
-    url: 'javascript:',
-    img: 'https://static.vux.li/demo/2.jpg',
-    title: '送你一辆车'
-  }, {
-    url: '/activity/11',
-    img: 'https://static.vux.li/demo/3.jpg',
-    title: '送你一次旅行',
-    fallbackImg: require('../../assets/logo.png')
-  }]
+  import * as store from '@/vuex/util'
 
   export default {
     name: 'homeIndex',
@@ -81,7 +67,7 @@
         location: '',
         swiperList: [],
         marketList: [],
-        showLocationTip: false
+        showLocationTip: false,
       }
     },
     mounted() {
@@ -128,8 +114,8 @@
               console.log(res)
               if (!res.data[0]) {
                 alert('当前位置不在配送范围内');
-                that.getRecommendMarkets(params.positionInfos[0]);
-                that.getBanner(1);
+                that.getNearMarket(params.positionInfos[0]);
+                that.getBanner();
                 that.showLocationTip = true
               } else {
                 that.$router.push('/index')
@@ -144,8 +130,8 @@
         })
       },
       //获取附近的菜市场，不在配送范围内
-      getRecommendMarkets(params) {
-        api.getRecommendMarkets(params).then((res) => {
+      getNearMarket(params) {
+        api.getNearMarket(params).then((res) => {
           if (res.data) {
             console.log(res);
             this.marketList = res.data
@@ -158,7 +144,8 @@
         setMarket: 'SET_MARKET'
       }),
       // 轮播图
-      getBanner(type) {
+      getBanner() {
+        const type = 1
         api.getBanner(type).then((res) => {
           if (res.data) {
             this.swiperList = res.data

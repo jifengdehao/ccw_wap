@@ -1,13 +1,13 @@
 /*
- * @Author: WuFengliang 
- * @Date: 2017-12-26 09:22:49 
- * DeveloperMailbox:   wufengliang@ccw163.com 
+ * @Author: WuFengliang
+ * @Date: 2017-12-26 09:22:49
+ * DeveloperMailbox:   wufengliang@ccw163.com
  * FunctionPoint:  底部菜单栏
  */
  <template>
    <div>
      <ul class="menu-bar">
-       <router-link tag="li" :to="'/home'" exact-active-class="active">
+       <router-link tag="li" :to="'/index'" exact-active-class="active">
         <div>
           <i class="icon-home"></i>
           <p>首页</p>

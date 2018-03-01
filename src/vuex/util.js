@@ -1,13 +1,13 @@
 /**
- * 存储localStorage
+ * 存储sessionStorage
  */
 export const setStore = (name, content) => {
   if (!name) return
-  return window.sessionStorage.setItem('name', content)
+  return window.sessionStorage.setItem(name, content)
 }
 
 /**
- * 获取localStorage
+ * 获取sessionStorage
  */
 export const getStore = name => {
   if (!name) return
@@ -15,9 +15,10 @@ export const getStore = name => {
 }
 
 /**
- * 删除localStorage
+ * 删除sessionStorage
  */
 export const removeStore = name => {
   if (!name) return
-  return window.sessionStorage.removeItem(name)
+  window.sessionStorage.removeItem(name)
 }
+
