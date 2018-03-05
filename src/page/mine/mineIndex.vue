@@ -10,27 +10,27 @@
     <!-- 主体内容区域 -->
     <scroller :height="menuBarH" lock-x ref="scroller">
       <div class="person-contain">
-        <div class="person-header" @click="dialog=true">
-          <img src="" />
+        <div class="person-header" @click="dialog=true" v-if="data">
+          <img :src="data.head_url != 'null' ? data.head_url : ''" />
           <ul>
-            <li>小不点</li>
-            <li>13838384381</li>
+            <li>{{data.cust_name}}</li>
+            <li>{{data.mobileno}}</li>
           </ul>
           <p><a></a></p>
         </div>
-        <ul class="person-my">
+        <ul class="person-my" v-if="data">
           <li>
-            <p>173元</p>
+            <p>{{data.mc_account.balance != null ? data.mc_account.balance:0 }}元</p>
             <p><span>我的账户</span></p>
           </li>
           <li class="line"></li>
           <li @click="jumpTo">
-            <p>3</p>
+            <p>{{data.discount_count}}</p>
             <p><span>劵包</span></p>
           </li>
           <li class="line"></li>
           <li>
-            <p>3</p>
+            <p>{{data.mc_account.coins}}</p>
             <p><span>积分账户</span></p>
           </li>
         </ul>
@@ -122,10 +122,15 @@ export default {
   props: {},
   data() {
     return {
-      dialog: false //  弹框bool值
+      dialog: false, //  弹框bool值
+      custId: '', //  用户ID
+      data: null //  接受到的数据
     }
   },
-  created() {},
+  created() {
+    this.custId = this.$store.state.loginInfo.cust_id
+    this.getUserCenter()
+  },
   mounted() {},
   activited: {},
   update: {},
@@ -134,6 +139,12 @@ export default {
     //  路由跳转
     jumpTo() {
       this.$router.push('/myCoupon')
+    },
+    //  获取个人中心数据
+    getUserCenter() {
+      http.getUserCenter(this.custId, {}).then(response => {
+        this.data = response.data
+      })
     }
   },
   filter: {},
@@ -167,7 +178,6 @@ export default {
     img {
       width: 3rem;
       height: 3rem;
-      background-color: #f00;
       border-radius: 50%;
       border: 2px solid #ffeeaf;
       box-shadow: 0 0 -4px 4px #ffeeaf outset;

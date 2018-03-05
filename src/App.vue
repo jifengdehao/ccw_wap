@@ -14,6 +14,7 @@
   </div>
 </template>
 <script type="text/ecmascript-6">
+import { mapMutations } from 'vuex'
 export default {
   name: 'app',
   data() {
@@ -27,9 +28,13 @@ export default {
       this.$store.state.loginInfo || sessionStorage.getItem('userInfo')
 
     let token = JSON.parse(JSON.parse(loginInfo))
-
+    console.log(token)
     if (token != null && token.authParam.token.length > 0) {
-      //  don't something
+      this.SET_LOGININFO(token)
+      //  do something
+      if (this.$route.path == '/login' || this.$route.path == '/webchat') {
+        this.$router.push('/home')
+      }
     } else {
       if (this.isWebchatBool) {
         //  微信内置浏览器登录
@@ -48,7 +53,8 @@ export default {
         this.isWebchatBool = true
       }
       this.isWebchatBool = false
-    }
+    },
+    ...mapMutations(['SET_LOGININFO'])
   }
 }
 </script>

@@ -13,16 +13,21 @@
         <button>下载</button>
       </p>
       <div class="content-box">
-        <slot></slot>
+        <scroller height="-44" lock-x ref="scroller">
+          <div>
+            <slot></slot>
+          </div>
+        </scroller>
       </div>
     </div>
   </transition>
 </template>
 <script>
 import { mapGetters } from 'vuex'
+import { Scroller } from 'vux'
 export default {
   name: 'LoginIndex',
-  components: {},
+  components: { Scroller },
   props: {},
   data() {
     return {}
@@ -79,6 +84,7 @@ export default {
   }
   .content-box {
     margin-top: 44px;
+    overflow: hidden;
   }
 }
 </style>

@@ -28,9 +28,9 @@ const SearchGoods = anyscComponent('page/search/goods') // 搜索商品
 
 const GoodDetails = anyscComponent('page/good-details/good-details') // 商品详情
 
-const SearchSellers = anyscComponent('page/search/sellers')  // 搜索档口
+const SearchSellers = anyscComponent('page/search/sellers') // 搜索档口
 
-const addAddress = anyscComponent('page/address/add-address')  //新增地址
+const addAddress = anyscComponent('page/address/add-address') //新增地址
 
 const shopInfo = anyscComponent('page/product/shopInfo') //  店铺详情shopProduct
 
@@ -62,6 +62,10 @@ export default [
     path: '/test',
     name: '测试',
     component: Test
+  },
+  {
+    path: '',
+    redirect: '/home'
   },
   {
     path: '/home',
@@ -154,7 +158,7 @@ export default [
   },
   {
     path: '/myCoupon',
-    name: '我的优惠券',
+    name: '我的优惠券（个人中心）',
     component: myCoupon
   },
   {

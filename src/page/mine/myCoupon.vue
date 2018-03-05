@@ -98,9 +98,9 @@ export default {
 @import '../../common/css/variable.less';
 .coupon-box {
   box-sizing: border-box;
-  padding: 0 17px;
+  padding: 44px 17px;
   ul {
-    margin-top: 9.5px;
+    margin-top: 10px;
     li {
       position: relative;
       width: 17.05rem;
