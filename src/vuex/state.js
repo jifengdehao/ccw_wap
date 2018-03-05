@@ -19,5 +19,6 @@ export default {
   user: null, //  登录的个人信息
   loginInfo: null, //  登录后相关信息
   location: null,   // 位置相关
-  market: null  // 菜市场
+  market: null,  // 菜市场
+  shopCart: []  // 购物车
 }

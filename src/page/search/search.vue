@@ -24,33 +24,47 @@
         </div>
       </div>
       <div class="tab-content" v-show="status===1">
+        <div class="tab-content-tab border-1px">
+          <div class="tab-item" :class="{'active':sort===0}" @click="selectSort(0)">综合排序<span
+            class="icon"></span>
+          </div>
+          <div class="tab-item" :class="{'active':sort===1}" @click="selectSort(1)">价格<span class="icon"></span>
+          </div>
+          <div class="tab-item" :class="{'active':sort===2}" @click="selectSort(2)">销量</div>
+          <div class="tab-item" :class="{'active':sort===3}" @click="selectSort(3)">评价</div>
+        </div>
         <div class="mescroll" id="mescroll_1" ref="mescroll">
           <show-cart></show-cart>
           <ul class="goods-list" v-if="goods.length>0">
-            <router-link :to="{path:'/goods/'+item.productId}"
-                         v-for="(item,index) in goods"
-                         :key="index"
-                         tag="li"
-                         class="item border-1px">
-              <div class="item-img">
-                <img v-lazy="item.proImgUrl">
-              </div>
-              <div class="item-content">
-                <div class="name">{{item.productName}}</div>
-                <div class="sales">月销量{{item.monthSalesAmount}}&nbsp;&nbsp;|&nbsp;&nbsp;好评率{{item.goodRemarkRate *
-                  100}}%
+            <li class="item border-1px" v-for="(item,index) in goods" :key="index">
+              <div @click="goToProductDetails(item)">
+                <div class="item-img">
+                  <img v-lazy="item.proImgUrl">
                 </div>
-                <div class="spec">约{{item.items | capitalize}}</div>
-                <div class="seller">{{item.shopName}}</div>
-                <div class="price">¥{{item.price / 100}}</div>
-                <div class="selectIcon" v-if="selectGood" @click="changSelectStatus"></div>
-                <div class="selectGood" v-else @click.native="selectSpec">多规格</div>
+                <div class="item-content">
+                  <div class="name">{{item.productName}}</div>
+                  <div class="sales">月销量{{item.monthSalesAmount}}&nbsp;&nbsp;|&nbsp;&nbsp;好评率{{item.goodRemarkRate *
+                    100}}%
+                  </div>
+                  <div class="spec">约{{item.items | capitalize}}</div>
+                  <div class="seller">{{item.shopName}}</div>
+                  <div class="price">¥{{item.price / 100}}</div>
+                </div>
               </div>
-            </router-link>
+              <div class="selectIcon" v-if="!item.isSelectGood" @click="addCart(item)"></div>
+              <div class="selectGood" v-else>多规格</div>
+            </li>
           </ul>
         </div>
       </div>
       <div class="tab-content" v-show="status===2">
+        <div class="tab-content-tab border-1px">
+          <div class="tab-item" :class="{'active':sort===0}" @click="selectSort(0)">综合排序<span class="icon"></span>
+          </div>
+          <div class="tab-item" :class="{'active':sort===1}" @click="selectSort(1)">销量</div>
+          <div class="tab-item" :class="{'active':sort===2}" @click="selectSort(2)">关注</div>
+          <div class="tab-item" :class="{'active':sort===3}" @click="selectSort(3)">评价</div>
+        </div>
         <div class="mescroll" id="mescroll_2" ref="mescroll">
           <ul class="sellers-list" v-if="sellers.length>0">
             <router-link :to="{path:/shopInfo/+item.msShopId}"
@@ -81,18 +95,21 @@
   import MeScroll from 'mescroll'
   import {Rater} from 'vux'
   import showCart from '@/components/show-cart/show-cart'
+  import Vue from 'vue'
 
   export default {
     data() {
       return {
         search: '',// 搜索
-        status: 1, // 切换
+        status: 1, // 切换商品和商铺
         goods: [], // 商品列表
         sellers: [], // 商铺列表
         starColor: '#FFBD52', // 星星颜色
         starDisabled: true,  // 不允许选星
         starFontSize: 10,   // 星星大小
-        selectGood: true
+        selectGood: true,
+        sort: 0, // 商品排序
+        isSelectGood: false
       }
     },
     computed: {
@@ -129,15 +146,12 @@
         }
         api.getLikeSellersData(params, this.market.marketId).then((res) => {
           if (res.code === 200) {
-            console.log(res.data)
             if (page.pageNum === 1) this.sellers = []
             this.sellers = this.sellers.concat(res.data.records)
             console.log(this.sellers)
-            this.mescroll_2.endByPage(res.data.records.length,res.data.pages)
+            this.mescroll_2.endByPage(res.data.records.length, res.data.pages)
           }
         })
-      },
-      changSelectStatus() {
       },
       mescroll_1_upCallback: function (page) {
         let params = {
@@ -149,9 +163,23 @@
             if (page.pageNum === 1) this.goods = []
             this.goods = this.goods.concat(res.data.records)
             console.log(this.goods)
-            this.mescroll_1.endByPage(res.data.records.length,res.data.pages)
+            this.mescroll_1.endByPage(res.data.records.length, res.data.pages)
           }
         })
+      },
+      // 跳转到商品详情
+      goToProductDetails(item) {
+        console.log(item)
+        this.$router.push('/goods/' + item.productId)
+      },
+      // 添加购物车
+      addCart(item) {
+        console.log(item)
+        if (item.items.length > 1) {
+          Vue.set(item, 'isSelectGood', true)
+        } else {
+          Vue.set(item, 'isSelectGood', false)
+        }
       },
       // 切换
       selectStatus(type) {
@@ -168,6 +196,9 @@
       // 返回上一级
       back() {
         this.$router.back()
+      },
+      selectSort(type) {
+        this.sort = type
       }
     },
     components: {
@@ -269,6 +300,29 @@
       right: 0;
       bottom: 0;
       overflow: hidden;
+      .tab-content-tab {
+        height: 2rem;
+        line-height: 2rem;
+        display: flex;
+        background: #FAFAFA;
+        .border-1px();
+        .tab-item {
+          flex: 1;
+          color: #999999;
+          font-size: .6rem;
+          text-align: center;
+          .icon {
+            display: inline-block;
+            width: 12px;
+            height: 6px;
+            background: url("../../common/img/common/up_ic.png") no-repeat center;
+            background-size: 6px 3px;
+          }
+        }
+        .active {
+          color: #333333;
+        }
+      }
       .sellers-list {
         padding: 0 .6rem;
         .item {
@@ -311,9 +365,12 @@
             .border-none()
           }
           .border-1px(#e5e5e5);
-          display: flex;
           padding-bottom: .4rem;
           padding-top: .6rem;
+          position: relative;
+          & > div {
+            display: flex;
+          }
           .item-img {
             width: 4rem;
             flex: 0 0 4rem;
@@ -326,7 +383,6 @@
           .item-content {
             padding-left: .6rem;
             flex: 1;
-            position: relative;
             .name {
               font-size: 12px;
               line-height: .85rem;
@@ -344,28 +400,25 @@
               font-size: .8rem;
               line-height: 1.1rem;
             }
-            .selectIcon {
-              position: absolute;
-              right: 0;
-              bottom: .1rem;
-              width: 1.3rem;
-              height: 1.3rem;
-              background: url("../../common/img/productIndex/shopping_ic.png") no-repeat center;
-              background-size: contain;
-            }
-            .selectGood {
-              position: absolute;
-              right: 0;
-              bottom: .1rem;
-              width: 2.7rem;
-              line-height: 1.1rem;
-              color: #FFFFFF;
-              background-color: #FFBD52;
-              height: 1.1rem;
-              border-radius: 5rem;
-              font-size: .6rem;
-              text-align: center;
-            }
+          }
+          .selectIcon {
+            position: absolute;
+            right: 0;
+            bottom: .4rem;
+            width: 1.3rem;
+            height: 1.3rem;
+            background: url("../../common/img/productIndex/shopping_ic.png") no-repeat center;
+            background-size: contain;
+          }
+          .selectGood {
+            position: absolute;
+            right: 0;
+            bottom: .4rem;
+            color: #FFFFFF;
+            background-color: #FFBD52;
+            padding: .25rem .4rem;
+            border-radius: 5rem;
+            font-size: .6rem;
           }
         }
       }

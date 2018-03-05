@@ -29,6 +29,16 @@ export default {
   [types.SET_USER](state, user) {
     setStore('userInfo', JSON.stringify(user))
     state.market = user
+  },
+  // 保存购物车数据
+  [types.SET_SHOP_CART](state, shopCart) {
+    setStore('shopCart', JSON.stringify(shopCart))
+    state.shopCart = shopCart
+  },
+  // 添加购物车
+  [types.ADD_SHOP_CART](state, product) {
+    state.shopCart.push(product)
+    setStore('shopCart', JSON.stringify(state.shopCart))
   }
 }
 
