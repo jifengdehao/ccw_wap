@@ -11,79 +11,119 @@
         <i class="back" @click="back"></i>
         <div class="search-content">
           <input type="text" class="search" placeholder="附近档口商品" v-model.trim="search" @keyup.enter="submit"/>
-          <i class="clear" v-show="search" @click="clearSearch"></i>
+          <i class="clear" v-show="search" @click.stop="clearSearch"></i>
         </div>
-        <button type="button" class="btn-search">搜索</button>
+        <button type="button" class="btn-search" @click="submit">搜索</button>
       </div>
       <div class="tab border-1px">
-        <div class="tab-item" :class="{active:status === 1}" @click="selectStatus(1)">
+        <div class="tab-item" :class="{active:status === 2}" @click="selectStatus(2)">
           <span>商品</span>
         </div>
-        <div class="tab-item" :class="{active:status === 2}" @click="selectStatus(2)">
+        <div class="tab-item" :class="{active:status === 1}" @click="selectStatus(1)">
           <span>档口</span>
         </div>
       </div>
-      <div class="tab-content" v-show="status===1">
-        <div class="tab-content-tab border-1px">
-          <div class="tab-item" :class="{'active':sort===0}" @click="selectSort(0)">综合排序<span
-            class="icon"></span>
-          </div>
-          <div class="tab-item" :class="{'active':sort===1}" @click="selectSort(1)">价格<span class="icon"></span>
-          </div>
-          <div class="tab-item" :class="{'active':sort===2}" @click="selectSort(2)">销量</div>
-          <div class="tab-item" :class="{'active':sort===3}" @click="selectSort(3)">评价</div>
-        </div>
-        <div class="mescroll" id="mescroll_1" ref="mescroll">
-          <show-cart></show-cart>
-          <ul class="goods-list" v-if="goods.length>0">
-            <li class="item border-1px" v-for="(item,index) in goods" :key="index">
-              <div @click="goToProductDetails(item)">
-                <div class="item-img">
-                  <img v-lazy="item.proImgUrl">
-                </div>
-                <div class="item-content">
-                  <div class="name">{{item.productName}}</div>
-                  <div class="sales">月销量{{item.monthSalesAmount}}&nbsp;&nbsp;|&nbsp;&nbsp;好评率{{item.goodRemarkRate *
-                    100}}%
-                  </div>
-                  <div class="spec">约{{item.items | capitalize}}</div>
-                  <div class="seller">{{item.shopName}}</div>
-                  <div class="price">¥{{item.price / 100}}</div>
-                </div>
+      <div class="tab-content" v-show="status===2">
+        <div class="mescroll" id="mescroll_1" ref="mescroll_1">
+          <template v-if="goods.length>0">
+            <div class="tab-content-tab border-1px">
+              <div class="tab-item" :class="{'active':sort===0}" @click="selectSort(0)">综合排序<span
+                class="icon"></span>
               </div>
-              <div class="selectIcon" v-if="!item.isSelectGood" @click="addCart(item)"></div>
-              <div class="selectGood" v-else>多规格</div>
-            </li>
-          </ul>
+              <div class="tab-item" :class="{'active':sort===1}" @click="selectSort(1)">价格<span class="icon"></span>
+              </div>
+              <div class="tab-item" :class="{'active':sort===2}" @click="selectSort(2)">销量</div>
+              <div class="tab-item" :class="{'active':sort===3}" @click="selectSort(3)">评价</div>
+            </div>
+            <show-cart></show-cart>
+            <ul class="goods-list">
+              <li class="item border-1px" v-for="(item,index) in goods" :key="index">
+                <router-link tag="div" :to="/goods/+item.productId">
+                  <div class="item-img">
+                    <img v-lazy="item.proImgUrl">
+                  </div>
+                  <div class="item-content">
+                    <div class="name">{{item.productName}}</div>
+                    <div class="sales">月销量{{item.monthSalesAmount}}&nbsp;&nbsp;|&nbsp;&nbsp;好评率{{item.goodRemarkRate *
+                      100}}%
+                    </div>
+                    <div class="spec">{{item.items | filterSpec}}</div>
+                    <div class="seller">{{item.shopName}}</div>
+                    <div class="price">¥{{item.items | filterPrice}}</div>
+                  </div>
+                </router-link>
+                <div class="selectIcon" v-if="!item.isOpenSpec" @click="addCart(item)"></div>
+                <div class="selectGood" v-else @click="openSpec">多规格</div>
+              </li>
+            </ul>
+          </template>
+          <template v-else>
+            <no-search-result :title="noSearchGoodResultTitle"
+                              :data="hotSearchTag"
+                              @selectTag="selectTag"></no-search-result>
+          </template>
         </div>
       </div>
-      <div class="tab-content" v-show="status===2">
-        <div class="tab-content-tab border-1px">
-          <div class="tab-item" :class="{'active':sort===0}" @click="selectSort(0)">综合排序<span class="icon"></span>
-          </div>
-          <div class="tab-item" :class="{'active':sort===1}" @click="selectSort(1)">销量</div>
-          <div class="tab-item" :class="{'active':sort===2}" @click="selectSort(2)">关注</div>
-          <div class="tab-item" :class="{'active':sort===3}" @click="selectSort(3)">评价</div>
-        </div>
-        <div class="mescroll" id="mescroll_2" ref="mescroll">
-          <ul class="sellers-list" v-if="sellers.length>0">
-            <router-link :to="{path:/shopInfo/+item.msShopId}"
-                         tag="li"
-                         class="item border-1px" v-for="(item,index) in sellers" :key="index">
-              <div class="item-img">
-                <img v-lazy="item.headUrl">
+      <div class="tab-content" v-show="status===1">
+        <div class="mescroll" id="mescroll_2" ref="mescroll_2">
+          <template v-if="sellers.length>0">
+            <div class="tab-content-tab border-1px">
+              <div class="tab-item" :class="{'active':sort===0}" @click="selectSort(0)">综合排序<span class="icon"></span>
               </div>
-              <div class="item-content">
-                <div class="name">{{item.shopName}}</div>
-                <div class="star">
-                  <rater :active-color="starColor" :fontSize="starFontSize" :disabled="starDisabled"
-                         v-model="item.starLevel"></rater>
-                  &nbsp;&nbsp;月销量{{item.monthSale}}&nbsp;&nbsp;|&nbsp;&nbsp;关注{{item.focus}}
+              <div class="tab-item" :class="{'active':sort===1}" @click="selectSort(1)">销量</div>
+              <div class="tab-item" :class="{'active':sort===2}" @click="selectSort(2)">关注</div>
+              <div class="tab-item" :class="{'active':sort===3}" @click="selectSort(3)">评价</div>
+            </div>
+            <ul class="sellers-list">
+              <router-link :to="{path:/shopInfo/+item.msShopId}"
+                           tag="li"
+                           class="item border-1px" v-for="(item,index) in sellers" :key="index">
+                <div class="item-img">
+                  <img v-lazy="item.headUrl">
                 </div>
-                <div class="dec">{{item.notice}}</div>
-              </div>
-            </router-link>
-          </ul>
+                <div class="item-content">
+                  <div class="name">{{item.shopName}}</div>
+                  <div class="star">
+                    <rater :active-color="starColor" :fontSize="starFontSize" :disabled="starDisabled"
+                           v-model="item.starLevel"></rater>
+                    &nbsp;&nbsp;月销量{{item.monthSale}}&nbsp;&nbsp;|&nbsp;&nbsp;关注{{item.focus}}
+                  </div>
+                  <div class="dec">{{item.notice}}</div>
+                </div>
+              </router-link>
+            </ul>
+          </template>
+          <template v-else>
+            <no-search-result :title="noSearchSellerResultTitle"
+                              :data="hotSearchTag"
+                              @selectTag="selectTag"></no-search-result>
+          </template>
+        </div>
+      </div>
+      <div class="dialog" v-if="isShowDialog">
+        <div class="mask" @click="isShowDialog=false"></div>
+        <div class="dialog-content">
+          <div v-if="spec.length>0">
+            <div class="title">规格：</div>
+            <ul class="list">
+              <li class="item"
+                  v-for="(item,index) in spec" :key="index"
+                  @click="selectSpec(item,index)"
+                  :class="{'active':specType === index}">{{item.names}}
+              </li>
+            </ul>
+          </div>
+          <div v-if="attr.length>0">
+            <div class="title">属性：</div>
+            <ul class="list">
+              <li class="item"
+                  v-for="(item,index) in spec" :key="index"
+                  @click="selectAttr(item,index)"
+                  :class="{'active':specType === index}">{{item.names}}
+              </li>
+            </ul>
+          </div>
+          <button type="button" class="btn-confirm" @click="hideDialog">确定</button>
         </div>
       </div>
     </div>
@@ -95,13 +135,16 @@
   import MeScroll from 'mescroll'
   import {Rater} from 'vux'
   import showCart from '@/components/show-cart/show-cart'
+  import noSearchResult from '@/components/no-search-result/no-search-result'
   import Vue from 'vue'
 
   export default {
     data() {
       return {
-        search: '',// 搜索
-        status: 1, // 切换商品和商铺
+        search: '',// 搜索字
+        rankFlag: 'default',// 排序标记,default默认,price 价格,monthSale 月销量,goodRate 好评
+        order: 0, // 升序降序,0降序 1升序
+        status: 2, // 切换商品和商铺 1是档口 2是商品
         goods: [], // 商品列表
         sellers: [], // 商铺列表
         starColor: '#FFBD52', // 星星颜色
@@ -109,7 +152,17 @@
         starFontSize: 10,   // 星星大小
         selectGood: true,
         sort: 0, // 商品排序
-        isSelectGood: false
+        isOpenSpec: false, // 是否选择多规格
+        isShowDialog: false,  // 弹窗
+        spec: [],  // 商品的规格组
+        attr: [], // 商品的属性组
+        currentSpec: {}, // 当前的商品的规格
+        currentAttr: {},// 当前的商品属性
+        specType: 0,  // 默认当前规格
+        attrType: 0,  // 默认当前属性
+        noSearchGoodResultTitle: '抱歉，未能找到您搜索的商品',
+        noSearchSellerResultTitle: '抱歉，未能找到您搜索的档口',
+        hotSearchTag: [] // 搜索关键字
       }
     },
     computed: {
@@ -118,76 +171,134 @@
       ])
     },
     filters: {
-      capitalize: function (value) {
+      filterSpec: function (value) {
         if (!value) return ''
         return value[0].names
+      },
+      filterPrice: function (value) {
+        if (!value) return ''
+        return value[0].curPrice / 100
       }
     },
+    created() {
+      this.getHotSearchTag()
+    },
     mounted() {
-      let self = this
-      this.mescroll_1 = new MeScroll('mescroll_1', {
+      this.mescroll_1 = new MeScroll("mescroll_1", {
+        down: {
+          auto: false
+        },
         up: {
           isBounce: false,
-          callback: self.mescroll_1_upCallback
+          auto: false,
+          callback: this.mescroll_1_upCallback
         }
       })
-      this.mescroll_2 = new MeScroll('mescroll_2', {
+      this.mescroll_2 = new MeScroll("mescroll_2", {
+        down: {
+          auto: false
+        },
         up: {
           isBounce: false,
-          callback: self.mescroll_2_upCallback
+          auto: false,
+          callback: this.mescroll_2_upCallback
         }
       })
     },
     methods: {
+      // 搜索关键字
+      selectTag(item) {
+        console.log(item)
+        this.search = item.tagName
+      },
+      // 选规格
+      selectSpec(item, index) {
+        this.specType = index
+        this.currentSpec = item
+      },
+      // 选属性
+      selectAttr(item, index) {
+        this.attrType = index
+        this.currentAttr = item
+      },
+      // 打开规格选择
+      openSpec() {
+        this.isShowDialog = true
+      },
+      // 关闭弹窗
+      hideDialog() {
+        this.isShowDialog = false
+      },
       mescroll_2_upCallback(page) {
         let params = {
           pageNum: page.num,
           pageSize: page.size,
+          order: this.order,
+          rankFlag: this.rankFlag,
+          queryString: this.search
         }
-        api.getLikeSellersData(params, this.market.marketId).then((res) => {
-          if (res.code === 200) {
-            if (page.pageNum === 1) this.sellers = []
-            this.sellers = this.sellers.concat(res.data.records)
-            console.log(this.sellers)
-            this.mescroll_2.endByPage(res.data.records.length, res.data.pages)
-          }
-        })
+        if (params.queryString) {
+          api.getSearchNearSeller(this.market.marketId, params).then((res) => {
+            if (res.code === 200) {
+              if (page.num === 1) {
+                this.sellers = res.data.records
+                this.mescroll_2.endByPage(res.data.records.length, res.data.pages)
+              } else {
+                this.sellers = this.sellers.concat(res.data.records)
+                console.log(this.sellers)
+                this.mescroll_2.endByPage(res.data.records.length, res.data.pages)
+              }
+            }
+          })
+        }
       },
       mescroll_1_upCallback: function (page) {
         let params = {
           pageNum: page.num,
           pageSize: page.size,
+          order: this.order,
+          rankFlag: this.rankFlag,
+          queryString: this.search
         }
-        api.getLikeProductsData(params, this.market.marketId).then((res) => {
+        api.getSearchNearProduct(this.market.marketId, params).then((res) => {
           if (res.code === 200) {
-            if (page.pageNum === 1) this.goods = []
-            this.goods = this.goods.concat(res.data.records)
-            console.log(this.goods)
-            this.mescroll_1.endByPage(res.data.records.length, res.data.pages)
+            if (page.num === 1) {
+              this.goods = res.data.records
+              this.mescroll_1.endByPage(res.data.records.length, res.data.pages)
+            } else {
+              this.goods = this.goods.concat(res.data.records)
+              console.log(this.goods)
+              this.mescroll_1.endByPage(res.data.records.length, res.data.pages)
+            }
           }
         })
-      },
-      // 跳转到商品详情
-      goToProductDetails(item) {
-        console.log(item)
-        this.$router.push('/goods/' + item.productId)
       },
       // 添加购物车
       addCart(item) {
         console.log(item)
         if (item.items.length > 1) {
-          Vue.set(item, 'isSelectGood', true)
+          Vue.set(item, 'isOpenSpec', true)
+          this.spec = item.items
+          this.attr = item.attrs
         } else {
-          Vue.set(item, 'isSelectGood', false)
+          Vue.set(item, 'isOpenSpec', false)
+          // http 请求
         }
       },
       // 切换
       selectStatus(type) {
         this.status = type
+        this.getHotSearchTag()
       },
       // 搜索
       submit() {
-        console.log(this.search)
+        if (this.search) {
+          if (this.status === 2) {
+            this.mescroll_1.resetUpScroll(); //重新搜索,重置列表数据
+          } else {
+            this.mescroll_2.resetUpScroll(); //重新搜索,重置列表数据
+          }
+        }
       },
       // 清除搜索条件
       clearSearch() {
@@ -197,13 +308,27 @@
       back() {
         this.$router.back()
       },
+      // 排序
       selectSort(type) {
         this.sort = type
+      },
+      // 获取搜索关键字
+      getHotSearchTag() {
+        let params = {
+          type: this.status
+        }
+        api.getHotSearchTag(params).then((res) => {
+          if (res.code === 200) {
+            console.log(res.data)
+            this.hotSearchTag = res.data
+          }
+        })
       }
     },
     components: {
       Rater,
-      showCart
+      showCart,
+      noSearchResult
     }
   }
 </script>
@@ -420,6 +545,65 @@
             border-radius: 5rem;
             font-size: .6rem;
           }
+        }
+      }
+    }
+    .dialog {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      top: 0;
+      z-index: 1999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      .mask {
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        background-color: #000000;
+        opacity: .6;
+      }
+      .dialog-content {
+        position: fixed;
+        width: 70%;
+        background-color: #FFFFFF;
+        z-index: 1200;
+        border-radius: 4px;
+        padding: .6rem;
+        box-sizing: border-box;
+        .title {
+          font-size: .7rem;
+          margin-bottom: .5rem;
+        }
+        .list {
+          font-size: 0;
+          margin-bottom: .5rem;
+          .item {
+            font-size: .7rem;
+            display: inline-block;
+            margin-right: .5rem;
+            padding: .2rem .5rem;
+            border-radius: 5rem;
+            color: #999999;
+            border: 0.5px solid #e5e5e5;
+          }
+          .active {
+            color: #fff;
+            background-color: #ffbf51;
+            border: none;
+          }
+        }
+        .btn-confirm {
+          display: block;
+          width: 100%;
+          height: 1.5rem;
+          color: #fff;
+          font-size: .7rem;
+          background-color: #ffbf51;
+          margin-top: 1rem;
+          border-radius: 5rem;
         }
       }
     }

@@ -21,8 +21,8 @@
             <div class="details">
               <div class="name">{{product.productName}}</div>
               <div class="price">
-                <span class="current">¥{{price}}</span>
-                <del>¥{{oddPrice}}</del>
+                <span class="current">¥{{currentSpec.curPrice / 100}}</span>
+                <del>¥{{currentSpec.historyPrice}}</del>
               </div>
               <div class="place border-1px">
                 <span>已售{{product.monthSalesAmount}}件</span><span>产地：{{product.originPlace}}</span>
@@ -31,13 +31,13 @@
                 <span class="spec-item"
                       :class="{'active':specType === index}"
                       @click="selectSpec(item,index)"
-                      v-for="(item,index) in spec" :key="index">约{{item.names}}</span>
+                      v-for="(item,index) in spec" :key="item.itemId">{{item.names}}</span>
               </div>
               <div class="attr" v-if="attr.length>0">属性
                 <span class="attr-item"
                       :class="{'active':attrType===index}"
                       @click="selectAtrr(item,index)"
-                      v-for="(item,index) in attr" :key="index">切片</span>
+                      v-for="(item,index) in attr" :key="index">{{item.names}}</span>
               </div>
             </div>
             <div class="tab border-1px">
@@ -72,16 +72,12 @@
             <i class="icon-seller"></i>
             <div class="text">店铺</div>
           </router-link>
-          <!--<div class="seller">-->
-          <!--<i class="icon-seller"></i>-->
-          <!--<div class="text">店铺</div>-->
-          <!--</div>-->
-          <div class="cart">
+          <router-link tag="div" class="cart" to="/cart">
             <i class="icon-cart">
               <div class="badge">2</div>
             </i>
             <div class="text">购物车</div>
-          </div>
+          </router-link>
           <div class="add-cart" @click="addCart">加入购物车</div>
         </div>
       </div>
@@ -107,8 +103,10 @@
         swiperImg: [], // 商品的轮播图
         introImg: [], // 商品的介绍图
         remarks: [], // 商品评价
-        spec: [],  // 商品的规格
-        attr: [] // 商品的属性
+        spec: [],  // 商品的规格组
+        attr: [], // 商品的属性组
+        currentSpec: {}, // 当前的商品的规格
+        currentAttr: {} // 当前的商品属性
       }
     },
     components: {
@@ -116,7 +114,6 @@
       Scroll
     },
     created() {
-      console.log(this.productId)
       this.getProductDetails()
       this.getProductRemarks()
     },
@@ -124,18 +121,6 @@
       formatTime: function (value) {
         if (!value) return ''
         return time.formatDateTime(value)
-      }
-    },
-    computed: {
-      price() { // 商品价格
-        if (this.spec.length > 0) {
-          return this.spec[0].curPrice / 100
-        }
-      },
-      oddPrice() {  // 商品历史价格
-        if (this.spec.length > 0) {
-          return this.spec[0].historyPrice
-        }
       }
     },
     methods: {
@@ -146,19 +131,22 @@
           this.$refs.scroll.refresh()
         }
       },
+      // 添加购物车
       addCart() {
         console.log("addCart");
       },
       getCurrent(type) {
         this.type = type
       },
+      // 选规格
       selectSpec(item, index) {
         this.specType = index
-        this.price = item.curPrice
-        this.oddPrice = item.historyPrice
+        this.currentSpec = item
       },
-      selectAtrr(item,index) {
+      // 选属性
+      selectAtrr(item, index) {
         this.attrType = index
+        this.currentAttr = item
       },
       // 返回
       back() {
@@ -175,6 +163,8 @@
               this.introImg = res.data.introducePicUrl
               this.spec = res.data.items
               this.attr = res.data.attrs
+              this.currentSpec = res.data.items[0]
+              this.currentAttr = res.data.attrs[0]
             }
           })
         }

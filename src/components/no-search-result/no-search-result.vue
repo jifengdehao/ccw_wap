@@ -7,18 +7,10 @@
 <template>
   <div id="no-search-result">
     <div class="no-result">{{title}}</div>
-    <div class="hot-search">
+    <div class="hot-search" v-if="data.length>0">
       <div class="title border-1px">热门搜索</div>
       <ul class="list">
-        <li class="item">鸡肉</li>
-        <li class="item">西红柿</li>
-        <li class="item">西红柿</li>
-        <li class="item">西红柿</li>
-        <li class="item">西红柿</li>
-        <li class="item">西红柿</li>
-        <li class="item">西红柿</li>
-        <li class="item">西红柿</li>
-        <li class="item">西红柿</li>
+        <li class="item" v-for="(item,index) in data" :key="index" @click="selectTag(item)">{{item.tagName}}</li>
       </ul>
     </div>
   </div>
@@ -30,9 +22,14 @@
         type: String,
         default: ''
       },
-      hotSearch: {
+      data: {
         type: Array,
-        default: null
+        default: []
+      }
+    },
+    methods: {
+      selectTag(item) {
+        this.$emit('selectTag', item)
       }
     }
   }

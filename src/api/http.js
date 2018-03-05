@@ -152,8 +152,8 @@ export const getProductRemarks = productId => {
  * email: zhangwenlong@ccw163.com
  * 功能模块: 热门搜索关键子 type ==> 1 店铺关键子 2 商品关键字
  */
-export const getHotSearchTag = type => {
-  return http.g(`/homePage/searchContent/hotSearchTag`, type)
+export const getHotSearchTag = params => {
+  return http.g('/homePage/searchContent/hotSearchTag', params)
 }
 
 /**
@@ -209,4 +209,22 @@ export const getDefaultCustomAddress = (custId, marketId) => {
  */
 export const getDeliverArea = (params) => {
   return http.g('/homePage/deliverArea', params)
+}
+/**
+ * 2018/3/5
+ * author: zhangwenlong
+ * email: zhangwenlong@ccw163.com
+ * 功能模块: 附近商品
+ */
+export const getSearchNearProduct = (marketId, params) => {
+  return http.g(`/homePage/nearProducts/${marketId}`, params)
+}
+/**
+ * 2018/3/5
+ * author: zhangwenlong
+ * email: zhangwenlong@ccw163.com
+ * 功能模块: 附近档口
+ */
+export const getSearchNearSeller = (marketId, params) => {
+  return http.g(`/homePage/nearShops/${marketId}`, params)
 }
