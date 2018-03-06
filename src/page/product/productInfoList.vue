@@ -31,7 +31,7 @@
     <Scroller lock-x class="list">
       <ul>
         <li class="productMessage" v-for="(item, index) in listData" :key="index">
-          <router-link :to="'/shopProduct'">
+          <router-link :to="'goods/'+ item.productId">
             <div class="productMessageLeft left"><img :src="item.proImgUrl" alt="商品图片"></div>
             <div class="productMessageRight right">
               <p class="first">{{item.productName}}</p>
@@ -41,11 +41,11 @@
                 <span>好评率{{item.goodRemarkRate*100}}%</span>
               </p>
               <p class="third">{{item.shopName}}</p>
-              <p class="fourth"><span>每斤{{item.price}}元</span></p>
-              <p class="last">¥{{item.items[0].curPrice}} <span>约{{item.items[0].names}}</span></p>
+              <p class="fourth"><span>每斤{{item.price/100}}元</span></p>
+              <p class="last">¥{{item.items[0].curPrice/100}} <span>约{{item.items[0].names}}</span></p>
             </div>
           </router-link>
-          <div v-if="!item.items.length === 1" class="cartIcon icon">
+          <div v-if="item.items.length === 1" class="cartIcon icon">
             <img src="../../common/img/productIndex/shopping_ic.png" alt="">
           </div>
           <div v-else class="fontIcon icon" @click="showChang(item.items)">多规格</div>
@@ -63,15 +63,15 @@
     <!-- 弹窗 -->
     <div class="alert">
       <x-dialog class="dialog" v-model="show">
-        <div class="alertContent clearfix" v-for="(item,index) in alertData" :key="index">
+        <div class="alertContent clearfix" >
           <h5>规格：</h5>
           <checker v-model="demo2" default-item-class="demo2-item" selected-item-class="demo2-item-selected">
-            <checker-item value="1">{{item.names}}</checker-item>
-            <checker-item value="2">不切</checker-item>
+            <checker-item :value="item.itemId" v-for="(item,index) in alertData" :key="index" @on-item-click = "changeitem(index)">{{item.names}}</checker-item>
+            <!-- <checker-item value="2">不切</checker-item> -->
           </checker>
         </div>
         <div class="alertFooter" @click="hideModel">
-          确定{{price}}
+          确定(￥{{price}})
         </div>
       </x-dialog>
     </div>
@@ -89,7 +89,7 @@ export default {
       selected: 0,
       showCart: false,
       show: false,
-      price: '(￥' + '143)',
+      price: '',
       demo2: '1', // 默认选中规格1
       countIcon: true,
       marketId: 141, // 市场id
@@ -131,8 +131,12 @@ export default {
     showChang(data) {
       this.show = true
       // if (data.length > 1) {
-        this.alertData = data
+      this.alertData = data
       // }
+    },
+    // 多规格的时候选择规格
+    changeitem(index){
+      this.price = this.alertData[index].curPrice
     },
     // 隐藏弹框
     hideModel() {
@@ -334,7 +338,7 @@ export default {
     .dialog .weui-dialog {
       border-radius: 12px;
       padding: 12px;
-      width: 270/20rem;
+      width: 280/20rem;
       box-sizing: border-box;
       .alertContent {
         padding-bottom: 30px;

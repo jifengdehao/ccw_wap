@@ -18,10 +18,11 @@
           </div>
           <div class="shopMessageRight">
             <p>
-              <span>{{shopName}} </span>
+              <span>{{shopDesc.shopName}} </span>
               <i class="showIcon" v-if="showIcon"></i>
             </p>
-            <rater v-model="countStar" :font-size="13" disabled></rater>
+            <!-- <rater v-model="countStar" :font-size="13" disabled></rater> -->
+            <rater v-model="shopDesc.starLevel" active-color="#ffbd52" :font-size="13" disabled></rater>
           </div>
         </div>
       </div>
@@ -35,34 +36,34 @@
       <!-- 一级分类 -->
       <aside>
         <ul>
-          <li v-for="(item,index) in 25" :key="index" :class="{current:selected==index}" @click="selectedList(index)">进口水果</li>
+          <li v-for="(item,index) in shopProduct" :key="index" :class="{current:selected==index}" @click="selectedList(index)">{{item.catName}}</li>
         </ul>
       </aside>
       <!-- 二级分类 -->
       <div class="productList">
         <ul>
-          <li v-for="(item,index) in 9" :key="index">
-            <router-link :to="'/home'">
+          <li v-for="(item,index) in products" :key="index">
+            <router-link :to="'goods/'+ item.productId">
               <div class="listLeft">
-                <img src="../../common/img/productIndex/3.jpg" alt="">
+                <img :src="item.proImgUrl" alt="">
               </div>
               <div class="listRight">
-                <p class="first">越南进口火龙果大果单果</p>
+                <p class="first">{{item.productName}}</p>
                 <p class="second">
-                  <span>月销量200</span>
+                  <span>月销量{{item.monthSalesAmount}}</span>
                   <i>|</i>
-                  <span>好评率96%</span>
+                  <span>好评率{{item.goodRemarkRate*100}}%</span>
                 </p>
-                <p class="third">每斤20元</p>
-                <p class="last">¥30.8
-                  <span>约1斤/个</span>
+                <p class="third">每斤{{item.price/100}}元</p>
+                <p class="last">¥{{item.items[0].curPrice/100}}
+                  <span>{{item.items[0].names}}</span>
                 </p>
               </div>
             </router-link>
-            <div v-if="showCart" class="cartIcon icon">
+            <div v-if="item.items.length === 1" class="cartIcon icon">
               <img src="../../common/img/productIndex/shopping_ic.png" alt="">
             </div>
-            <div v-else class="fontIcon icon" @click="showChang">多规格</div>
+            <div v-else class="fontIcon icon" @click="showChang(index)">多规格</div>
           </li>
         </ul>
       </div>
@@ -88,24 +89,24 @@
     <!-- 弹窗 -->
     <div class="alert">
       <x-dialog class="dialog" v-model="show">
-        <div class="alertContent clearfix" v-for="(item,index) in 2" :key="index">
+        <div class="alertContent clearfix" >
           <h5>规格：</h5>
           <checker v-model="demo2" default-item-class="demo2-item" selected-item-class="demo2-item-selected">
-            <checker-item value="1">约1.5斤/份</checker-item>
-            <checker-item value="3">不切</checker-item>
+            <checker-item :value="item.itemId" v-for="(item,index) in items" :key="index" @on-item-click = "changeitem(index)">{{item.names}}</checker-item>
+            <!-- <checker-item value="3">不切</checker-item> -->
           </checker>
         </div>
         <div class="alertFooter" @click="hideModel">
-          确定{{price}}
+          确定(￥{{price/100}})
         </div>
       </x-dialog>
     </div>
-    <loading v-model="loading.status" :text="loading.text"></loading>
   </div>
 </template>
 <script>
 import { mapActions, mapState } from 'vuex'
 import { Rater, XDialog, Checker, CheckerItem, Loading } from 'vux'
+import * as api from '@/api/http'
 export default {
   components: { Rater, XDialog, Checker, CheckerItem, Loading },
   props: {},
@@ -113,33 +114,43 @@ export default {
     return {
       index: 0,
       showIcon: true, // 到店铺详情的箭头
-      showMessage: true,
       selected: 0,
-      shopName: '菜城水果店', // 店铺名称
-      listTitle: ['店铺', '评价'],
-      countStar: 3, // 店铺评价星数
+      shopDesc: {}, // 店铺详情介绍
+      countStar: 4.5, // 店铺评价星数
+      shopProduct: [], // 店铺产品信息
+      products: [], // 二级产品列表
+      items: [],
       showCart: false,
       show: false, // 弹框
-      price: '￥30',
+      price: '',
       demo2: 1,
-      notSettlement: false,
-      isShowLoading: {}
+      notSettlement: false
     }
   },
-  created() {
-    this.showLoading()
-  },
+  computed: {},
+  created() {},
   mounted() {
-    this.up()
+    this.getShopDesc()
+    this.getProductByShopId()
   },
   methods: {
-    ...mapActions(['startLoding']),
-    isShowMessage(index) {
-      if (index === 0) {
-        this.showMessage = true
-      } else {
-        this.showMessage = false
-      }
+    // 获取店铺信息
+    getShopDesc() {
+      api.getShopDesc(this.$route.query.shopId).then(res => {
+        // console.log(res.data, '店铺介绍')
+        this.shopDesc = res.data
+      })
+    },
+    // 进入店铺页面   获取该店铺产品信息
+    getProductByShopId() {
+      api.getProductByShopId(this.$route.query.shopId).then(res => {
+        this.shopProduct = res.data
+        if (res.data[0]) {
+          this.products = this.shopProduct[0].product
+        } else {
+          alert('该店铺暂无商品')
+        }
+      })
     },
     goback() {
       this.$router.go(-1)
@@ -149,10 +160,17 @@ export default {
     },
     selectedList(index) {
       this.selected = index
+      // 二级产品列表信息
+      this.products = this.shopProduct[index].product
     },
     // 点击弹出弹框
-    showChang() {
+    showChang(index) {
       this.show = true
+      this.items = this.products[index].items
+    },
+    // 多规格时选择
+    changeitem(index) {
+      this.price = this.items[index].curPrice
     },
     // 点击取消弹框
     hideModel() {
@@ -164,20 +182,10 @@ export default {
         this.$router.push('cart')
       }
     },
-    showLoading() {
-      this.startLoding({ status: true, text: '加载..' })
-    },
-    up() {
-      this.startLoding({ status: false, text: '加载..' })
-    },
     alert() {}
   },
   filfter: {},
-  computed: {
-    ...mapState({
-      loading: state => state.isLoading
-    })
-  },
+  computed: {},
   watch: {}
 }
 </script>
@@ -246,12 +254,6 @@ export default {
             vertical-align: middle;
             background-size: contain;
           }
-        }
-        span {
-          color: #ffffff;
-        }
-        .is-active span {
-          color: #ffbd52;
         }
       }
     }

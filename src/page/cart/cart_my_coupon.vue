@@ -10,7 +10,7 @@
     <div class="contain-div-box">
       <div class="header"><top-bar></top-bar></div>
       <!-- 优惠券主体 -->
-      <div class="coupon-box">
+      <div class="coupon-box" v-if="showMyCoupon">
         <!-- 折扣券 -->
         <ul class="discount">
           <li>
@@ -69,9 +69,17 @@
           </li>
         </ul>
         <!-- 抵扣券 -->
+        <button>确定</button>
       </div>
       <!-- 优惠券主体 -->
-      <button>确定</button>
+
+      <!-- 优惠券空白页 -->
+      <div class="coupon-blank">
+        <div class="blank-pic">
+          <img src="../../common/img/cart/no_coupon_ic.png" alt="">
+          <p>您还没有优惠券</p>
+        </div>
+      </div>
     </div>
   </transition>
 </template>
@@ -82,7 +90,9 @@ export default {
   components: { topBar },
   props: {},
   data() {
-    return {}
+    return {
+      showMyCoupon: false
+    }
   },
   created() {},
   mounted() {},
@@ -171,4 +181,7 @@ input.check:checked { background: url(../../common/img/cart/select_selected_btn.
   }
 }
 button { width: 140 / 20rem; height: 40 / 20rem; position: fixed; bottom: 13px; left: 32%; background-color: #FFBD52; border-radius: 2px; font-size: 18px; color: #ffffff; }
+.coupon-blank { width: 100%; height: 100%; background-color: #ffffff; position: fixed; top: 0; left: 0; display: flex; justify-content: center; align-items: center; }
+.blank-pic > img{ width: 100 / 20rem; height: 100 / 20rem; margin-bottom: 28 / 20rem; }
+.blank-pic > p { font-size: 12px; color: #999999; }
 </style>

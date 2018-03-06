@@ -24,17 +24,18 @@
 <script>
 export default {
   name: 'Alert',
-  // components: {},
+  // components: { },
   data () {
     return {
       contAddImgShow: false,
       contDeleteShow: false,
-      contMaskShow: false
+      contMaskShow:  false
     }
   },
-  // created: {},
+  created() { },
   // mounted: {},
-  // methods: {}
+  methods: {
+  }
 }
 </script>
 <style lang="less" scoped>

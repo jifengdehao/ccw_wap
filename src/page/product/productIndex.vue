@@ -37,12 +37,13 @@ export default {
   props: {},
   data() {
     return {
-      isScope: true // 是否在配送范围内
+      isScope: window.sessionStorage.market // 是否在配送范围内
     }
   },
   created() {
   },
-  mounted() {},
+  mounted() {
+  },
   activited: {},
   update: {},
   methods: {

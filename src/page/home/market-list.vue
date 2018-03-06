@@ -5,43 +5,17 @@
 * 功能：菜市场列表
 */
 <template>
-  <div class="market-list">
-    <div class="item">
-      <img v-lazy="imgUrl"/>
+  <div class="market-list" v-if="marketList.length>0">
+    <div class="item" v-for="item in marketList" @click="selectMarket(item)">
+      <img v-lazy="item.picUrl"/>
       <div class="content">
         <div class="na">
-          <span class="name">清河菜市场</span>
-          <span class="range">(该市场配送范围：3km)</span>
+          <span class="name">{{item.marketName}}</span>
+          <span class="range">(该市场配送范围：{{item.deliverRange}})</span>
         </div>
         <div class="ad clearfix">
-          <span class="fl">广州市番禺区南桥街道南堤东路836号</span>
-          <span class="fr">2.0km</span>
-        </div>
-      </div>
-    </div>
-    <div class="item">
-      <img v-lazy="imgUrl"/>
-      <div class="content">
-        <div class="na">
-          <span class="name">清河菜市场</span>
-          <span class="range">(该市场配送范围：3km)</span>
-        </div>
-        <div class="ad clearfix">
-          <span class="fl">广州市番禺区南桥街道南堤东路836号</span>
-          <span class="fr">2.0km</span>
-        </div>
-      </div>
-    </div>
-    <div class="item">
-      <img v-lazy="imgUrl"/>
-      <div class="content">
-        <div class="na">
-          <span class="name">清河菜市场</span>
-          <span class="range">(该市场配送范围：3km)</span>
-        </div>
-        <div class="ad clearfix">
-          <span class="fl">广州市番禺区南桥街道南堤东路836号</span>
-          <span class="fr">2.0km</span>
+          <span class="fl">{{item.address}}</span>
+          <span class="fr">{{parseInt(item.marketDistance/1000)}}km</span>
         </div>
       </div>
     </div>
@@ -50,13 +24,13 @@
 <script type="text/ecmascript-6">
   export default {
     props: {
-      data: {
-        type: Object
+      marketList: {
+        type: Array
       }
     },
-    data() {
-      return {
-        imgUrl:'https://y.gtimg.cn/music/photo_new/T003R720x288M000004Pq1an2tnnQu.jpg?max_age=2592000'
+    methods: {
+      selectMarket(item) {
+        this.$emit('selectMarket', item)
       }
     }
   }
@@ -73,7 +47,6 @@
       border: 0.5px solid #e5e5e5;
       & > img {
         width: 100%;
-        height: 9rem;
       }
       .content {
         height: 3rem;

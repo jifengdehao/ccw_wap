@@ -25,7 +25,7 @@
         </ul>
       </aside>
       <section class="classifiyInfo">
-        <product-list :productData="productData"></product-list>
+        <product-list :productData="productData" ></product-list>
       </section>
     </div>
   </div>
@@ -41,8 +41,8 @@ export default {
       selected: 0,
       preantCat: [], // 一级分类列表
       parentLevel: 1, // 父类ID
-      marketId: 143,  // 菜市场id
-      productData: []  // 一级分类下面的获取的数据
+      marketId: JSON.parse(sessionStorage.getItem("market")).marketId, // 菜市场id
+      productData: [] // 一级分类下面的获取的数据
     }
   },
   created() {
@@ -51,17 +51,17 @@ export default {
         this.preantCat = res.data
       }
     })
-    if(this.selected === 0){
+    if (this.selected === 0) {
       this.preantCat = 1
       this.getSecondCat()
     }
   },
-  mounted () {
-    
+  mounted() {
+  //  console.log(JSON.parse(sessionStorage.getItem("market")).marketId)
   },
   methods: {
     // 点击分类
-    changeList(index,id) {
+    changeList(index, id) {
       this.selected = index
       this.parentLevel = id
       this.getSecondCat()
@@ -71,9 +71,9 @@ export default {
       this.$router.push('Search')
     },
     // 获取二级分类和三级分类
-    getSecondCat(){
-      http.getSecondProductCat(this.parentLevel,this.marketId).then(res => {
-        if(res.code === 200){
+    getSecondCat() {
+      http.getSecondProductCat(this.parentLevel, this.marketId).then(res => {
+        if (res.code === 200) {
           this.productData = res.data
         }
       })

@@ -10,7 +10,7 @@
       <p class="smallTitle">{{item.name}}</p>
       <ul class="infoList clearfix">
         <li v-for="(imgUrl,index) in item.threeCat" :key="index" @click="toProductInfoList(imgUrl.name)">
-          <img src="../../../common/img/productIndex/no_location_ic.png" alt="">
+          <img :src="imgUrl.pictureUrl" alt="">
           <p>{{imgUrl.name}}</p>
         </li>
       </ul>

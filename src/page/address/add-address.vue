@@ -7,7 +7,7 @@
 <template>
   <transition name="slide">
     <div class="add-address">
-      <top-bar></top-bar>
+     <m-header></m-header>
       <div class="content">
         <div class="form-group">
           <div class="item border-1px select">
@@ -37,11 +37,11 @@
   </transition>
 </template>
 <script type="text/ecmascript-6">
-  import topBar from '@/components/header/topBar'
+  import mHeader from '@/components/header/m-header'
 
   export default {
     components: {
-      topBar
+      mHeader
     },
     created() {},
     methods: {
