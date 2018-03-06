@@ -8,7 +8,7 @@
   <div class="index">
     <div class="header">
       <div class="content">
-        <i class="icon-location" @click="goToLocation"></i>
+        <i class="icon-location" @click="goToAddress"></i>
         <div class="select-market" @click="isShowMarketSelect=!isShowMarketSelect">{{market.marketName}}</div>
         <i class="icon-search" @click="goToSearch"></i>
       </div>
@@ -61,7 +61,7 @@
                            class="item border-1px"
                            v-for="item in sellerList"
                            :key="item.msShopId">
-              <!--<li class="item border-1px" v-for="item in sellerList" :key="item.msShopId">-->
+                <!--<li class="item border-1px" v-for="item in sellerList" :key="item.msShopId">-->
                 <div class="item-img">
                   <i class="status" v-if="item.businessStatus===2"></i>
                   <i class="seller-close" v-if="item.businessStatus===3">档口关店中</i>
@@ -81,7 +81,7 @@
                   </div>
                   <div class="dec">{{item.shopDesc}}</div>
                 </div>
-              <!--</li>-->
+                <!--</li>-->
               </router-link>
             </ul>
           </div>
@@ -177,8 +177,8 @@
         this.$router.push('/search');
       },
       // 跳转到定位页
-      goToLocation() {
-        this.$router.push('/location')
+      goToAddress() {
+        this.$router.push('/address')
       },
       // 加载图片
       loadImage() {

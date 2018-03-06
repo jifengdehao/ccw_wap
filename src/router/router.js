@@ -24,11 +24,7 @@ const address = anyscComponent('page/address/address') // 定位
 
 const Search = anyscComponent('page/search/search') // 搜索
 
-const SearchGoods = anyscComponent('page/search/goods') // 搜索商品
-
 const GoodDetails = anyscComponent('page/good-details/good-details') // 商品详情
-
-const SearchSellers = anyscComponent('page/search/sellers') // 搜索档口
 
 const addAddress = anyscComponent('page/address/add-address') //新增地址
 

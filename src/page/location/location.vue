@@ -16,7 +16,7 @@
       </div>
       <div class="map-tip">蓝色区域为当前市场配送范围</div>
       <div class="map" id="map">
-        <!--<i class="icon-location"></i>-->
+        <i class="icon-location" @click="getLo"></i>
       </div>
       <div class="content">
         <scroll>
@@ -79,79 +79,176 @@
 </template>
 <script type="text/ecmascript-6">
   import scroll from '@/components/scroll/scroll'
+  import {mapGetters} from 'vuex'
   import AMap from 'AMap'   //在页面中引入高德地图
+  import * as api from '@/api/http.js'
 
   export default {
     data() {
       return {
-        search: '',
-        searchList: [],
-        mapList: []
+        search: '', // 搜索
+        searchList: [], // 搜索条件
+        mapList: [], // 地址列表
+        deliverArea: [] // 配送范围
       }
     },
+    computed: {
+      ...mapGetters([
+        'location',
+      ])
+    },
+    created() {
+      // this.getDeliverArea()
+    },
     methods: {
+      // 搜索
       submit() {
         console.log(this.search)
       },
+      // 清除搜索字段
       clearSearch() {
         this.search = ''
       },
+      // 返回
       back() {
         return this.$router.back()
+      },
+      // 定位
+      getLo() {
+        let map, geolocation;
+        //加载地图，调用浏览器定位服务
+        map = new AMap.Map('map', {
+          resizeEnable: true
+        });
+        map.plugin('AMap.Geolocation', function () {
+          geolocation = new AMap.Geolocation({
+            enableHighAccuracy: true,//是否使用高精度定位，默认:true
+            timeout: 10000,          //超过10秒后停止定位，默认：无穷大
+            buttonOffset: new AMap.Pixel(10, 20),//定位按钮与设置的停靠位置的偏移量，默认：Pixel(10, 20)
+            zoomToAccuracy: true,      //定位成功后调整地图视野范围使定位位置及精度范围视野内可见，默认：false
+            buttonPosition: 'RB',
+            showMarker: true,        //定位成功后在定位到的位置显示点标记，默认：true
+            showCircle: true,        //定位成功后用圆圈表示定位精度范围，默认：true
+            panToLocation: true     //定位成功后将定位到的位置作为地图中心点，默认：true
+          });
+          map.addControl(geolocation);
+          geolocation.getCurrentPosition();
+          AMap.event.addListener(geolocation, 'complete', onComplete);//返回定位信息
+          AMap.event.addListener(geolocation, 'error', onError);      //返回定位出错信息
+        });
+
+        //解析定位结果
+        function onComplete(data) {
+          console.log(data)
+        }
+
+        //解析定位错误信息
+        function onError(data) {
+          console.log(data)
+        }
+      },
+      // 获取配送范围
+      getDeliverArea() {
+        api.getDeliverArea().then((res) => {
+          if (res.code === 200) {
+            const map = new AMap.Map('map', {
+              resizeEnable: true,
+              zoom: 18
+            })
+            const lnglatXY = [this.location.position.lng, this.location.position.lat]; //已知点坐标
+            const marker = new AMap.Marker({  //加点
+              map: map,
+              position: lnglatXY,
+              icon: new AMap.Icon({
+                size: new AMap.Size(23, 23),  //图标大小
+                image: 'http://webapi.amap.com/theme/v1.3/markers/b/loc.png',
+                imageSize: new AMap.Size(23, 23)
+              })
+            })
+            const polygonArr = new Array()//多边形覆盖物节点坐标数组
+            for (let i = 0; i < res.data.length; i++) {
+              let arj = JSON.parse(res.data[i])
+              for (let j = 0; j < arj.length; j++) {
+                // this.deliverArea.push(arj[j])
+                polygonArr.push(arj[j])
+              }
+            }
+            const polygon = new AMap.Polygon({
+              path: polygonArr,//设置多边形边界路径
+              strokeColor: "#4A90E2", //线颜色
+              strokeOpacity: 0.2, //线透明度
+              strokeWeight: 1,    //线宽
+              fillColor: "#8DC2FF", //填充色
+              fillOpacity: 0.35//填充透明度
+            })
+            polygon.setMap(map)
+            map.setFitView()
+          }
+        })
+      },
+      // 位置
+      setLo() {
+        const map = new AMap.Map('map', {
+          resizeEnable: true,
+          zoom: 18
+        })
+        const lnglatXY = [this.location.position.lng, this.location.position.lat]; //已知点坐标
+        const marker = new AMap.Marker({  //加点
+          map: map,
+          position: lnglatXY,
+          icon: new AMap.Icon({
+            size: new AMap.Size(23, 23),  //图标大小
+            image: 'http://webapi.amap.com/theme/v1.3/markers/b/loc.png',
+            imageSize: new AMap.Size(23, 23)
+          })
+        })
+        const polygonArr = new Array()//多边形覆盖物节点坐标数组
+        polygonArr.concat(this.deliverArea)
+        console.log(polygonArr)
+        const polygon = new AMap.Polygon({
+          path: polygonArr,//设置多边形边界路径
+          strokeColor: "#FF33FF", //线颜色
+          strokeOpacity: 0.2, //线透明度
+          strokeWeight: 3,    //线宽
+          fillColor: "#1791fc", //填充色
+          fillOpacity: 0.35//填充透明度
+        })
+        polygon.setMap(map)
+        map.setFitView()
       }
+
     },
     mounted() {
+      this.$nextTick(() => {
+        this.getDeliverArea()
+      })
 //      const map = new AMap.Map('map', {
 //        resizeEnable: true,
-//        zoom: 10,
-//        center: [116.480983, 40.0958]
+//        zoom: 18
+//      })
+//      const lnglatXY = [this.location.position.lng, this.location.position.lat]; //已知点坐标
+//      const marker = new AMap.Marker({  //加点
+//        map: map,
+//        position: lnglatXY,
+//        icon: new AMap.Icon({
+//          size: new AMap.Size(23, 23),  //图标大小
+//          image: 'http://webapi.amap.com/theme/v1.3/markers/b/loc.png',
+//          imageSize: new AMap.Size(23, 23)
+//        })
 //      });
-//      console.log(map)
-      var map, geolocation;
-      //加载地图，调用浏览器定位服务
-      map = new AMap.Map('map', {
-        resizeEnable: true,
-        zoom: 13
-      });
-      map.plugin('AMap.Geolocation', function () {
-        geolocation = new AMap.Geolocation({
-          enableHighAccuracy: true,//是否使用高精度定位，默认:true
-          timeout: 10000,          //超过10秒后停止定位，默认：无穷大
-          maximumAge: 0,           //定位结果缓存0毫秒，默认：0
-          convert: true,           //自动偏移坐标，偏移后的坐标为高德坐标，默认：true
-          showButton: true,        //显示定位按钮，默认：true
-          buttonPosition: 'RB',    //定位按钮停靠位置，默认：'LB'，左下角
-          buttonOffset: new AMap.Pixel(10, 20),//定位按钮与设置的停靠位置的偏移量，默认：Pixel(10, 20)
-          showMarker: true,        //定位成功后在定位到的位置显示点标记，默认：true
-          showCircle: true,        //定位成功后用圆圈表示定位精度范围，默认：true
-          panToLocation: true,     //定位成功后将定位到的位置作为地图中心点，默认：true
-          zoomToAccuracy: true      //定位成功后调整地图视野范围使定位位置及精度范围视野内可见，默认：false
-        });
-        map.addControl(geolocation);
-        geolocation.getCurrentPosition();
-        AMap.event.addListener(geolocation, 'complete', this.onComplete);//返回定位信息
-        AMap.event.addListener(geolocation, 'error', onError);      //返回定位出错信息
-      });
-
-      //解析定位结果
-      function onComplete(data) {
-        console.log(data)
-        debugger
-        var str = ['定位成功'];
-        str.push('经度：' + data.position.getLng());
-        str.push('纬度：' + data.position.getLat());
-        if (data.accuracy) {
-          str.push('精度：' + data.accuracy + ' 米');
-        }//如为IP精确定位结果则没有精度信息
-        str.push('是否经过偏移：' + (data.isConverted ? '是' : '否'));
-        document.getElementById('tip').innerHTML = str.join('<br>');
-      }
-
-      //解析定位错误信息
-      function onError(data) {
-        document.getElementById('tip').innerHTML = '定位失败';
-        console.log(data);
-      }
+//      const polygonArr = new Array();//多边形覆盖物节点坐标数组
+//      console.log(this.deliverArea)
+//      polygonArr.concat(this.deliverArea)
+//      const polygon = new AMap.Polygon({
+//        path: polygonArr,//设置多边形边界路径
+//        strokeColor: "#FF33FF", //线颜色
+//        strokeOpacity: 0.2, //线透明度
+//        strokeWeight: 3,    //线宽
+//        fillColor: "#1791fc", //填充色
+//        fillOpacity: 0.35//填充透明度
+//      });
+//      polygon.setMap(map);
+//      map.setFitView();
     },
     components: {
       scroll
@@ -188,17 +285,17 @@
     .map {
       height: 12.3rem;
       width: 100%;
+      position: relative;
       .icon-location {
         position: absolute;
-        right: 0;
-        bottom: 1rem;
-        width: 2.4rem;
-        height: 2.4rem;
-        background: #FFFFFF url("../../common/img/location/map_location_ic.png") no-repeat center;
-        background-size: 2.35rem 2.35rem;
-        border-radius: 50%;
-        border: 0.05rem solid #e5e5e5;
-        z-index: 200;
+        right: 10px;
+        bottom: 20px;
+        background: url("http://webapi.amap.com/theme/v1.3/markers/b/loc_gray.png") 50% 50% no-repeat #fff;
+        width: 35px;
+        height: 35px;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+        z-index: 9999;
       }
     }
     #tip {
