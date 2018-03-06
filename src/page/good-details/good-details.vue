@@ -7,83 +7,77 @@
 <template>
   <transition name="slide">
     <div class="good-details">
-      <i class="back"></i>
+      <i class="back" @click="back"></i>
       <div class="content">
-        <scroll>
+        <scroll :data="swiperImg" ref="scroll">
           <div>
-            <slide>
-              <div v-for="(item,index) in demo03_list" :key="index">
-                <a :href="item.url">
-                  <img :src="item.img">
+            <slide v-if="swiperImg.length>0">
+              <div v-for="(item,index) in swiperImg" :key="index">
+                <a>
+                  <img :src="item" @load="loadImage">
                 </a>
               </div>
             </slide>
             <div class="details">
-              <div class="name">越南进口红心火龙果 2个装 大果 单果约450~500g 新鲜水果</div>
+              <div class="name">{{product.productName}}</div>
               <div class="price">
-                <span class="current">¥388</span>
-                <del>¥500</del>
+                <span class="current">¥{{currentSpec.curPrice / 100}}</span>
+                <del>¥{{currentSpec.historyPrice}}</del>
               </div>
-              <div class="place border-1px"><span>已售390件</span><span>产地：新西兰</span></div>
-              <div class="spec border-1px">规格
-                <span class="spec-item" :class="{'active':specType===0}" @click="selectSpec(0)">约0.5斤/份</span>
-                <span class="spec-item" :class="{'active':specType===1}" @click="selectSpec(1)">约1斤/份</span></div>
-              <div class="attr">属性
-                <span class="attr-item" :class="{'active':attrType===0}" @click="selectAtrr(0)">切片</span>
-                <span class="attr-item" :class="{'active':attrType===1}" @click="selectAtrr(1)">不切片</span>
+              <div class="place border-1px">
+                <span>已售{{product.monthSalesAmount}}件</span><span>产地：{{product.originPlace}}</span>
+              </div>
+              <div class="spec border-1px" v-if="spec.length>0">规格
+                <span class="spec-item"
+                      :class="{'active':specType === index}"
+                      @click="selectSpec(item,index)"
+                      v-for="(item,index) in spec" :key="item.itemId">{{item.names}}</span>
+              </div>
+              <div class="attr" v-if="attr.length>0">属性
+                <span class="attr-item"
+                      :class="{'active':attrType===index}"
+                      @click="selectAtrr(item,index)"
+                      v-for="(item,index) in attr" :key="index">{{item.names}}</span>
               </div>
             </div>
             <div class="tab border-1px">
               <div class="tab-item" :class="{'active':type===0}" @click="getCurrent(0)"><span>商品介绍</span></div>
-              <div class="tab-item" :class="{'active':type===1}" @click="getCurrent(1)"><span>好评率98%</span></div>
+              <div class="tab-item" :class="{'active':type===1}" @click="getCurrent(1)"><span>好评率{{product.goodRemarkRate * 100}}%</span>
+              </div>
             </div>
             <div class="tab-container" v-show="type===0">
-              <div class="img-wrapper">
-                <img v-lazy="imgUrl"/>
-                <img v-lazy="imgUrl"/>
-                <img v-lazy="imgUrl"/>
-                <img v-lazy="imgUrl"/>
-                <img v-lazy="imgUrl"/>
-                <img v-lazy="imgUrl"/>
-                <img v-lazy="imgUrl"/>
+              <div class="img-wrapper" v-if="introImg.length>0">
+                <img v-lazy="item" v-for="(item,index) in introImg" :key="index"/>
               </div>
             </div>
             <div class="tab-container" v-show="type===1">
-              <ul class="list">
-                <li class="item border-1px">
-                  <div class="item-img"></div>
+              <ul class="list" v-if="remarks.length>0">
+                <li class="item border-1px" v-for="(item,index) in remarks" :key="index">
+                  <div class="item-img" v-lazy:background-image="item.picUrl"></div>
                   <div class="item-content">
-                    <div class="name">小树懒</div>
-                    <div class="date">2017.04.30</div>
+                    <div class="name">{{item.custName}}</div>
+                    <div class="date">{{item.remarkAt|formatTime}}</div>
                   </div>
-                  <i class="icon-status"></i>
-                </li>
-                <li class="item border-1px">
-                  <div class="item-img"></div>
-                  <div class="item-content">
-                    <div class="name">小树懒</div>
-                    <div class="date">2017.04.30</div>
-                  </div>
-                  <i class="icon-status active"></i>
+                  <i class="icon-status" :class="{active:item.goodRemarkFlag === 1}"></i>
                 </li>
               </ul>
-              <!--<div class="no-result">近期暂无评价</div>-->
+              <div class="no-result" v-else>近期暂无评价</div>
             </div>
           </div>
         </scroll>
       </div>
       <div class="shop-wrapper">
         <div class="shopcart border-top-1px">
-          <div class="seller">
+          <router-link tag="div" class="seller" :to="{path:/shopInfo/+product.shopId}">
             <i class="icon-seller"></i>
             <div class="text">店铺</div>
-          </div>
-          <div class="cart">
+          </router-link>
+          <router-link tag="div" class="cart" to="/cart">
             <i class="icon-cart">
               <div class="badge">2</div>
             </i>
             <div class="text">购物车</div>
-          </div>
+          </router-link>
           <div class="add-cart" @click="addCart">加入购物车</div>
         </div>
       </div>
@@ -93,48 +87,102 @@
 <script type="text/ecmascript-6">
   import Slide from '@/components/slide/slide'
   import Scroll from '@/components/scroll/scroll'
-
-  const baseList = [{
-    url: 'javascript:',
-    img: 'https://static.vux.li/demo/1.jpg',
-    title: '送你一朵fua'
-  }, {
-    url: 'javascript:',
-    img: 'https://static.vux.li/demo/2.jpg',
-    title: '送你一辆车'
-  }, {
-    url: '/activity/11',
-    img: 'https://static.vux.li/demo/3.jpg',
-    title: '送你一次旅行',
-    fallbackImg: require('../../assets/logo.png')
-  }]
+  import * as api from '@/api/http.js'
+  import * as time from '@/until/time.js'
 
   export default {
     data() {
       return {
-        demo03_list: baseList,
-        type: 1,
+        productId: (() => {   // 商品Id
+          return this.$route.params.id
+        })(),
+        type: 0, // 商品介绍 0 好评率 1
+        product: {},
         specType: 0,
         attrType: 0,
-        imgUrl: require('../../assets/logo.png')
+        swiperImg: [], // 商品的轮播图
+        introImg: [], // 商品的介绍图
+        remarks: [], // 商品评价
+        spec: [],  // 商品的规格组
+        attr: [], // 商品的属性组
+        currentSpec: {}, // 当前的商品的规格
+        currentAttr: {} // 当前的商品属性
       }
     },
     components: {
       Slide,
       Scroll
     },
+    created() {
+      this.getProductDetails()
+      this.getProductRemarks()
+    },
+    filters: {
+      formatTime: function (value) {
+        if (!value) return ''
+        return time.formatDateTime(value)
+      }
+    },
     methods: {
+      // 加载图片
+      loadImage() {
+        if (!this.checkImg) {         /* 加载完一张图片时不再执行 */
+          this.checkImg = true
+          this.$refs.scroll.refresh()
+        }
+      },
+      // 添加购物车
       addCart() {
         console.log("addCart");
       },
       getCurrent(type) {
         this.type = type
       },
-      selectSpec(type) {
-        this.specType = type
+      // 选规格
+      selectSpec(item, index) {
+        this.specType = index
+        this.currentSpec = item
       },
-      selectAtrr(type) {
-        this.attrType = type
+      // 选属性
+      selectAtrr(item, index) {
+        this.attrType = index
+        this.currentAttr = item
+      },
+      // 返回
+      back() {
+        this.$router.back()
+      },
+      // 获取商品详情
+      getProductDetails() {
+        if (this.productId) {
+          api.getProductDetails(this.productId).then((res) => {
+            if (res.code === 200) {
+              console.log(res.data)
+              this.product = res.data
+              this.swiperImg = res.data.picUrl
+              this.introImg = res.data.introducePicUrl
+              this.spec = res.data.items
+              this.attr = res.data.attrs
+              this.currentSpec = res.data.items[0]
+              this.currentAttr = res.data.attrs[0]
+            }
+          })
+        }
+      },
+      // 获取商品评价
+      getProductRemarks() {
+        if (this.productId) {
+          let params = {
+            pageNum: 1,
+            pageSize: 10
+          }
+          api.getProductRemarks(this.productId, params).then((res) => {
+            if (res.code === 200) {
+              console.log(res.data)
+              this.remarks = res.data.records
+            }
+          })
+        }
       }
     }
   }

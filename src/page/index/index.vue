@@ -56,7 +56,12 @@
           <div class="seller">
             <div class="title"></div>
             <ul class="seller-list" v-if="sellerList.length>0">
-              <li class="item border-1px" v-for="item in sellerList" @click="toShopInfo(item.msShopId)">
+              <router-link :to="{path: '/shopInfo/' + item.msShopId}"
+                           tag="li"
+                           class="item border-1px"
+                           v-for="item in sellerList"
+                           :key="item.msShopId">
+              <!--<li class="item border-1px" v-for="item in sellerList" :key="item.msShopId">-->
                 <div class="item-img">
                   <i class="status" v-if="item.businessStatus===2"></i>
                   <i class="seller-close" v-if="item.businessStatus===3">档口关店中</i>
@@ -76,7 +81,8 @@
                   </div>
                   <div class="dec">{{item.shopDesc}}</div>
                 </div>
-              </li>
+              <!--</li>-->
+              </router-link>
             </ul>
           </div>
         </div>
@@ -266,7 +272,9 @@
         background: url("../../common/img/index/market_bg.png") no-repeat center;
         background-size: contain;
         min-width: 8.6rem;
+        height: 6.5rem;
         box-sizing: border-box;
+        overflow: scroll;
         .item {
           height: 2rem;
           line-height: 2rem;

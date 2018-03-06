@@ -5,6 +5,7 @@
  * FunctionPoint:  getters
  */
 import {getStore} from './util'
+import state from "./state";
 
 
 export default {
@@ -21,5 +22,8 @@ export default {
   },
   market: state => {
     return state.market || JSON.parse(getStore('market'))
+  },
+  user: state => {
+    return state.user || JSON.parse(getStore('userInfo'))
   }
 }

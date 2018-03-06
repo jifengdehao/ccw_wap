@@ -1,14 +1,14 @@
 /*
- * @Author: WuFengliang 
- * @Date: 2018-01-02 11:40:58 
- * DeveloperMailbox:   wufengliang@ccw163.com 
+ * @Author: WuFengliang
+ * @Date: 2018-01-02 11:40:58
+ * DeveloperMailbox:   wufengliang@ccw163.com
  * FunctionPoint:  axios相关请求方法
  */
 import axios from 'axios'
-import hash from 'js-md5'
 import qs from 'qs'
 
 import Vue from 'vue'
+import Vuex from 'vuex'
 import { AlertPlugin } from 'vux'
 Vue.use(AlertPlugin)
 
@@ -32,7 +32,6 @@ const itr = (type, url, params) => {
   let userInfo = JSON.parse(sessionStorage.getItem('userInfo'))
   let token = ''
   if (userInfo) {
-    // console.log(userInfo)
     userInfo = typeof userInfo === 'string' ? JSON.parse(userInfo) : userInfo
     token = userInfo.authParam.token ? userInfo.authParam.token : ''
   }

@@ -2,12 +2,12 @@
 * $
 * author zhangwenlong
 * email zhangwenlong@ccw163.com
-* 功能：新增地址
+* 功能：新增和修改地址
 */
 <template>
   <transition name="slide">
     <div class="add-address">
-     <m-header></m-header>
+      <m-header></m-header>
       <div class="content">
         <div class="form-group">
           <div class="item border-1px select">
@@ -30,7 +30,7 @@
           </div>
         </div>
         <div class="form-group form-btn">
-          <button type="button" class="btn-submit" @click="submit">确定</button>
+          <button type="button" class="btn-submit" @click.stop="submit">确定</button>
         </div>
       </div>
     </div>
@@ -38,18 +38,46 @@
 </template>
 <script type="text/ecmascript-6">
   import mHeader from '@/components/header/m-header'
+  import * as api from '@/api/http.js'
 
   export default {
+    data() {
+      return {
+        addressId: (() => {   // 地址Id
+          return this.$route.params.id
+        })()
+      }
+    },
     components: {
       mHeader
     },
-    created() {},
+    created() {
+    },
     methods: {
       select() {
         return this.$router.push('/location')
       },
       submit() {
         console.log('form submit')
+      },
+      // 保存用户收货地址
+      postCustomAddress() {
+        let params = {}
+        api.postCustomAddress(params).then((res) => {
+          if (res.code === 200) {
+            console.log(res.data)
+          }
+        })
+      },
+      // 获取用户收货地址详情
+      // 修改用户收货地址
+      putCustomAddress() {
+        let params = {}
+        api.putCustomAddress(params).then((res) => {
+          if (res.code === 200) {
+            console.log(res.data)
+          }
+        })
       }
     }
   }

@@ -7,18 +7,10 @@
 <template>
   <div id="no-search-result">
     <div class="no-result">{{title}}</div>
-    <div class="hot-search">
-      <div class="title vux-1px-b">热门搜索</div>
+    <div class="hot-search" v-if="data.length>0">
+      <div class="title border-1px">热门搜索</div>
       <ul class="list">
-        <li class="item vux-1px">鸡肉</li>
-        <li class="item vux-1px">西红柿</li>
-        <li class="item vux-1px">西红柿</li>
-        <li class="item vux-1px">西红柿</li>
-        <li class="item vux-1px">西红柿</li>
-        <li class="item vux-1px">西红柿</li>
-        <li class="item vux-1px">西红柿</li>
-        <li class="item vux-1px">西红柿</li>
-        <li class="item vux-1px">西红柿</li>
+        <li class="item" v-for="(item,index) in data" :key="index" @click="selectTag(item)">{{item.tagName}}</li>
       </ul>
     </div>
   </div>
@@ -30,15 +22,20 @@
         type: String,
         default: ''
       },
-      hotSearch: {
+      data: {
         type: Array,
-        default: null
+        default: []
+      }
+    },
+    methods: {
+      selectTag(item) {
+        this.$emit('selectTag', item)
       }
     }
   }
 </script>
 <style scoped lang="less" type="text/less">
-  @import '~vux/src/styles/1px.less';
+  @import "../../common/css/mixin";
 
   #no-search-result {
     .no-result {
@@ -57,6 +54,7 @@
         background: url("../../common/img/common/Hot_search.png") no-repeat left top;
         background-size: .6rem .7rem;
         padding-left: .8rem;
+        .border-1px();
       }
       .list {
         font-size: 0;
@@ -70,11 +68,10 @@
           margin-right: .35rem;
           box-sizing: border-box;
           margin-top: .6rem;
+          border: 1px solid #e5e5e5;
+          border-radius: 5rem;
           &:nth-child(4n) {
             margin-right: 0;
-          }
-          &:before {
-            border-radius: 5rem;
           }
         }
       }

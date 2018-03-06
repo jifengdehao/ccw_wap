@@ -6,12 +6,18 @@
 */
 <template>
   <div class="m-header border-1px">
-    <i class="icon-back"></i>
+    <i class="icon-back" @click="back"></i>
     {{$route.name}}
   </div>
 </template>
 <script type="text/ecmascript-6">
-  export default {}
+  export default {
+    methods: {
+      back() {
+        return this.$router.back()
+      }
+    }
+  }
 </script>
 <style scoped lang="less" type="text/less">
   @import "../../common/css/mixin";

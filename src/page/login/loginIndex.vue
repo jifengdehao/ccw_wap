@@ -9,30 +9,32 @@
     <login-slot>
       <div>
         <div class="bg"><img src="../../common/img/login/login_img.png" /></div>
-        <div class="main-box">
+        <div class="main-box" ref="mainBox">
           <div class="write-box telphone">
             <i></i>
-            <input type="number" placeholder="请输入您的手机号码" v-model="mobileNumber" maxlength="11">
+            <input type="number" placeholder="请输入您的手机号码" ref="telphone" v-model="mobileNumber" maxlength="11">
           </div>
           <div class="write-box verification">
             <i></i>
-            <input type="text" placeholder="验证码" v-model="loginParams.code">
-            <button :class="{'active':$store.state.loginParams.isActive}" @click="isTelPhone">{{words}}</button>
+            <input type="text" placeholder="验证码" ref="verification" v-model="loginParams.code">
+            <button :class="{'active':isActive}" @click="isTelPhone">{{words}}</button>
           </div>
         </div>
-        <div class="operate" @click="userLogin">立即加入</div>
+        <div class="operate" @click="userLogin"><button>立即加入</button></div>
       </div>
     </login-slot>
   </div>
 </template>
 <script>
-import { mapGetters } from 'vuex'
-import { Toast } from 'vux'
+import { mapMutations } from 'vuex'
+import { Toast, Scroller } from 'vux'
 import * as http from '@/api/http'
 import loginSlot from './loginSlot'
+import { setTimeout, clearInterval } from 'timers'
+import topBarVue from '../../components/header/topBar.vue'
 export default {
   name: 'LoginIndex',
-  components: { loginSlot, Toast },
+  components: { loginSlot, Toast, Scroller },
   props: {},
   data() {
     return {
@@ -47,15 +49,19 @@ export default {
       loginParams: {
         code: '',
         mobileno: ''
-      }
+      },
+      isActive: false //  是否发送验证码
     }
   },
-  created() {},
+  created() {
+    this.checkIsLogin()
+  },
   mounted() {},
   activited: {},
   update: {},
   beforeRouteUpdate: {},
   methods: {
+    ...mapMutations(['SET_LOGININFO']),
     //  检测当前是否登录
     checkIsLogin() {
       if (this.$store.state.loginInfo != null) {
@@ -70,40 +76,20 @@ export default {
         this.runClock()
         this.sendCode()
       } else {
-        this.$vux.toast.text('手机号码不正确', 'middle')
+        this.$vux.toast.text('请输入正确的手机号码', 'middle')
       }
     },
     //  定时器是否开启
     runClock() {
-      let times = null
-      if (typeof sessionStorage.getItem('times') == 'object') {
-        //  没有设置times值
-        times = this.$store.state.loginParams.times
-      } else {
-        if (parseInt(sessionStorage.getItem('times')) < 0) {
-          return
-        }
-        this.$store.state.loginParams.times = times = parseInt(
-          sessionStorage.getItem('times')
-        )
-      }
+      let times = 5
+      this.isActive = true
       this.timer = setInterval(() => {
-        if (times <= 1) {
+        this.words = `${times--}s`
+        if (times < 0) {
+          this.isActive = false
           this.words = '获取验证码'
-          this.$store.state.loginParams = {
-            times: 60,
-            isActive: false
-          }
-          sessionStorage.removeItem('isActive')
-          sessionStorage.removeItem('times')
-          clearInterval(this.timer)
-          return
+          window.clearInterval(this.timer)
         }
-        this.words = `${times}s`
-        this.$store.state.loginParams.times = times = parseInt(times) - 1
-        this.$store.state.loginParams.isActive = true
-        sessionStorage.setItem('times', times)
-        sessionStorage.setItem('isActive', true)
       }, 1000)
     },
     //  发送验证码
@@ -121,7 +107,7 @@ export default {
       http.userLogin(this.loginParams).then(response => {
         if (response.code == 200) {
           let loginInfo = JSON.stringify(response.data)
-          this.$store.state.loginInfo = loginInfo
+          this.SET_LOGININFO(loginInfo)
           sessionStorage.setItem('userInfo', JSON.stringify(loginInfo))
           this.$router.push('/home')
         }
@@ -129,9 +115,7 @@ export default {
     }
   },
   filter: {},
-  computed: {
-    ...mapGetters(['name'])
-  },
+  computed: {},
   watch: {}
 }
 </script>
@@ -149,7 +133,10 @@ export default {
 }
 
 .main-box {
-  margin-top: 2.78rem;
+  position: fixed;
+  top: 16.05rem;
+  left: 0;
+  width: 100%;
   height: 6.65rem;
   .write-box {
     position: relative;
@@ -158,7 +145,6 @@ export default {
     align-items: center;
     width: 14.25rem;
     height: 2.25rem;
-    line-height: 2.25rem;
     margin: auto;
     &:after {
       display: block;
@@ -217,15 +203,21 @@ export default {
 }
 
 .operate {
-  width: 14.25rem;
-  height: 2.2rem;
-  line-height: 2.2rem;
+  position: fixed;
+  top: 22.7rem;
+  left: 0;
+  width: 100%;
   text-align: center;
-  font-size: 18px;
-  color: #fff;
-  background: linear-gradient(left bottom, #ff9367, #ffe294);
-  box-shadow: 0 4px 12px 3px #ffe5b6;
-  border-radius: 5.25rem;
-  margin: auto;
+  button {
+    width: 14.25rem;
+    height: 2.2rem;
+    font-size: 18px;
+    color: #fff;
+    line-height: 2.2rem;
+    background: linear-gradient(left bottom, #ff9367, #ffe294);
+    box-shadow: 0 4px 12px 3px #ffe5b6;
+    border-radius: 5.25rem;
+    margin: auto;
+  }
 }
 </style>
