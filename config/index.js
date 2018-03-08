@@ -4,7 +4,7 @@
 
 const path = require('path')
 
-const devTarget = 'http://192.168.0.151:30110/customer'
+const devTarget = 'http://192.168.0.151/customer'
 
 module.exports = {
   dev: {

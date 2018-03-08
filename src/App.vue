@@ -19,18 +19,25 @@ export default {
   name: 'app',
   data() {
     return {
-      isWebchatBool: false //  是否是微信登录
+      isWebchatBool: false, //  是否是微信登录
+      token: null
     }
   },
   created() {
     this.isWebchat()
-    let loginInfo =
-      this.$store.state.loginInfo || sessionStorage.getItem('userInfo')
+    let loginInfo = null
 
-    let token = JSON.parse(JSON.parse(loginInfo))
-    console.log(token)
-    if (token != null && token.authParam.token.length > 0) {
-      this.SET_LOGININFO(token)
+    if (this.$store.state.loginInfo) {
+      loginInfo = JSON.parse(this.$store.state.loginInfo)
+    } else {
+      loginInfo = JSON.parse(sessionStorage.getItem('userInfo'))
+      this.SET_LOGININFO(loginInfo)
+    }
+
+    this.token = JSON.parse(loginInfo)
+
+    if (this.token != null) {
+      this.SET_LOGININFO(this.token)
       //  do something
       if (this.$route.path == '/login' || this.$route.path == '/webchat') {
         this.$router.push('/home')
