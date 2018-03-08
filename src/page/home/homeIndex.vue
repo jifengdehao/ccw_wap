@@ -87,11 +87,13 @@
       initMap() {
         let that = this
         let map, geolocation
-        map = new AMap.Map('map') //iCenter是id容器名称
+        map = new AMap.Map('map')
         map.plugin('AMap.Geolocation', function () {
           geolocation = new AMap.Geolocation({
             timeout: 10000,   //超过10秒后停止定位，默认：无穷大
             maximumAge: 0, //定位结果缓存0毫秒，默认：0
+            extensions: 'all', // extensions用来设定是否需要周边POI、道路交叉口等信息，可选值'base'、'all'
+            accuracy: 500  // 精度范围
           });
           map.addControl(geolocation)
           geolocation.getCurrentPosition()
@@ -121,7 +123,7 @@
           })
           AMap.event.addListener(geolocation, 'error', function (data) {  //返回定位失败信息
             if (data.info == 'FAILED') {
-              alert('获取您当前位置失败！')
+              alert('获取你当前位置失败！')
             }
           })
         })
@@ -164,6 +166,7 @@
     height: 0;
     display: none;
   }
+
   .home {
     height: 100%;
     background-color: #FFFFFF;

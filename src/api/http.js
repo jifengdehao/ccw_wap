@@ -155,6 +155,15 @@ export const getProductRemarks = productId => {
 export const getHotSearchTag = params => {
   return http.g('/homePage/searchContent/hotSearchTag', params)
 }
+/**
+ * 2018/3/7
+ * author: zhangwenlong
+ * email: zhangwenlong@ccw163.com
+ * 功能模块: 获取用户收货地址详情
+ */
+export const getCustomAddressDetails = custId => {
+  return http.g(`/homePage/addr/${custId}`)
+}
 
 /**
  * 2018/2/23

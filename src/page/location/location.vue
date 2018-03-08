@@ -10,57 +10,24 @@
       <div class="header border-1px">
         <i class="back" @click="back"></i>
         <div class="search-content">
-          <input type="text" class="search" placeholder="请输入收货地址" v-model.trim="search" @keyup.enter="submit"/>
+          <input type="text" class="search" placeholder="请输入收货地址" v-model.trim="search" @keyup.enter="submit"
+                 id="search"/>
           <i class="clear" v-show="search" @click.stop="clearSearch"></i>
         </div>
       </div>
       <div class="map-tip">蓝色区域为当前市场配送范围</div>
       <div class="map" id="map">
-        <i class="icon-location" @click="getLo"></i>
+        <!--<i class="icon-location" id="getLo"></i>-->
       </div>
       <div class="content">
-        <scroll>
-          <div>
-            <ul class="list">
-              <li class="item border-1px">
-                <div class="name">黄沙冷仓<span class="current">当前</span></div>
-                <div class="dec">广州市番禺区南桥街道南堤东路836号</div>
-              </li>
-              <li class="item border-1px">
-                <div class="name">黄沙冷仓</div>
-                <div class="dec">广州市番禺区南桥街道南堤东路836号</div>
-              </li>
-              <li class="item border-1px">
-                <div class="name">黄沙冷仓</div>
-                <div class="dec">广州市番禺区南桥街道南堤东路836号</div>
-              </li>
-              <li class="item border-1px">
-                <div class="name">黄沙冷仓</div>
-                <div class="dec">广州市番禺区南桥街道南堤东路836号</div>
-              </li>
-              <li class="item border-1px">
-                <div class="name">黄沙冷仓</div>
-                <div class="dec">广州市番禺区南桥街道南堤东路836号</div>
-              </li>
-              <li class="item border-1px">
-                <div class="name">黄沙冷仓</div>
-                <div class="dec">广州市番禺区南桥街道南堤东路836号</div>
-              </li>
-              <li class="item border-1px">
-                <div class="name">黄沙冷仓</div>
-                <div class="dec">广州市番禺区南桥街道南堤东路836号</div>
-              </li>
-              <li class="item border-1px">
-                <div class="name">黄沙冷仓</div>
-                <div class="dec">广州市番禺区南桥街道南堤东路836号</div>
-              </li>
-              <li class="item border-1px">
-                <div class="name">黄沙冷仓</div>
-                <div class="dec">广州市番禺区南桥街道南堤东路836号</div>
-              </li>
-            </ul>
-          </div>
-        </scroll>
+        <div class="mescroll" id="mescroll" ref="mescroll">
+          <ul class="list">
+            <li class="item border-1px" v-for="(item,index) in mapList" :key="index">
+              <div class="name">{{item.name}}<span class="current" v-if="index === 0">当前</span></div>
+              <div class="dec">{{item.address}}</div>
+            </li>
+          </ul>
+        </div>
       </div>
       <div class="search-list" v-show="search">
         <ul class="list">
@@ -82,6 +49,8 @@
   import {mapGetters} from 'vuex'
   import AMap from 'AMap'   //在页面中引入高德地图
   import * as api from '@/api/http.js'
+  import MeScroll from 'mescroll'
+  import {mapMutations} from 'vuex'
 
   export default {
     data() {
@@ -99,6 +68,7 @@
     },
     created() {
       // this.getDeliverArea()
+      console.log(this.location)
     },
     methods: {
       // 搜索
@@ -113,42 +83,7 @@
       back() {
         return this.$router.back()
       },
-      // 定位
-      getLo() {
-        let map, geolocation;
-        //加载地图，调用浏览器定位服务
-        map = new AMap.Map('map', {
-          resizeEnable: true
-        });
-        map.plugin('AMap.Geolocation', function () {
-          geolocation = new AMap.Geolocation({
-            enableHighAccuracy: true,//是否使用高精度定位，默认:true
-            timeout: 10000,          //超过10秒后停止定位，默认：无穷大
-            buttonOffset: new AMap.Pixel(10, 20),//定位按钮与设置的停靠位置的偏移量，默认：Pixel(10, 20)
-            zoomToAccuracy: true,      //定位成功后调整地图视野范围使定位位置及精度范围视野内可见，默认：false
-            buttonPosition: 'RB',
-            showMarker: true,        //定位成功后在定位到的位置显示点标记，默认：true
-            showCircle: true,        //定位成功后用圆圈表示定位精度范围，默认：true
-            panToLocation: true     //定位成功后将定位到的位置作为地图中心点，默认：true
-          });
-          map.addControl(geolocation);
-          geolocation.getCurrentPosition();
-          AMap.event.addListener(geolocation, 'complete', onComplete);//返回定位信息
-          AMap.event.addListener(geolocation, 'error', onError);      //返回定位出错信息
-        });
-
-        //解析定位结果
-        function onComplete(data) {
-          console.log(data)
-        }
-
-        //解析定位错误信息
-        function onError(data) {
-          console.log(data)
-        }
-      },
-      // 获取配送范围
-      getDeliverArea() {
+      mescroll_upCallback(page) {
         api.getDeliverArea().then((res) => {
           if (res.code === 200) {
             const map = new AMap.Map('map', {
@@ -156,7 +91,7 @@
               zoom: 18
             })
             const lnglatXY = [this.location.position.lng, this.location.position.lat]; //已知点坐标
-            const marker = new AMap.Marker({  //加点
+            const marker = new AMap.Marker({  //添加maker
               map: map,
               position: lnglatXY,
               icon: new AMap.Icon({
@@ -165,11 +100,37 @@
                 imageSize: new AMap.Size(23, 23)
               })
             })
+
+            // 定位
+            map.plugin('AMap.Geolocation', function () {
+              let geolocation = new AMap.Geolocation({
+                enableHighAccuracy: true,//是否使用高精度定位，默认:true
+                timeout: 10000,          //超过10秒后停止定位，默认：无穷大
+                buttonOffset: new AMap.Pixel(10, 20),//定位按钮与设置的停靠位置的偏移量，默认：Pixel(10, 20)
+                zoomToAccuracy: true,      //定位成功后调整地图视野范围使定位位置及精度范围视野内可见，默认：false
+                buttonPosition: 'RB',
+                showButton: true,        //显示定位按钮，默认：true
+                showMarker: false,        //定位成功后在定位到的位置显示点标记，默认：true
+                showCircle: false,        //定位成功后用圆圈表示定位精度范围，默认：true
+                panToLocation: false,     //定位成功后将定位到的位置作为地图中心点，默认：true
+                extensions: 'all'
+              });
+              map.addControl(geolocation);
+              AMap.event.addListener(geolocation, 'complete', function (data) {//返回定位信息
+                console.log(data)
+                //that.setLocation(data) // 保存定位信息
+              });
+              AMap.event.addListener(geolocation, 'error', function (data) {   //返回定位出错信息
+                if (data.info == 'FAILED') {
+                  alert('定位失败！')
+                }
+              })
+            })
+
             const polygonArr = new Array()//多边形覆盖物节点坐标数组
             for (let i = 0; i < res.data.length; i++) {
               let arj = JSON.parse(res.data[i])
               for (let j = 0; j < arj.length; j++) {
-                // this.deliverArea.push(arj[j])
                 polygonArr.push(arj[j])
               }
             }
@@ -181,74 +142,47 @@
               fillColor: "#8DC2FF", //填充色
               fillOpacity: 0.35//填充透明度
             })
+            let self = this
             polygon.setMap(map)
             map.setFitView()
+            AMap.service(["AMap.PlaceSearch"], function () {
+              const placeSearch = new AMap.PlaceSearch({ //构造地点查询类
+                pageSize: page.size,
+                pageIndex: page.num
+              })
+              placeSearch.searchNearBy('', lnglatXY, 500, function (status, result) {
+                if (status === 'complete' && result.info === 'OK') {
+                  //TODO : 解析返回结果,如果设置了map和panel，api将帮助完成点标注和列表
+                  console.log(result)
+                  if (page.num === 1) {
+                    self.mapList = result.poiList.pois
+                    self.mapList.unshift()
+                    self.mescroll.endBySize(result.poiList.pageSize, result.poiList.count)
+                  } else {
+                    self.mapList = self.mapList.concat(result.poiList.pois)
+                    self.mescroll.endBySize(result.poiList.pageSize, result.poiList.count)
+                  }
+                }
+              })
+            })
           }
         })
       },
-      // 位置
-      setLo() {
-        const map = new AMap.Map('map', {
-          resizeEnable: true,
-          zoom: 18
-        })
-        const lnglatXY = [this.location.position.lng, this.location.position.lat]; //已知点坐标
-        const marker = new AMap.Marker({  //加点
-          map: map,
-          position: lnglatXY,
-          icon: new AMap.Icon({
-            size: new AMap.Size(23, 23),  //图标大小
-            image: 'http://webapi.amap.com/theme/v1.3/markers/b/loc.png',
-            imageSize: new AMap.Size(23, 23)
-          })
-        })
-        const polygonArr = new Array()//多边形覆盖物节点坐标数组
-        polygonArr.concat(this.deliverArea)
-        console.log(polygonArr)
-        const polygon = new AMap.Polygon({
-          path: polygonArr,//设置多边形边界路径
-          strokeColor: "#FF33FF", //线颜色
-          strokeOpacity: 0.2, //线透明度
-          strokeWeight: 3,    //线宽
-          fillColor: "#1791fc", //填充色
-          fillOpacity: 0.35//填充透明度
-        })
-        polygon.setMap(map)
-        map.setFitView()
-      }
-
+      // vux 保存位置
+      ...mapMutations({
+        setLocation: 'SET_LOCATION',
+      })
     },
     mounted() {
       this.$nextTick(() => {
-        this.getDeliverArea()
+        let self = this
+        this.mescroll = new MeScroll("mescroll", {
+          up: {
+            isBounce: false,
+            callback: self.mescroll_upCallback
+          }
+        })
       })
-//      const map = new AMap.Map('map', {
-//        resizeEnable: true,
-//        zoom: 18
-//      })
-//      const lnglatXY = [this.location.position.lng, this.location.position.lat]; //已知点坐标
-//      const marker = new AMap.Marker({  //加点
-//        map: map,
-//        position: lnglatXY,
-//        icon: new AMap.Icon({
-//          size: new AMap.Size(23, 23),  //图标大小
-//          image: 'http://webapi.amap.com/theme/v1.3/markers/b/loc.png',
-//          imageSize: new AMap.Size(23, 23)
-//        })
-//      });
-//      const polygonArr = new Array();//多边形覆盖物节点坐标数组
-//      console.log(this.deliverArea)
-//      polygonArr.concat(this.deliverArea)
-//      const polygon = new AMap.Polygon({
-//        path: polygonArr,//设置多边形边界路径
-//        strokeColor: "#FF33FF", //线颜色
-//        strokeOpacity: 0.2, //线透明度
-//        strokeWeight: 3,    //线宽
-//        fillColor: "#1791fc", //填充色
-//        fillOpacity: 0.35//填充透明度
-//      });
-//      polygon.setMap(map);
-//      map.setFitView();
     },
     components: {
       scroll
