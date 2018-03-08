@@ -20,5 +20,6 @@ export default {
   loginInfo: null, //  登录后相关信息
   location: null,   // 位置相关
   market: null,  // 菜市场
-  shopCart: []  // 购物车
+  shopCart: [],  // 购物车
+  addmodress: null  // 选中或者修改的地址
 }

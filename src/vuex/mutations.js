@@ -5,7 +5,7 @@
  * FunctionPoint:  mutations
  */
 
-import { setStore, getStore, removeStore } from './util'
+import {setStore, getStore, removeStore} from './util'
 import * as types from './mutation-types'
 
 export default {
@@ -41,5 +41,10 @@ export default {
   [types.ADD_SHOP_CART](state, product) {
     state.shopCart.push(product)
     setStore('shopCart', JSON.stringify(state.shopCart))
+  },
+  // 选中或者修改的地址
+  [types.SET_ADDMODRESS](state, addmodress) {
+    state.addmodress = addmodress
+    setStore('addmodress', JSON.stringify(addmodress))
   }
 }

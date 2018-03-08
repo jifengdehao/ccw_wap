@@ -12,21 +12,21 @@
         <div class="form-group">
           <div class="item border-1px select">
             <label>小区/大厦/学校:</label>
-            <input type="text" placeholder="点击选择" @click="select" v-model.tirm="buildingName"/>
+            <input type="text" placeholder="点击选择" @click="selectPlace" v-model.tirm="form.buildingName"/>
           </div>
           <div class="item">
             <label>详细地址:</label>
-            <input type="text" placeholder="请输入详细地址" v-model.trim="addr"/>
+            <input type="text" placeholder="请输入详细地址" v-model.trim="form.addr"/>
           </div>
         </div>
         <div class="form-group">
           <div class="item border-1px">
             <label>收货人:</label>
-            <input type="text" placeholder="请填写收货人的姓名或称呼" v-model.trim="receiver"/>
+            <input type="text" placeholder="请填写收货人的姓名或称呼" v-model.trim="form.receiver"/>
           </div>
           <div class="item">
             <label>联系电话:</label>
-            <input type="number" placeholder="请填写联系电话" v-model.trim="contactNumber"/>
+            <input type="number" placeholder="请填写联系电话" v-model.trim="form.contactNumber"/>
           </div>
         </div>
         <div class="form-group form-btn">
@@ -38,8 +38,8 @@
 </template>
 <script type="text/ecmascript-6">
   import mHeader from '@/components/header/m-header'
-  import {mapGetters} from 'vuex'
   import * as api from '@/api/http.js'
+  import {mapGetters} from 'vuex'
 
   export default {
     data() {
@@ -47,10 +47,7 @@
         addressId: (() => {   // 地址Id
           return this.$route.params.id
         })(),
-        buildingName: '', // 地图返回的地址名
-        addr: '', // 详细地址
-        receiver: '', // 收货人
-        contactNumber: '' // 联系电话
+        form: {}
       }
     },
     components: {
@@ -59,58 +56,80 @@
     computed: {
       ...mapGetters([
         'user',
-        'location'
+        'addmodress'
       ])
     },
     created() {
+      // 获取详情 修改
       if (this.addressId) {
-        this.getCustomAddressDetails()
+        this.getCustomAddressDetails(this.addressId)
+      } else {
+        if (this.addmodress) {
+          this.form = this.addmodress
+        }
+      }
+      // console.log(this.addmodress)
+    },
+    watch: {
+      '$route' (to, from) {
+        // 对路由变化作出响应...
+        console.log(to)
       }
     },
     methods: {
-      select() {
-        return this.$router.push('/location')
+      // 跳转到位置
+      selectPlace() {
+        if (this.addressId) {
+          this.$router.push('/location/' + this.addressId)
+        } else {
+          this.$router.push('/location')
+        }
+
       },
       submit() {
-        console.log('form submit')
         if (this.addressId) {
-
+          this.putCustomAddress()
         } else {
           this.postCustomAddress()
         }
       },
       // 保存用户收货地址
       postCustomAddress() {
-        let params = {
-          addr: this.addr,
-          addrId: this.addressId,
-          buildingName: this.buildingName,
-          contactNumber: this.contactNumber,
-          custId: this.user.cust_id, // 用户id
-          latitude: this.location.position.lat, // 纬度
-          longitude: this.location.position.lng, // 经度
-          receiver: this.receiver
-        }
-        api.postCustomAddress(params).then((res) => {
-          if (res.code === 200) {
-            console.log(res.data)
+        if (this.addmodress) {
+          let params = {
+            custId: JSON.parse(this.user).cust_id,
           }
-        })
+          this.form = Object.assign(this.form, params)
+          api.postCustomAddress(this.form).then((res) => {
+            if (res.code === 200) {
+              console.log(res.data)
+              if (res.data) {
+                this.$router.back()
+              }
+            }
+          })
+        }
+
       },
       // 获取用户收货地址详情
-      getCustomAddressDetails() {
-        api.getCustomAddressDetails(this.addressId).then((res) => {
-          if (res.code === 200) {
-            console.log(res.data)
-          }
-        })
+      getCustomAddressDetails(addressId) {
+        if (addressId) {
+          api.getCustomAddressDetails(addressId).then((res) => {
+            if (res.code === 200) {
+              console.log(res.data)
+              this.form = res.data
+            }
+          })
+        }
       },
       // 修改用户收货地址
       putCustomAddress() {
-        let params = {}
-        api.putCustomAddress(params).then((res) => {
+        api.putCustomAddress(this.form).then((res) => {
           if (res.code === 200) {
             console.log(res.data)
+            if (res.data) {
+              this.$router.back()
+            }
           }
         })
       }

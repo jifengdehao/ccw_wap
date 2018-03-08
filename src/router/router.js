@@ -90,7 +90,12 @@ export default [
   },
   {
     path: '/location',
-    name: '位置',
+    name: '设置位置',
+    component: Location
+  },
+  {
+    path: '/location/:id',
+    name: '设置位置',
     component: Location
   },
   {

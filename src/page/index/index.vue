@@ -217,6 +217,7 @@
         this.isShowMarketSelect = false
         this.sellerList = []
         this.menuList = []
+        this.market = item
         this.getSeller();
       },
       // 选择分类

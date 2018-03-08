@@ -88,10 +88,10 @@
       },
       // 删除收货地址
       onButtonClick(item) {
-        console.log(item)
         let userInfo = JSON.parse(this.user)
         api.delCustomAddress(userInfo.cust_id, item.addrId).then((res) => {
           if (res.code === 200 && res.data) {
+            console.log(res.data)
             this.getCustomAddress()
           }
         })
