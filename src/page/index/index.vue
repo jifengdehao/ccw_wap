@@ -56,7 +56,7 @@
           <div class="seller">
             <div class="title"></div>
             <ul class="seller-list" v-if="sellerList.length>0">
-              <router-link :to="{path: '/shopInfo/' + item.msShopId}"
+              <router-link :to="{path: '/shopProduct/' + item.msShopId}"
                            tag="li"
                            class="item border-1px"
                            v-for="item in sellerList"
@@ -133,7 +133,7 @@
       this.getBanner();
       this.getRecommendMarkets();
       this.getSeller();
-      // console.log(this.location)
+      console.log(this.location)
     },
     watch: {
       'menuList'() {
@@ -191,7 +191,7 @@
       getSeller() {
         api.getIndexStore(this.market.marketId).then((res) => {
           if (res.data.length > 0) {
-            // console.log(res)
+            console.log(res)
             this.menuList = res.data
             this.menuTypeActive = res.data[0].businessType
             this.sellerList = res.data[0].catShops
@@ -230,15 +230,11 @@
             this.sellerList = item.catShops
           }
         })
-        // console.log(this.sellerList)
+        console.log(this.sellerList)
       },
       ...mapMutations({
         setMarket: 'SET_MARKET'
-      }),
-      // 点击店铺列表  跳转到店铺详情
-      toShopInfo(shopId){
-        this.$router.push('/shopProduct?shopId=' + shopId)
-      }
+      })
     }
   }
 </script>

@@ -108,7 +108,7 @@ export default [
     component: productIndex
   },
   {
-    path: '/shopProduct',
+    path: '/shopProduct/:id',
     name: '店铺商品',
     component: shopProduct
   },

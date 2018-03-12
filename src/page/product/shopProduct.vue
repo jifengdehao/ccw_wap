@@ -14,7 +14,7 @@
         <i class="goback" @click="goback"></i>
         <div class="shopMessage" @click="goShopInfo">
           <div class="shopMessageLeft">
-            <img src="../../common/img/productIndex/3.jpg" alt="">
+            <img :src="shopDesc.headUrl" alt="">
           </div>
           <div class="shopMessageRight">
             <p>
@@ -28,7 +28,7 @@
       </div>
       <!-- 公告 -->
       <div class="notic">
-        <span>公告：</span>这里是店铺活动布告！满100元减10元，满200元减30元。
+        <span>公告：</span>{{shopDesc.notice}}
       </div>
     </div>
     <!-- 产品列表 -->
@@ -43,7 +43,7 @@
       <div class="productList">
         <ul>
           <li v-for="(item,index) in products" :key="index">
-            <router-link :to="'goods/'+ item.productId">
+            <router-link :to="'/goods/'+ item.productId">
               <div class="listLeft">
                 <img :src="item.proImgUrl" alt="">
               </div>
@@ -132,18 +132,18 @@ export default {
   mounted() {
     this.getShopDesc()
     this.getProductByShopId()
+    this.getCartAmountAndNum()
   },
   methods: {
     // 获取店铺信息
     getShopDesc() {
-      api.getShopDesc(this.$route.query.shopId).then(res => {
-        // console.log(res.data, '店铺介绍')
+      api.getShopDesc(this.$route.params.id).then(res => {
         this.shopDesc = res.data
       })
     },
     // 进入店铺页面   获取该店铺产品信息
     getProductByShopId() {
-      api.getProductByShopId(this.$route.query.shopId).then(res => {
+      api.getProductByShopId(this.$route.params.id).then(res => {
         this.shopProduct = res.data
         if (res.data[0]) {
           this.products = this.shopProduct[0].product
@@ -152,11 +152,22 @@ export default {
         }
       })
     },
+    // 获取购物车内总件数，满多少减免运费和总金额
+    getCartAmountAndNum() {
+      api
+        .getCartAmountAndNum(
+          this.$store.state.loginInfo.cust_id,
+          JSON.parse(window.sessionStorage.market).marketId
+        )
+        .then(res => {
+          console.log(res)
+        })
+    },
     goback() {
       this.$router.go(-1)
     },
     goShopInfo() {
-      this.$router.push('/shopInfo')
+      this.$router.push('/shopInfo/' + this.$route.params.id)
     },
     selectedList(index) {
       this.selected = index
@@ -204,6 +215,7 @@ export default {
   .topImg {
     width: 100%;
     img {
+      width: 100%;
       height: 127/20rem;
     }
     .goback {
@@ -220,7 +232,7 @@ export default {
     .shopMessage {
       position: absolute;
       top: 2.5rem;
-      width: 204/20rem;
+      min-width: 204/20rem;
       height: 3.5rem;
       padding: 12px 10px 0 10px;
       box-sizing: border-box;
@@ -265,6 +277,7 @@ export default {
     padding-left: 0.6rem;
     font-size: 10px;
     color: #666666;
+    overflow: auto;
     letter-spacing: -0.06px;
     background-color: #fff;
   }

@@ -78,7 +78,7 @@ export const getNearProducts = (marketId,params) => {
  */ 
 // GET /homePage/shopDesc/{shopId}
 export const getShopDesc = (shopId) => {
-  return http.g(`/homePage/shopDesc//${shopId}`)
+  return http.g(`/homePage/shopDesc/${shopId}`)
 }
 /**
  * 获取店铺中所有产品的信息
@@ -86,6 +86,20 @@ export const getShopDesc = (shopId) => {
 export const getProductByShopId = (shopId) => {
   return http.g(`/homePage/productByShopId/${shopId}`)
 }
+/**
+ * 获取购物车内总件数，满多少减免运费和总金额
+ */ 
+export const getCartAmountAndNum = (userId,marketId) => {
+  return http.g(`/cart/obtainCartAmountAndNum/${userId}/${marketId}`)
+}
+// GET /homePage/shopRemarks/{shopId}
+/**
+ * 获取店铺评价
+ */ 
+export const getShopRemarks = (shopId,params) => {
+  return http.g(`/homePage/shopRemarks/${shopId}`,params)
+}
+
 /**
  *  负责人 -By zhangwenlong
  */

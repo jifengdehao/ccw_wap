@@ -10,23 +10,23 @@
     <div style="position:absolute;zIndex:1000">
       <div class="topImg">
         <!-- 返回上一页图标 -->
-        <img src="../../common/img/productIndex/shop_bg.png" alt="">
+        <img :src="shopDesc.shopPictureUrl" alt="">
         <i class="goback" @click="goback"></i>
         <div class="shopMessage">
           <div class="shopMessageLeft">
-            <img src="../../common/img/productIndex/3.jpg" alt="">
+            <img :src="shopDesc.headUrl" alt="">
           </div>
           <div class="shopMessageRight">
             <p>
-              <span>{{shopName}} </span>
+              <span>{{shopDesc.shopName}} </span>
             </p>
-            <rater v-model="countStar" :font-size="13" disabled></rater>
+            <rater v-model="shopDesc.starLevel" :font-size="13" disabled></rater>
           </div>
         </div>
       </div>
       <!-- 公告 -->
       <div class="notic">
-        <span>公告：</span>这里是店铺活动布告！满100元减10元，满200元减30元。
+        <span>公告：</span>{{shopDesc.notice}}
       </div>
       <!-- tab栏 -->
       <tab class="tab">
@@ -39,20 +39,19 @@
       <div class="address">
         <div class="line">
           <i class="first"></i>
-          <span>番禺祈福市场</span>
+          <span>{{shopDesc.stallAddress}}</span>
         </div>
       </div>
 
       <div class="tel" @click="tel">
         <i class="second"></i>
-        <span>{{telNub}}</span>
+        <span>{{shopDesc.mobileNo}}</span>
       </div>
-      <div class="lastCell" is-link @click="onClick">
+      <div class="lastCell" is-link @click="goQualification">
         <i class="last"></i>
         <i class="jumpIcon"></i>
         <span>查看商家资质</span>
       </div>
-
     </div>
     <!-- 店铺评价 -->
     <div v-else style="position: absolute;
@@ -61,13 +60,14 @@
       padding-top: 10.5rem;
       box-sizing: border-box;
       zIndex: 10">
-      <shop-evaluation></shop-evaluation>
+      <shop-evaluation :shopId="$route.params.id"></shop-evaluation>
     </div>
   </div>
 </template>
 <script>
 import shopEvaluation from './productComponents/shopEvaluation'
 import { Tab, TabItem, Group, CellBox, Rater } from 'vux'
+import * as api from '@/api/http'
 export default {
   components: {
     Tab,
@@ -81,15 +81,16 @@ export default {
   data() {
     return {
       index: 0,
+      shopDesc: {}, // 店铺说明
       showMessage: true,
       shopName: '菜城水果店', // 店铺名称
-      listTitle: ['店铺', '评价'],
-      countStar: 3, // 店铺评价星数
-      telNub: '18876543210'
+      listTitle: ['店铺', '评价']
     }
   },
   created() {},
-  mounted() {},
+  mounted() {
+    this.getShopDesc()
+  },
   methods: {
     isShowMessage(index) {
       if (index === 0) {
@@ -98,14 +99,23 @@ export default {
         this.showMessage = false
       }
     },
+    // 获取店铺信息
+    getShopDesc() {
+      api.getShopDesc(this.$route.params.id).then(res => {
+        this.shopDesc = res.data
+      })
+    },
     goback() {
       this.$router.go(-1)
     },
     tel() {
       window.location.href = 'tel:' + this.telNub
     },
-    onClick() {
-      this.$router.push('qualification')
+    goQualification() {
+      this.$router.push(
+        '/qualification?qualification=' +
+          JSON.stringify(this.shopDesc.qualiPicUrl)
+      )
     }
   },
   filfter: {},
@@ -124,6 +134,7 @@ export default {
   .topImg {
     width: 100%;
     img {
+      width: 100%;
       height: 127/20rem;
     }
     .goback {
@@ -140,7 +151,7 @@ export default {
     .shopMessage {
       position: absolute;
       top: 2.5rem;
-      width: 204/20rem;
+      min-width: 204/20rem;
       height: 3.5rem;
       padding: 12px 10px 0 10px;
       box-sizing: border-box;
@@ -174,12 +185,6 @@ export default {
             background-size: contain;
           }
         }
-        span {
-          color: #ffffff;
-        }
-        .is-active span {
-          color: #ffbd52;
-        }
       }
     }
   }
@@ -190,6 +195,7 @@ export default {
     padding-left: 0.6rem;
     font-size: 10px;
     color: #666666;
+    overflow: auto;
     letter-spacing: -0.06px;
     background-color: #fff;
   }

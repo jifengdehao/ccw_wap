@@ -98,7 +98,7 @@
           AMap.event.addListener(geolocation, 'complete', function (data) {
 //            data.position.getLng() //定位成功返回的经度
 //            data.position.getLat() //定位成功返回的纬度
-            // console.log(data)
+            console.log(data)
             that.location = data.formattedAddress
             // 保存地址相关信息
             that.setLocation(data);
@@ -109,9 +109,9 @@
                 latitude: data.position.getLat()
               }]
             };
-            // console.log(params);
+            console.log(params);
             api.isAddressCover(params).then((res) => {
-              // console.log(res)
+              console.log(res)
               if (!res.data[0]) {
                 alert('当前位置不在配送范围内');
                 that.getNearMarket(params.positionInfos[0]);
@@ -154,7 +154,7 @@
       },
       // 选择菜市场
       selectMarket(item) {
-        // console.log(item)
+        console.log(item)
         this.setMarket(item);
         this.$router.push('/index');
       }

@@ -13,39 +13,25 @@
     </div>
     <div class="img">
       <div class="showIndex">
-        <span>{{index}}</span> / <span>{{length}}</span>
+        <span>{{index}}</span> / <span>{{demo01_list.length}}</span>
       </div>
-      <swiper :list="demo01_list" :show-dots="false" :height="imgHeigth" style="width:84%;margin:44px  auto;" @on-index-change="changeIndex"></swiper>
+      <!-- <swiper :list="demo01_list"  :height="imgHeigth" style="width:84%;margin:44px  auto;" @on-index-change="changeIndex"></swiper> -->
+      <swiper :height="imgHeigth" style="width:84%;margin:10%  auto;" :show-dots="false" @on-index-change="changeIndex">
+      <swiper-item class="swiper-demo-img" v-for="(item, index) in demo01_list" :key="index" ><img :src="item"></swiper-item>
+    </swiper>
     </div>
   </div>
 </template>
 <script>
-import { Swiper, GroupTitle, SwiperItem, XButton, Divider } from 'vux'
-
-import { XHeader } from 'vux'
-const baseList = [
-  {
-    url: 'javascript:',
-    img: 'https://static.vux.li/demo/1.jpg'
-  },
-  {
-    url: 'javascript:',
-    img: 'https://static.vux.li/demo/2.jpg'
-  },
-  {
-    url: '/activity/11',
-    img: 'https://static.vux.li/demo/3.jpg'
-  }
-]
+import { Swiper, GroupTitle, SwiperItem, XButton, Divider, XHeader } from 'vux'
 export default {
-  components: { XHeader, Swiper },
+  components: { XHeader, Swiper, SwiperItem },
   props: {},
   data() {
     return {
-      demo01_list: baseList,
+      demo01_list: JSON.parse(this.$route.query.qualification),
       index: 1,
-      length: baseList.length,
-      imgHeigth: '21rem'
+      imgHeigth: '26rem'
     }
   },
   created() {},

@@ -4,7 +4,7 @@
 
 const path = require('path')
 
-const devTarget = 'http://192.168.0.151:30110/customer'
+const devTarget = 'http://192.168.0.151/customer'
 
 module.exports = {
   dev: {
@@ -38,6 +38,13 @@ module.exports = {
         changeOrigin: true,
         pathRewrith: {
           '^/personCenter': '/personCenter'
+        }
+      },
+      '/cart': {
+        target: devTarget,
+        changeOrigin: true,
+        pathRewrith: {
+          '^/cart': '/cart'
         }
       }
     },
