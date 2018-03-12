@@ -8,7 +8,7 @@
   <div class="home">
     <div class="location">
       <span class="icon-location"></span>
-      <span class="name" v-if="location">{{location}}</span>
+      <span class="name" v-if="locationName">{{locationName}}</span>
     </div>
     <div class="scroll-wrapper">
       <loading v-if="!marketList.length>0"></loading>
@@ -64,10 +64,10 @@
     components: {menuBar, marketList, loading, Scroll, Slide},
     data() {
       return {
-        location: '',
-        swiperList: [],
-        marketList: [],
-        showLocationTip: false,
+        locationName: '', // 位置信息
+        swiperList: [], // 轮播图
+        marketList: [], // 市场列表
+        showLocationTip: false, // 是否显示提示
       }
     },
     mounted() {
@@ -85,55 +85,51 @@
       },
       // 获取定位
       initMap() {
-        let that = this
-        let mapObj = new AMap.Map('map') //iCenter是id容器名称
-        mapObj.plugin('AMap.Geolocation', function () {
-          let geolocation = new AMap.Geolocation({
-            timeout: 10000,
-            GeoLocationFirst: false,
-            maximumAge: 0 //定位结果缓存0毫秒，默认：0
+        let that = this, map, geolocation
+        map = new AMap.Map('map')
+        map.plugin('AMap.Geolocation', function () {
+          geolocation = new AMap.Geolocation({
+            timeout: 10000,   //超过10秒后停止定位，默认：无穷大
+            maximumAge: 0 //定位结果缓存0毫秒，默认：
           });
-          mapObj.addControl(geolocation)
-          geolocation.getCurrentPosition();
-          AMap.event.addListener(geolocation, 'complete', function (data) {
-//            data.position.getLng() //定位成功返回的经度
-//            data.position.getLat() //定位成功返回的纬度
+          map.addControl(geolocation)
+          geolocation.getCurrentPosition()
+          AMap.event.addListener(geolocation, 'complete', function (data) {  //返回定位成功信息
             console.log(data)
-            that.location = data.formattedAddress
-            // 保存地址相关信息
-            that.setLocation(data);
+            that.setLocation(data) // 保存定位信息
+            that.locationName = data.formattedAddress // 位置标题信息
             let params = {
               marketId: '-1',
               positionInfos: [{
                 longitude: data.position.getLng(),
                 latitude: data.position.getLat()
               }]
-            };
-            console.log(params);
-            api.isAddressCover(params).then((res) => {
-              console.log(res)
-              if (!res.data[0]) {
-                alert('当前位置不在配送范围内');
-                that.getNearMarket(params.positionInfos[0]);
-                that.getBanner();
-                that.showLocationTip = true
-              } else {
-                that.$router.push('/index')
-              }
-            });
-          }); //返回定位信息
-          AMap.event.addListener(geolocation, 'error', function (data) {
-            if (data.info == 'FAILED') {
-              alert('获取您当前位置失败！')
             }
-          });
+            api.isAddressCover(params).then((res) => {
+              if (res.code === 200) {
+                if (!res.data[0]) {
+                  alert('当前位置不在配送范围内');
+                  that.getNearMarket(params.positionInfos[0]);
+                  that.getBanner();
+                  that.showLocationTip = true
+                } else {
+                  that.$router.push('/index')
+                }
+              }
+            })
+          })
+          AMap.event.addListener(geolocation, 'error', function (data) {  //返回定位失败信息
+            if (data.info == 'FAILED') {
+              alert('获取你当前位置失败！')
+            }
+          })
         })
       },
       //获取附近的菜市场，不在配送范围内
       getNearMarket(params) {
         api.getNearMarket(params).then((res) => {
-          if (res.code === 200) {
-            console.log(res);
+          if (res.code === 200 && res.data.length > 0) {
+            console.log(res.data);
             this.marketList = res.data
           }
         })
@@ -147,7 +143,8 @@
       getBanner() {
         const type = 1
         api.getBanner(type).then((res) => {
-          if (res.code === 200) {
+          if (res.code === 200 && res.data.length > 0) {
+            console.log(res.data)
             this.swiperList = res.data
           }
         })
@@ -185,7 +182,7 @@
       }
       .name {
         display: inline-block;
-        font-size: .9rem;
+        font-size: .6rem;
         margin-left: .4rem;
         height: 2.2rem;
       }

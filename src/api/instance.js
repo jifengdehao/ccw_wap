@@ -6,9 +6,8 @@
  */
 import axios from 'axios'
 import qs from 'qs'
-
+import hash from 'js-md5'
 import Vue from 'vue'
-import Vuex from 'vuex'
 import { AlertPlugin } from 'vux'
 Vue.use(AlertPlugin)
 
@@ -17,7 +16,8 @@ var ax = axios.create({
   withCredentials: true, // 跨域携带证书
   timeout: 30000,
   headers: {
-    CCWTOKEN: ''
+    CCWTOKEN: '',
+    sign: ''
   }
 })
 
@@ -35,9 +35,14 @@ const itr = (type, url, params) => {
     userInfo = typeof userInfo === 'string' ? JSON.parse(userInfo) : userInfo
     token = userInfo.authParam.token ? userInfo.authParam.token : ''
   }
-
+  let sign = ''
+  if (type === 'get' || type === 'delete') {
+    sign = hash(arg + token)
+  } else {
+    sign = hash(JSON.stringify(params) + token)
+  }
   ax.defaults.headers.CCWTOKEN = token
-
+  ax.defaults.headers.sign = sign
   return ax[type](url, params)
 }
 

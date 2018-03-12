@@ -8,20 +8,25 @@
   <div class="index">
     <div class="header">
       <div class="content">
-        <i class="icon-location" @click="goToLocation"></i>
+        <router-link to="/address" tag="i" class="icon-location"></router-link>
         <div class="select-market" @click="isShowMarketSelect=!isShowMarketSelect">{{market.marketName}}</div>
-        <i class="icon-search" @click="goToSearch"></i>
+        <router-link to="/search" class="icon-search" tag="i"></router-link>
       </div>
     </div>
     <div class="select-bar" v-show="isShowMarketSelect" v-if="marketList.length>0">
-      <ul class="list">
-        <li class="item border-1px" v-for="item in marketList" @click="selectMarket(item)">{{item.marketName}}</li>
-      </ul>
+      <div class="mask" @click="isShowMarketSelect=!isShowMarketSelect"></div>
+      <div class="list-wrapper">
+        <ul class="list">
+          <li class="item border-1px" v-for="(item,index) in marketList" @click="selectMarket(item)" :key="index">
+            {{item.marketName}}
+          </li>
+        </ul>
+      </div>
     </div>
     <div class="tab" v-if="menuList.length>0">
       <div ref="tabScroll" class="tab-wrapper">
         <ul class="tab-list" ref="tabList">
-          <li class="tab-item" v-for="item in menuList">
+          <li class="tab-item" v-for="(item,index) in menuList" :key="index">
             <span @click="selectType(item.businessType)" :class="{active:menuTypeActive===item.businessType}">{{item.businessTypeName}}</span>
           </li>
         </ul>
@@ -35,7 +40,7 @@
         <div class="title border-1px">全部品类</div>
         <i class="icon-close" @click="isShowClassify=!isShowClassify"></i>
         <ul class="list clearfix">
-          <li class="item" v-for="item in menuList" @click="selectType(item.businessType)">
+          <li class="item" v-for="(item,index) in menuList" @click="selectType(item.businessType)" :key="index">
             <img :src="item.iconUrl"/>
             <p>{{item.businessTypeName}}</p>
           </li>
@@ -59,9 +64,8 @@
               <router-link :to="{path: '/shopProduct/' + item.msShopId}"
                            tag="li"
                            class="item border-1px"
-                           v-for="item in sellerList"
-                           :key="item.msShopId">
-              <!--<li class="item border-1px" v-for="item in sellerList" :key="item.msShopId">-->
+                           v-for="(item,index) in sellerList"
+                           :key="index">
                 <div class="item-img">
                   <i class="status" v-if="item.businessStatus===2"></i>
                   <i class="seller-close" v-if="item.businessStatus===3">档口关店中</i>
@@ -81,7 +85,6 @@
                   </div>
                   <div class="dec">{{item.shopDesc}}</div>
                 </div>
-              <!--</li>-->
               </router-link>
             </ul>
           </div>
@@ -104,16 +107,16 @@
   export default {
     data() {
       return {
-        starDisabled: false,
-        starColor: '#FFBD52',
-        starFontSize: 12,
-        star: 4,
-        isShowClassify: false,
-        isShowMarketSelect: false,
-        swiperList: [],
-        sellerList: [],
-        marketList: [],
-        menuList: []
+        starDisabled: false, // 星星不允许点击
+        starColor: '#FFBD52', // 星星颜色
+        starFontSize: 12,   // 星星大小
+        isShowClassify: false, // 是否显示种类下拉
+        isShowMarketSelect: false, // 是否显示菜市场下拉
+        swiperList: [],// 轮播图
+        sellerList: [], // 档口列表
+        marketList: [],  // 菜市场列表
+        menuList: [],  // 菜单列表
+        market: {}, // 当前菜市场
       }
     },
     components: {
@@ -125,14 +128,11 @@
     },
     computed: {
       ...mapGetters([
-        'location',
-        'market'
+        'location'
       ])
     },
     created() {
-      this.getBanner();
-      this.getRecommendMarkets();
-      this.getSeller();
+      this.getRecommendMarkets()
       console.log(this.location)
     },
     watch: {
@@ -144,41 +144,35 @@
     },
     methods: {
       initTabScroll() {
-        this.tabGroup = this.$refs.tabList
-        this.children = this.tabGroup.children
-        let width = 0
-        for (let i = 0; i < this.children.length; i++) {
-          width += this.children[i].clientWidth
-        }
-        this.$refs.tabList.style.width = width + 'px';
-        this.$nextTick(() => {
-          if (!this.tabScroll) {
-            this.tabScroll = new BScroll(this.$refs.tabScroll, {
-              scrollX: true,
-              eventPassthrough: 'vertical',
-              click: true
-            });
-          } else {
-            this.tabScroll.refresh()
+        if (this.$refs.tabList) {
+          this.tabGroup = this.$refs.tabList
+          this.children = this.tabGroup.children
+          let width = 0
+          for (let i = 0; i < this.children.length; i++) {
+            width += this.children[i].clientWidth
           }
-        })
+          this.$refs.tabList.style.width = width + 'px';
+          this.$nextTick(() => {
+            if (!this.tabScroll) {
+              this.tabScroll = new BScroll(this.$refs.tabScroll, {
+                scrollX: true,
+                eventPassthrough: 'vertical',
+                click: true
+              });
+            } else {
+              this.tabScroll.refresh()
+            }
+          })
+        }
       },
       // 获取轮播图
       getBanner() {
         const type = 0
         api.getBanner(type).then((res) => {
-          if (res.data) {
+          if (res.code === 200 && res.data.length > 0) {
             this.swiperList = res.data
           }
         })
-      },
-      // 跳转到搜索页
-      goToSearch() {
-        this.$router.push('/search');
-      },
-      // 跳转到定位页
-      goToLocation() {
-        this.$router.push('/location')
       },
       // 加载图片
       loadImage() {
@@ -189,15 +183,16 @@
       },
       // 获取首页分类档口
       getSeller() {
-        api.getIndexStore(this.market.marketId).then((res) => {
-          if (res.data.length > 0) {
-            console.log(res)
-            this.menuList = res.data
-            this.menuTypeActive = res.data[0].businessType
-            this.sellerList = res.data[0].catShops
-            console.log(this.sellerList)
-          }
-        })
+        if (this.market) {
+          api.getIndexStore(this.market.marketId).then((res) => {
+            if (res.code === 200 && res.data.length > 0) {
+              console.log(res.data)
+              this.menuList = res.data
+              this.menuTypeActive = res.data[0].businessType
+              this.sellerList = res.data[0].catShops
+            }
+          })
+        }
       },
       // 获取推荐菜市场
       getRecommendMarkets() {
@@ -206,9 +201,13 @@
           latitude: this.location.position.lat
         };
         api.getRecommendMarkets(params).then((res) => {
-          if (res.data) {
-            this.setMarket(res.data[0]);
+          if (res.code === 200 && res.data.length > 0) {
+            console.log(res.data)
+            this.market = res.data[0]
             this.marketList = res.data
+            this.setMarket(res.data[0])
+            this.getBanner()
+            this.getSeller()
           }
         })
       },
@@ -218,6 +217,7 @@
         this.isShowMarketSelect = false
         this.sellerList = []
         this.menuList = []
+        this.market = item
         this.getSeller();
       },
       // 选择分类
@@ -225,7 +225,7 @@
         console.log(type)
         this.menuTypeActive = type
         this.isShowClassify = false
-        this.menuList.map((item, index) => {
+        this.menuList.forEach((item) => {
           if (item.businessType === type) {
             this.sellerList = item.catShops
           }
@@ -255,22 +255,41 @@
       right: 0;
       bottom: 0;
       top: 0;
-      background: rgba(0, 0, 0, 0.35);
       z-index: 999;
       overflow: hidden;
-      .list {
+      .mask {
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, .6);
+      }
+      .list-wrapper {
         position: absolute;
         z-index: 1000;
         top: 2rem;
         left: 50%;
         transform: translate(-50%);
-        padding: .3rem .6rem 0 .6rem;
-        background: url("../../common/img/index/market_bg.png") no-repeat center;
-        background-size: contain;
-        min-width: 8.6rem;
+        &:before {
+          display: block;
+          position: absolute;
+          top: -.3rem;
+          right: 1.2rem;
+          content: '';
+          width: 0;
+          height: 0;
+          border-left: .3rem solid transparent;
+          border-right: .3rem solid transparent;
+          border-bottom: .3rem solid #FFFFFF;
+          z-index: 1001;
+        }
+      }
+      .list {
         height: 6.5rem;
-        box-sizing: border-box;
         overflow: scroll;
+        background-color: #FFFFFF;
+        padding: .3rem .6rem 0 .6rem;
+        min-width: 8.6rem;
+        border-radius: .2rem;
+        box-sizing: border-box;
         .item {
           height: 2rem;
           line-height: 2rem;

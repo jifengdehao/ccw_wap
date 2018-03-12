@@ -5,51 +5,44 @@
 * 功能：定位+收货地址
 */
 <template>
-  <div class="address">
-    <m-header></m-header>
-    <div class="search-wrapper border-1px">
-      <div class="search-content">
-        <input type="text" class="search" placeholder="查找小区/大厦/学校等" v-model.trim="search" @keyup.enter="submit"/>
-        <i class="clear" v-show="search" @click="clearSearch"></i>
-      </div>
-    </div>
-    <div class="my-address">我的收货地址</div>
-    <div class="scroll-wrapper" v-if="addressList.length>0">
-      <scroll>
-        <div>
-          <swipeout>
-            <swipeout-item transition-mode="follow" :threshold=".5" v-for="(item,index) in customAddress" :key="index">
-              <div slot="right-menu">
-                <swipeout-button type="warn" @click.native="onButtonClick(item)">删除</swipeout-button>
-              </div>
-              <div slot="content" class="address-item border-1px">
-                <div class="name">{{item.receiver}}<span class="tel">{{item.contactNumber}}</span></div>
-                <div class="adr">{{item.addr}}</div>
-                <i class="icon-edit" @click="modifyAddress(item)"></i>
-              </div>
-            </swipeout-item>
-            <!--<swipeout-item transition-mode="follow" :threshold=".5">-->
-            <!--<div slot="right-menu">-->
-            <!--<swipeout-button type="warn">删除</swipeout-button>-->
-            <!--</div>-->
-            <!--<div slot="content" class="address-item border-1px">-->
-            <!--<div class="name">菜城<span class="tel">159 4546 4907</span></div>-->
-            <!--<div class="adr">广州市番禺区南桥街道南堤东路836号</div>-->
-            <!--<i class="icon-edit"></i>-->
-            <!--</div>-->
-            <!--</swipeout-item>-->
-          </swipeout>
+  <transition name="slide">
+    <div class="address">
+      <m-header></m-header>
+      <div class="search-wrapper border-1px">
+        <div class="search-content">
+          <input type="text" class="search" placeholder="查找小区/大厦/学校等" v-model.trim="search" @keyup.enter="submit"/>
+          <i class="clear" v-show="search" @click="clearSearch"></i>
         </div>
-      </scroll>
-    </div>
-    <div class="content" v-else>
-      <div class="no-address">
-        <img src="../../common/img/address/no_location_ic.png"/>
-        <p>还没有收货地址</p>
       </div>
+      <div class="my-address">我的收货地址</div>
+      <div class="scroll-wrapper" v-if="customAddress.length>0">
+        <scroll :data="customAddress">
+          <div>
+            <swipeout>
+              <swipeout-item transition-mode="follow" :threshold=".5" v-for="(item,index) in customAddress"
+                             :key="index">
+                <div slot="right-menu">
+                  <swipeout-button type="warn" @click.native="onButtonClick(item)">删除</swipeout-button>
+                </div>
+                <div slot="content" class="address-item border-1px">
+                  <div class="name">{{item.receiver}}<span class="tel">{{item.contactNumber}}</span></div>
+                  <div class="adr">{{item.addr}}</div>
+                  <router-link tag="i" class="icon-edit" :to="/address/+item.addrId"></router-link>
+                </div>
+              </swipeout-item>
+            </swipeout>
+          </div>
+        </scroll>
+      </div>
+      <div class="content" v-else>
+        <div class="no-address">
+          <img src="../../common/img/address/no_location_ic.png"/>
+          <p>还没有收货地址</p>
+        </div>
+      </div>
+      <router-link tag="div" to="/addAddress" class="add-address">新建收货地址</router-link>
     </div>
-    <router-link tag="div" to="/addAddress" class="add-address">新建收货地址</router-link>
-  </div>
+  </transition>
 </template>
 <script type="text/ecmascript-6">
   import topBar from '@/components/header/topBar'
@@ -62,9 +55,8 @@
   export default {
     data() {
       return {
-        search: '',
-        addressList: [1, 2],
-        customAddress: []
+        search: '', // 搜索
+        customAddress: []  // 用户地址列表
       }
     },
     components: {
@@ -81,35 +73,34 @@
       ])
     },
     created() {
-      this.getCustomAddress()
+      setTimeout(() => {
+        this.getCustomAddress()
+      }, 20)
     },
     methods: {
+      // 清除搜索
       clearSearch() {
         this.search = '';
       },
-      // 跳转到修改地址页
-      modifyAddress(item) {
-        this.$router.push('/address/' + item.addrId)
+      // 搜索
+      submit() {
+        console.log(this.search)
       },
       // 删除收货地址
       onButtonClick(item) {
-        console.log(item)
         let userInfo = JSON.parse(this.user)
         api.delCustomAddress(userInfo.cust_id, item.addrId).then((res) => {
-          if (res.code === 200) {
+          if (res.code === 200 && res.data) {
             console.log(res.data)
-            if (res.data) {
-              this.getCustomAddress()
-            }
+            this.getCustomAddress()
           }
         })
       },
       // 获取用户所有的收货地址
       getCustomAddress() {
         let userInfo = JSON.parse(this.user)
-        console.log(userInfo)
         api.getCustomAddress(userInfo.cust_id).then((res) => {
-          if (res.code === 200) {
+          if (res.code === 200 && res.data.length > 0) {
             console.log(res.data)
             this.customAddress = res.data
           }

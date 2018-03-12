@@ -25,5 +25,8 @@ export default {
   },
   user: state => {
     return state.user || JSON.parse(getStore('userInfo'))
+  },
+  addmodress: state => {
+    return state.addmodress || JSON.parse(getStore('addmodress'))
   }
 }
