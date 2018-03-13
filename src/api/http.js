@@ -76,7 +76,6 @@ export const getNearProducts = (marketId,params) => {
 /**
  * 获取店铺的信息
  */ 
-// GET /homePage/shopDesc/{shopId}
 export const getShopDesc = (shopId) => {
   return http.g(`/homePage/shopDesc/${shopId}`)
 }
@@ -92,13 +91,22 @@ export const getProductByShopId = (shopId) => {
 export const getCartAmountAndNum = (userId,marketId) => {
   return http.g(`/cart/obtainCartAmountAndNum/${userId}/${marketId}`)
 }
-// GET /homePage/shopRemarks/{shopId}
 /**
  * 获取店铺评价
  */ 
 export const getShopRemarks = (shopId,params) => {
   return http.g(`/homePage/shopRemarks/${shopId}`,params)
 }
+/**
+ * 添加商品到购物车
+ */ 
+export const postCarts = (params) => {
+  return http.p(`/cart/carts`,params)
+}
+
+/**
+ *  hushangjun    end
+ */
 
 /**
  *  负责人 -By zhangwenlong

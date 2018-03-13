@@ -6,8 +6,10 @@
  */
 <template>
   <div id="shopInfo">
-    <!-- 头部大图区域 -->
-    <div style="position:absolute;zIndex:1000">
+    <loading v-if="showLoading"></loading>
+    <div v-else>
+      <!-- 头部大图区域 -->
+    <div style="position:absolute;zIndex:1000" >
       <div class="topImg">
         <!-- 返回上一页图标 -->
         <img :src="shopDesc.shopPictureUrl" alt="">
@@ -56,17 +58,21 @@
     <!-- 店铺评价 -->
     <div v-else style="position: absolute;
       top: 0;
+      width:100%;
       height: 100%;
       padding-top: 10.5rem;
       box-sizing: border-box;
       zIndex: 10">
       <shop-evaluation :shopId="$route.params.id"></shop-evaluation>
     </div>
+    </div>
+    
   </div>
 </template>
 <script>
 import shopEvaluation from './productComponents/shopEvaluation'
 import { Tab, TabItem, Group, CellBox, Rater } from 'vux'
+import loading from '@/components/loading/loading'
 import * as api from '@/api/http'
 export default {
   components: {
@@ -75,11 +81,13 @@ export default {
     Group,
     CellBox,
     Rater,
-    shopEvaluation
+    shopEvaluation,
+    loading
   },
   props: {},
   data() {
     return {
+      showLoading: true,
       index: 0,
       shopDesc: {}, // 店铺说明
       showMessage: true,
@@ -87,7 +95,8 @@ export default {
       listTitle: ['店铺', '评价']
     }
   },
-  created() {},
+  created() {
+  },
   mounted() {
     this.getShopDesc()
   },
@@ -103,6 +112,9 @@ export default {
     getShopDesc() {
       api.getShopDesc(this.$route.params.id).then(res => {
         this.shopDesc = res.data
+        setTimeout(() => {
+          this.showLoading = false
+        }, 1000)
       })
     },
     goback() {

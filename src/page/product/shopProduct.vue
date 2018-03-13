@@ -6,7 +6,9 @@
  */
 <template>
   <div id="shopProduct">
-    <!-- 头部大图区域 -->
+    <loading v-if="showLoading"></loading>
+    <div v-else style="height: 100%">
+      <!-- 头部大图区域 -->
     <div style="position:absolute;zIndex:1000">
       <div class="topImg">
         <!-- 返回上一页图标 -->
@@ -21,7 +23,6 @@
               <span>{{shopDesc.shopName}} </span>
               <i class="showIcon" v-if="showIcon"></i>
             </p>
-            <!-- <rater v-model="countStar" :font-size="13" disabled></rater> -->
             <rater v-model="shopDesc.starLevel" active-color="#ffbd52" :font-size="13" disabled></rater>
           </div>
         </div>
@@ -60,7 +61,7 @@
                 </p>
               </div>
             </router-link>
-            <div v-if="item.items.length === 1" class="cartIcon icon">
+            <div v-if="item.items.length === 1" class="cartIcon icon" @click="postCarts(item.productId)">
               <img src="../../common/img/productIndex/shopping_ic.png" alt="">
             </div>
             <div v-else class="fontIcon icon" @click="showChang(index)">多规格</div>
@@ -71,17 +72,17 @@
     <!-- 购物栏 -->
     <div class="cartBar">
       <!-- 提示 -->
-      <p class="prompt" v-if="notSettlement">含有下架商品无法结算</p>
+      <!-- <p class="prompt" v-if="notSettlement">含有下架商品无法结算</p> -->
       <!-- 内容购物车 -->
       <div class="cartContent">
         <div class="left">
-          <p class="first">
-            <span>￥</span>30.8</p>
-          <p class="second">差30元免配送费</p>
+          <p class="first" >
+            <span>￥</span>{{cartdata.cartAmount}}</p>
+          <!-- <p class="second">差{{cartdata.instantRebateDeliveryCost/100 - cartdata.cartAmount}}元免配送费</p> -->
         </div>
-        <div class="right" :class="{current: notSettlement}" @click="toCart">去支付</div>
-        <div class="bigCart">
-          <p class="countIcon">21</p>
+        <div class="right" @click="toCart">去支付</div>
+        <div class="bigCart"  @click="toCart">
+          <p class="countIcon" v-if="cartdata.cartNum">{{cartdata.cartNum}}</p>
         </div>
       </div>
 
@@ -96,22 +97,26 @@
             <!-- <checker-item value="3">不切</checker-item> -->
           </checker>
         </div>
-        <div class="alertFooter" @click="hideModel">
-          确定(￥{{price/100}})
+        <div class="alertFooter" @click="postCarts">
+          确定( ¥ {{price/100}} )
         </div>
       </x-dialog>
     </div>
   </div>
+    
+  </div>
 </template>
 <script>
 import { mapActions, mapState } from 'vuex'
-import { Rater, XDialog, Checker, CheckerItem, Loading } from 'vux'
+import { Rater, XDialog, Checker, CheckerItem } from 'vux'
 import * as api from '@/api/http'
+import loading from '@/components/loading/loading'
 export default {
-  components: { Rater, XDialog, Checker, CheckerItem, Loading },
+  components: { Rater, XDialog, Checker, CheckerItem, loading },
   props: {},
   data() {
     return {
+      showLoading: true,
       index: 0,
       showIcon: true, // 到店铺详情的箭头
       selected: 0,
@@ -123,7 +128,16 @@ export default {
       showCart: false,
       show: false, // 弹框
       price: '',
-      demo2: 1,
+      demo2: '1',
+      cartdata: {}, // 购物车信息
+      params: {
+        // 添加商品到购物车的数据
+        attrId: null, // 规格
+        marketId: JSON.parse(window.sessionStorage.market).marketId, // 市场id
+        shopId: this.$route.params.id, // 店铺id
+        skuid: null, // 产品id
+        userId: this.$store.state.loginInfo.cust_id // 用户id
+      },
       notSettlement: false
     }
   },
@@ -139,6 +153,9 @@ export default {
     getShopDesc() {
       api.getShopDesc(this.$route.params.id).then(res => {
         this.shopDesc = res.data
+        setTimeout(() => {
+          this.showLoading = false
+        }, 1000)
       })
     },
     // 进入店铺页面   获取该店铺产品信息
@@ -160,7 +177,7 @@ export default {
           JSON.parse(window.sessionStorage.market).marketId
         )
         .then(res => {
-          console.log(res)
+          this.cartdata = res.data
         })
     },
     goback() {
@@ -178,19 +195,28 @@ export default {
     showChang(index) {
       this.show = true
       this.items = this.products[index].items
+      this.params.skuid = this.products[index].productId
     },
     // 多规格时选择
     changeitem(index) {
       this.price = this.items[index].curPrice
+      this.params.attrId = this.items[index].itemId
     },
-    // 点击取消弹框
-    hideModel() {
-      this.show = false
+
+    // 添加商品进入购物车
+    postCarts(skuid) {
+      if (typeof skuid == 'string') {
+        this.params.skuid = skuid
+      }
+      api.postCarts(this.params).then(res => {
+        this.getCartAmountAndNum()
+        this.show = false
+      })
     },
     // 去购物车结算
     toCart() {
       if (this.notSettlement === false) {
-        this.$router.push('cart')
+        this.$router.push('/cart')
       }
     },
     alert() {}
@@ -249,11 +275,12 @@ export default {
       }
       .shopMessageRight {
         float: left;
+        vertical-align: middle;
         p {
           height: 1.25rem;
           span {
             float: left;
-            line-height: 1.25rem;
+            line-height: 1.24rem;
             font-size: 0.9rem;
             color: #ffffff;
             letter-spacing: -0.08px;
@@ -263,7 +290,6 @@ export default {
             width: 1.25rem;
             height: 1.25rem;
             background: url('../../common/img/productIndex/core_Jump.png');
-            vertical-align: middle;
             background-size: contain;
           }
         }

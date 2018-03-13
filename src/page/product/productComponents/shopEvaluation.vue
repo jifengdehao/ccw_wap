@@ -24,7 +24,7 @@
         <div class="evaluationListRight left clearfix">
           <div style="width:100%;height:18px">
             <span style="font-size: 12px;color: #333333;letter-spacing: -0.09px; float:left">{{item.custName}}</span>
-            <span style="font-size: 10px;color: #999999;letter-spacing: -0.08px; float:right">{{item.remarkAt}}</span>
+            <span style="font-size: 10px;color: #999999;letter-spacing: -0.08px; float:right">{{item.remarkAt|formatTime}}</span>
           </div>
           <rater  v-model="item.starLevel" :font-size="12" disabled></rater>
           <div class="pinlun"><span>{{item.remarkContent}}</span></div>
@@ -50,7 +50,7 @@
           </div>
         </div>
       </li>
-      <li v-if="shopRemark.records === []" class="last noComment">
+      <li v-if="shopRemark.records.length === 0" class="last noComment">
         <span>该店铺近期暂无评价</span>
       </li>
       <li class="last" v-if="shopRemark.total > shopRemark.size"><span>加载更多</span></li>
@@ -60,6 +60,7 @@
 <script>
 import { Rater } from 'vux'
 import * as api from '@/api/http'
+import * as time from '@/until/time.js'
 export default {
   components: { Rater },
   props: ['shopId'],
@@ -77,6 +78,12 @@ export default {
       }
     }
   },
+  filters: {
+    formatTime: function(value) {
+      if (!value) return ''
+      return time.formatDateTime(value)
+    }
+  },
   created() {},
   mounted() {
     // 获取店铺评价
@@ -88,6 +95,8 @@ export default {
       api.getShopRemarks(this.shopId, this.params).then(res => {
         if (res.code === 200) {
           this.shopRemark = res.data
+          console.log(res);
+          
         }
       })
     }
@@ -131,6 +140,7 @@ export default {
   }
   .evaluationList {
     .last {
+      width: 100%;
       height: 40px;
       line-height: 40px;
       font-size: 12px;
