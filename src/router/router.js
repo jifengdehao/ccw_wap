@@ -26,7 +26,7 @@ const Search = anyscComponent('page/search/search') // 搜索
 
 const GoodDetails = anyscComponent('page/good-details/good-details') // 商品详情
 
-const addAddress = anyscComponent('page/address/add-address') //新增地址
+const addressDetails = anyscComponent('page/address/addressDetails') //地址详情
 
 const shopInfo = anyscComponent('page/product/shopInfo') //  店铺详情shopProduct
 
@@ -86,16 +86,16 @@ export default [
   {
     path: '/address/:id',
     name: '编辑地址',
-    component: addAddress
+    component: addressDetails
   },
   {
     path: '/location',
-    name: '设置位置',
+    name: '新增地址设置位置',
     component: Location
   },
   {
     path: '/location/:id',
-    name: '设置位置',
+    name: '修改地址设置位置',
     component: Location
   },
   {
@@ -177,6 +177,6 @@ export default [
   {
     path: '/addAddress',
     name: '新增地址',
-    component: addAddress
+    component: addressDetails
   }
 ]

@@ -91,7 +91,6 @@
         let userInfo = JSON.parse(this.user)
         api.delCustomAddress(userInfo.cust_id, item.addrId).then((res) => {
           if (res.code === 200 && res.data) {
-            console.log(res.data)
             this.getCustomAddress()
           }
         })
@@ -101,7 +100,6 @@
         let userInfo = JSON.parse(this.user)
         api.getCustomAddress(userInfo.cust_id).then((res) => {
           if (res.code === 200 && res.data.length > 0) {
-            console.log(res.data)
             this.customAddress = res.data
           }
         })

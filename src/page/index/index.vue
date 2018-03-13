@@ -133,14 +133,13 @@
     },
     created() {
       this.getRecommendMarkets()
-      console.log(this.location)
     },
     watch: {
       'menuList'() {
         this.$nextTick(() => {
           this.initTabScroll();
         });
-      }
+      },
     },
     methods: {
       initTabScroll() {

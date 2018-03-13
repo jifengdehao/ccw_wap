@@ -50,6 +50,5 @@ export default {
   // 选中或者修改的地址
   [types.SET_ADDMODRESS](state, addmodress) {
     state.addmodress = addmodress
-    setStore('addmodress', JSON.stringify(addmodress))
   }
 }
