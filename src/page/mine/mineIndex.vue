@@ -14,7 +14,12 @@
           <img :src="data.head_url != 'null' ? data.head_url : ''" />
           <ul>
             <li>{{data.cust_name}}</li>
-            <li>{{data.mobileno}}</li>
+            <!-- <li>{{data.mobileno}}</li> -->
+						<li>
+							<span>{{data.mobileno.substr(0,3)}}</span>
+							<span>{{data.mobileno.substr(3,4)}}</span>
+							<span>{{data.mobileno.substr(7)}}</span>
+						</li>
           </ul>
           <p><a></a></p>
         </div>
@@ -74,7 +79,7 @@
           </div>
           <div @click="dialog=true">
             <i></i>
-            <span>我的设置</span>
+            <span>设置</span>
             <p><i></i></p>
           </div>
         </section>
@@ -123,7 +128,8 @@ export default {
   data() {
     return {
       dialog: false, //  弹框bool值
-      custId: '', //  用户ID
+			custId: '', //  用户ID
+			
       data: null //  接受到的数据
     }
   },
@@ -133,7 +139,8 @@ export default {
       this.custId = this.$store.state.loginInfo.cust_id
     } else {
       this.custId = JSON.parse(this.$store.state.loginInfo).cust_id
-    }
+		}
+		// console.log(this.$store.state.loginInfo);
     // this.custId = loginInfo.cust_id
     this.getUserCenter()
   },
@@ -144,12 +151,13 @@ export default {
   methods: {
     //  路由跳转
     jumpTo() {
-      this.$router.push('/myCoupon')
+      this.$router.push('/myCoupon');
     },
     //  获取个人中心数据
     getUserCenter() {
       http.getUserCenter(this.custId, {}).then(response => {
-        this.data = response.data
+				this.data = response.data;
+				console.log(response.data)
       })
     }
   },
