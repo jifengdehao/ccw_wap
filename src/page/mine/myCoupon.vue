@@ -10,7 +10,7 @@
     <div class="contain-div-box">
       <top-bar></top-bar>
       <!-- 优惠券主体 -->
-      <div class="coupon-box">
+      <div class="coupon-box" v-show="hiddeen">
         <!-- 折扣券 -->
         <ul class="discount">
           <li>
@@ -22,9 +22,9 @@
               <span>折扣券</span>
             </div>
           </li>
-        </ul>
-        <!-- 折扣券 --> 
-        
+        </ul>   
+        <!-- 折扣券 -->
+
         <!-- 满减券 -->
         <ul class="money-off">
           <li>
@@ -68,9 +68,15 @@
             </div>
           </li>
         </ul>
-        <!-- 抵扣券 -->
+       <!-- 抵扣券 -->
+
+
       </div>
       <!-- 优惠券主体 -->
+      <div v-show="!hiddeen" class="no_couponbackgroud">
+        <img :src="no_couponBackgroudImg" alt="" class="no_couponbackimg">
+        <p>您还没有优惠券</p>
+      </div>
     </div>
   </transition>
 </template>
@@ -81,14 +87,31 @@ export default {
   components: { topBar },
   props: {},
   data() {
-    return {}
+    return {
+      hiddeen:false,
+      no_couponBackgroudImg:'',//无优惠券背景图片
+    }
   },
   created() {},
-  mounted() {},
+  mounted() {
+    // this.getCoupon();
+    this.no_couponBackgroudImg = require('../../common/img/mine/no_coupon_ic.png')
+  },
   activited: {},
   update: {},
   beforeRouteUpdate: {},
-  methods: {},
+  methods: {
+    getCoupon(){
+      console.log(this.$store.state.market);
+      return
+      // let customerId =        //用户ID
+      // let marketId =          //市场ID
+      http.getCoupon(1,2, {}).then(response => {
+				console.log(response)
+      })
+    }
+
+  },
   filter: {},
   computed: {},
   watch: {}
@@ -164,4 +187,19 @@ export default {
     }
   }
 }
+.no_couponbackgroud{
+    width:100%;
+    text-align: center;
+    .no_couponbackimg{
+        display: inline-block;
+        width: 100px;
+        height: 100px;
+        padding-top: 170px;
+    }
+    p{
+      padding-top: 24px;
+      font-size: 0.6rem;
+    }
+}
+
 </style>
