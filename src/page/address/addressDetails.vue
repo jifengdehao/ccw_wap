@@ -68,12 +68,11 @@
           this.form = this.addmodress
         }
       }
-      // console.log(this.addmodress)
     },
     watch: {
-      '$route' (to, from) {
+      '$route'(to, from) {
         // 对路由变化作出响应...
-        console.log(to)
+        console.log(this.$route.path)
       }
     },
     methods: {
@@ -84,7 +83,6 @@
         } else {
           this.$router.push('/location')
         }
-
       },
       submit() {
         if (this.addressId) {
@@ -116,7 +114,6 @@
         if (addressId) {
           api.getCustomAddressDetails(addressId).then((res) => {
             if (res.code === 200) {
-              console.log(res.data)
               this.form = res.data
             }
           })
@@ -125,11 +122,8 @@
       // 修改用户收货地址
       putCustomAddress() {
         api.putCustomAddress(this.form).then((res) => {
-          if (res.code === 200) {
-            console.log(res.data)
-            if (res.data) {
-              this.$router.back()
-            }
+          if (res.code === 200 && res.data) {
+            this.$router.back()
           }
         })
       }

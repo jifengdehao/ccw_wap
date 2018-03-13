@@ -89,9 +89,10 @@
         map = new AMap.Map('map')
         map.plugin('AMap.Geolocation', function () {
           geolocation = new AMap.Geolocation({
-            timeout: 10000,   //超过10秒后停止定位，默认：无穷大
-            maximumAge: 0 //定位结果缓存0毫秒，默认：
-          });
+            enableHighAccuracy: true,//是否使用高精度定位，默认:true
+            timeout: 10000,          //超过10秒后停止定位，默认：无穷大
+            maximumAge: 0           //定位结果缓存0毫秒，默认：0
+          })
           map.addControl(geolocation)
           geolocation.getCurrentPosition()
           AMap.event.addListener(geolocation, 'complete', function (data) {  //返回定位成功信息
@@ -119,6 +120,7 @@
             })
           })
           AMap.event.addListener(geolocation, 'error', function (data) {  //返回定位失败信息
+            console.log(data)
             if (data.info == 'FAILED') {
               alert('获取你当前位置失败！')
             }

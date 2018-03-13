@@ -68,7 +68,8 @@ const webpackConfig = {
     ]
   },
   externals: {
-    'AMap': 'AMap'
+    'AMap': 'AMap',
+    'AMapUI': 'AMapUI'
   },
   node: {
     // prevent webpack from injecting useless setImmediate polyfill because Vue
