@@ -5,36 +5,34 @@
 * 功能：新增和修改地址
 */
 <template>
-  <transition name="slide">
-    <div class="add-address">
-      <m-header></m-header>
-      <div class="content">
-        <div class="form-group">
-          <div class="item border-1px select">
-            <label>小区/大厦/学校:</label>
-            <input type="text" placeholder="点击选择" @click="selectPlace" v-model.tirm="form.buildingName"/>
-          </div>
-          <div class="item">
-            <label>详细地址:</label>
-            <input type="text" placeholder="请输入详细地址" v-model.trim="form.addr"/>
-          </div>
+  <div class="add-address">
+    <m-header></m-header>
+    <div class="content">
+      <div class="form-group">
+        <div class="item border-1px select">
+          <label>小区/大厦/学校:</label>
+          <input type="text" placeholder="点击选择" @click="selectPlace" v-model.tirm="form.buildingName"/>
         </div>
-        <div class="form-group">
-          <div class="item border-1px">
-            <label>收货人:</label>
-            <input type="text" placeholder="请填写收货人的姓名或称呼" v-model.trim="form.receiver"/>
-          </div>
-          <div class="item">
-            <label>联系电话:</label>
-            <input type="number" placeholder="请填写联系电话" v-model.trim="form.contactNumber"/>
-          </div>
-        </div>
-        <div class="form-group form-btn">
-          <button type="button" class="btn-submit" @click.stop="submit">确定</button>
+        <div class="item">
+          <label>详细地址:</label>
+          <input type="text" placeholder="请输入详细地址" v-model.trim="form.addr"/>
         </div>
       </div>
+      <div class="form-group">
+        <div class="item border-1px">
+          <label>收货人:</label>
+          <input type="text" placeholder="请填写收货人的姓名或称呼" v-model.trim="form.receiver"/>
+        </div>
+        <div class="item">
+          <label>联系电话:</label>
+          <input type="number" placeholder="请填写联系电话" v-model.trim="form.contactNumber"/>
+        </div>
+      </div>
+      <div class="form-group form-btn">
+        <button type="button" class="btn-submit" @click.stop="submit">确定</button>
+      </div>
     </div>
-  </transition>
+  </div>
 </template>
 <script type="text/ecmascript-6">
   import mHeader from '@/components/header/m-header'
@@ -59,21 +57,17 @@
         'addmodress'
       ])
     },
-    created() {
-      // 获取详情 修改
-      if (this.addressId) {
-        this.getCustomAddressDetails(this.addressId)
-      } else {
-        if (this.addmodress) {
-          this.form = this.addmodress
+    mounted() {
+      this.$nextTick(() => {
+        // 获取详情 修改
+        if (this.addressId) {
+          this.getCustomAddressDetails(this.addressId)
+        } else {
+          if (this.addmodress) {
+            this.form = this.addmodress
+          }
         }
-      }
-    },
-    watch: {
-      '$route'(to, from) {
-        // 对路由变化作出响应...
-        console.log(this.$route.path)
-      }
+      })
     },
     methods: {
       // 跳转到位置

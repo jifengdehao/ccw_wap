@@ -52,7 +52,7 @@
       <scroll ref="scroll" :data="sellerList" v-else>
         <div>
           <slide :showDot="false">
-            <div v-for="item in swiperList">
+            <div v-for="(item,index) in swiperList" :key="index">
               <a :href="item.linkUrl">
                 <img @load="loadImage" :src="item.picUrl" class="needsclick"/>
               </a>
@@ -138,8 +138,8 @@
       'menuList'() {
         this.$nextTick(() => {
           this.initTabScroll();
-        });
-      },
+        })
+      }
     },
     methods: {
       initTabScroll() {
@@ -185,7 +185,6 @@
         if (this.market) {
           api.getIndexStore(this.market.marketId).then((res) => {
             if (res.code === 200 && res.data.length > 0) {
-              console.log(res.data)
               this.menuList = res.data
               this.menuTypeActive = res.data[0].businessType
               this.sellerList = res.data[0].catShops
@@ -201,7 +200,6 @@
         };
         api.getRecommendMarkets(params).then((res) => {
           if (res.code === 200 && res.data.length > 0) {
-            console.log(res.data)
             this.market = res.data[0]
             this.marketList = res.data
             this.setMarket(res.data[0])
@@ -221,7 +219,6 @@
       },
       // 选择分类
       selectType(type) {
-        console.log(type)
         this.menuTypeActive = type
         this.isShowClassify = false
         this.menuList.forEach((item) => {
@@ -229,7 +226,6 @@
             this.sellerList = item.catShops
           }
         })
-        console.log(this.sellerList)
       },
       ...mapMutations({
         setMarket: 'SET_MARKET'
