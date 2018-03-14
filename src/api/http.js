@@ -237,3 +237,22 @@ export const getSearchNearProduct = (marketId, params) => {
 export const getSearchNearSeller = (marketId, params) => {
   return http.g(`/homePage/nearShops/${marketId}`, params)
 }
+
+/**
+ * 2018/3/14
+ * author: zhangwenlong
+ * email: zhangwenlong@ccw163.com
+ * 功能模块: 领劵中心
+ */
+export const getCouponListData = (customerId, marketId) => {
+  return http.g(`/personCenter/coupon/${customerId}/${marketId}/receiveCore`)
+}
+/**
+ * 2018/3/14
+ * author: zhangwenlong
+ * email: zhangwenlong@ccw163.com
+ * 功能模块: 领取优惠卷
+ */
+export const linQuCoupon = (customerId, couponId) => {
+  return http.p(`/personCenter/coupon/${customerId}/${couponId}/receive`)
+}

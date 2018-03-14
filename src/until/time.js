@@ -6,7 +6,7 @@
  */
 
 // 将分秒时间格式化
-export function timeFormat (now) {
+export function timeFormat(now) {
   let year = now.getFullYear()
   let month = now.getMonth() + 1
   let date = now.getDate()
@@ -17,7 +17,7 @@ export function timeFormat (now) {
 }
 
 // 时间戳格式化 yyyy-MM-dd hh:mm:ss
-export function formatDateTime (inputTime) {
+export function formatDateTime(inputTime) {
   if (inputTime) {
     var date = new Date(inputTime)
     var y = date.getFullYear()
@@ -32,5 +32,18 @@ export function formatDateTime (inputTime) {
     minute = minute < 10 ? ('0' + minute) : minute
     second = second < 10 ? ('0' + second) : second
     return y + '-' + m + '-' + d + ' ' + h + ':' + minute + ':' + second
+  }
+}
+
+// 时间戳格式化 yyyy-MM-dd
+export function formatDate(inputTime) {
+  if (inputTime) {
+    var date = new Date(inputTime)
+    var y = date.getFullYear()
+    var m = date.getMonth() + 1
+    m = m < 10 ? ('0' + m) : m
+    var d = date.getDate()
+    d = d < 10 ? ('0' + d) : d
+    return y + '-' + m + '-' + d
   }
 }

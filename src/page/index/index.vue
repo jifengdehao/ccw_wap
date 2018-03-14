@@ -6,6 +6,7 @@
 */
 <template>
   <div class="index">
+    <top-bar></top-bar>
     <div class="header">
       <div class="content">
         <router-link to="/address" tag="i" class="icon-location"></router-link>
@@ -92,16 +93,19 @@
       </scroll>
     </div>
     <m-footer></m-footer>
+    <coupon></coupon>
   </div>
 </template>
 <script type="text/ecmascript-6">
-  import Scroll from '@/components/scroll/scroll';
-  import mFooter from '@/components/footer/menuBar';
-  import Slide from '@/components/slide/slide';
-  import loading from '@/components/loading/loading';
-  import BScroll from 'better-scroll';
-  import {Rater} from 'vux';
-  import {mapGetters, mapMutations} from 'vuex';
+  import Scroll from '@/components/scroll/scroll'
+  import mFooter from '@/components/footer/menuBar'
+  import Slide from '@/components/slide/slide'
+  import loading from '@/components/loading/loading'
+  import Coupon from '@/page/index/coupon'
+  import TopBar from '@/page/index/topBar'
+  import BScroll from 'better-scroll'
+  import {Rater} from 'vux'
+  import {mapGetters, mapMutations} from 'vuex'
   import * as api from '@/api/http'
 
   export default {
@@ -124,7 +128,9 @@
       mFooter,
       Slide,
       Rater,
-      loading
+      loading,
+      Coupon,
+      TopBar
     },
     computed: {
       ...mapGetters([

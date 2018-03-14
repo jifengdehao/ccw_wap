@@ -20,6 +20,7 @@
         <div>
           <ul class="list">
             <li class="item border-1px" v-for="(item,index) in mapList" :key="index"
+                :class="{disabled:item.isDisabled === false}"
                 @click="getAddressLocation(item)">
               <div class="name">{{item.name}}<span class="current" v-if="index === 0">当前</span></div>
               <div class="dec">{{item.address}}</div>
@@ -50,6 +51,7 @@
   import * as api from '@/api/http.js'
   import {mapMutations, mapGetters} from 'vuex'
   import Scroll from '@/components/scroll/scroll'
+  import Vue from 'vue'
 
   export default {
     data() {
@@ -76,9 +78,8 @@
     methods: {
       // 获取选中的地址
       getAddressLocation(item) {
-        if (this.addressId) {
+        if (this.addressId && item.isDisabled) {
           // 修改地址
-          console.log(item)
           let params = {
             custId: JSON.parse(this.user).cust_id,
             latitude: item.location.lat,
@@ -93,13 +94,15 @@
             }
           })
         } else {
-          this.setAddmodress({
-            buildingName: item.name,
-            addr: item.address,
-            longitude: item.location.lng,
-            latitude: item.location.lat
-          })
-          this.$router.back()
+          if (item.isDisabled) {
+            this.setAddmodress({
+              buildingName: item.name,
+              addr: item.address,
+              longitude: item.location.lng,
+              latitude: item.location.lat
+            })
+            this.$router.back()
+          }
         }
       },
       // 搜索
@@ -141,18 +144,17 @@
             })
             polygon.setMap(map)
             map.setFitView()
-            AMap.plugin(['AMap.Autocomplete','AMap.PlaceSearch'],function(){
+            AMap.plugin(['AMap.Autocomplete', 'AMap.PlaceSearch'], function () {
               let autoOptions = {
                 input: 'search'//使用联想输入的input的id
               }
-              let autocomplete= new AMap.Autocomplete(autoOptions);
+              let autocomplete = new AMap.Autocomplete(autoOptions);
               let placeSearch = new AMap.PlaceSearch({
-                map:map
+                map: map
               })
-              AMap.event.addListener(autocomplete, 'select', function(e){
+              AMap.event.addListener(autocomplete, 'select', function (e) {
                 //TODO 针对选中的poi实现自己的功能
-                // placeSearch.search(e.poi.name)
-                // console.log(e)
+                placeSearch.search(e.poi.name)
               })
             })
             if (this.addressId) {
@@ -166,7 +168,27 @@
                       map: map
                     })
                     positionPicker.on('success', function (positionResult) {
-                      self.mapList = positionResult.regeocode.pois
+                      // 判断是否在配送范围
+                      let positionArr = new Array()
+                      positionResult.regeocode.pois.forEach((item) => {
+                        positionArr.push({
+                          latitude: item.location.lat,
+                          longitude: item.location.lng
+                        })
+                      })
+                      let params = {
+                        marketId: '-1',
+                        positionInfos: positionArr
+                      }
+                      api.isAddressCover(params).then((res) => {
+                        if (res.code === 200 && res.data.length > 0) {
+                          let pois = positionResult.regeocode.pois
+                          for (let i = 0; i < res.data.length; i++) {
+                            Vue.set(pois[i], 'isDisabled', res.data[i])
+                          }
+                          self.mapList = positionResult.regeocode.pois
+                        }
+                      })
                     })
                     positionPicker.on('fail', function (positionResult) {
                       self.mapList = []
@@ -215,7 +237,27 @@
                       map: map
                     })
                     positionPicker.on('success', function (positionResult) {
-                      self.mapList = positionResult.regeocode.pois
+                      //判断是否在配送范围
+                      let positionArr = new Array()
+                      positionResult.regeocode.pois.forEach((item) => {
+                        positionArr.push({
+                          latitude: item.location.lat,
+                          longitude: item.location.lng
+                        })
+                      })
+                      let params = {
+                        marketId: '-1',
+                        positionInfos: positionArr
+                      }
+                      api.isAddressCover(params).then((res) => {
+                        if (res.code === 200 && res.data.length > 0) {
+                          let pois = positionResult.regeocode.pois
+                          for (let i = 0; i < res.data.length; i++) {
+                            Vue.set(pois[i], 'isDisabled', res.data[i])
+                          }
+                          self.mapList = positionResult.regeocode.pois
+                        }
+                      })
                     })
                     positionPicker.on('fail', function (positionResult) {
                       self.mapList = []
@@ -349,15 +391,18 @@
       overflow-y: scroll;
     }
     .list {
-      padding: 0 .6rem;
       background-color: #ffffff;
       .item {
         height: 3rem;
-        background: url("../../common/img/location/maps.png") no-repeat left .6rem;
+        background: url("../../common/img/location/maps.png") no-repeat .6rem .6rem;
         background-size: .6rem .75rem;
-        padding-left: 1rem;
+        padding-left: 1.6rem;
+        padding-right: .6rem;
         padding-top: .5rem;
         box-sizing: border-box;
+        &.disabled {
+          background-color: #f0f0f0;
+        }
         .border-1px(#e5e5e5);
         &:last-child {
           .border-none();
