@@ -94,7 +94,7 @@ export default {
   },
   created() {},
   mounted() {
-    // this.getCoupon();
+    this.getCoupon();
     this.no_couponBackgroudImg = require('../../common/img/mine/no_coupon_ic.png')
   },
   activited: {},
@@ -102,7 +102,7 @@ export default {
   beforeRouteUpdate: {},
   methods: {
     getCoupon(){
-      console.log(this.$store.state.market);
+      console.log(this.$store.state.loginInfo);
       return
       // let customerId =        //用户ID
       // let marketId =          //市场ID

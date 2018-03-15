@@ -237,3 +237,15 @@ export const getSearchNearProduct = (marketId, params) => {
 export const getSearchNearSeller = (marketId, params) => {
   return http.g(`/homePage/nearShops/${marketId}`, params)
 }
+
+/**
+ * 2018/3/14
+ * author: huyong
+ * email: huyong@caichengwang.com
+ * 功能模块: 查询购物车内的总件数
+ */
+export const getShopStoreNum = (userId,marketId) => {
+   return http.g(`/cart/cartNum/${userId}/${marketId}`)
+}
+
+
