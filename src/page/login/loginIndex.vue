@@ -15,8 +15,10 @@
             <input type="number" placeholder="请输入您的手机号码" ref="telphone" v-model="mobileNumber" maxlength="11">
           </div>
           <div class="write-box verification">
-            <i></i>
-            <input type="text" placeholder="验证码" ref="verification" v-model="loginParams.code">
+            <div>
+              <i></i>
+              <input type="text" placeholder="验证码" ref="verification" v-model="loginParams.code">
+            </div>
             <button :class="{'active':isActive}" @click="isTelPhone">{{words}}</button>
           </div>
         </div>
@@ -81,7 +83,7 @@ export default {
     },
     //  定时器是否开启
     runClock() {
-      let times = 5
+      let times = 60
       this.isActive = true
       this.timer = setInterval(() => {
         this.words = `${times--}s`
@@ -124,28 +126,27 @@ export default {
   display: flex;
   justify-content: center;
   width: 100%;
-  height: 9.82rem;
-  padding-top: 3.45rem;
-  background-size: 16.4rem auto;
+  height: 10.5rem;
+  padding-top: 0.45rem;
+  padding-bottom: 1rem;
   img {
-    width: 16.4rem;
+    width: 13.8rem;
   }
 }
 
 .main-box {
-  position: fixed;
-  top: 16.05rem;
-  left: 0;
   width: 100%;
   height: 6.65rem;
+  margin-bottom: 0.25rem;
   .write-box {
     position: relative;
     display: flex;
     justify-content: flex-start;
     align-items: center;
-    width: 14.25rem;
-    height: 2.25rem;
-    margin: auto;
+    width: 16.5rem;
+    height: 2.2rem;
+    border: 1px solid #ccc;
+    margin: 0 auto 0.8rem;
     &:after {
       display: block;
       position: absolute;
@@ -154,13 +155,13 @@ export default {
       content: '';
       width: 100%;
       height: 0;
-      border-bottom: 1px solid #e5e5e5;
     }
     &.telphone {
       i {
         display: inline-block;
         width: 11px;
         height: 17px;
+        margin-left: 1.15rem;
         background-size: 11px 17px;
         background-image: url(../../common/img/login/iPhone.png);
       }
@@ -169,54 +170,63 @@ export default {
       }
     }
     &.verification {
-      i {
-        display: inline-block;
-        width: 17px;
-        height: 17px;
-        background-size: 17px 17px;
-        background-image: url(../../common/img/login/verification@2x.png);
+      border: 0;
+      div {
+        display: flex;
+        flex-grow: 1;
+        width: 11.2rem;
+        height: 100%;
+        align-items: center;
+        border: 1px solid #ccc;
+        i {
+          display: inline-block;
+          width: 17px;
+          height: 17px;
+          margin-left: 1.15rem;
+          background-size: 17px 17px;
+          background-image: url(../../common/img/login/verification@2x.png);
+        }
       }
+
       button {
-        position: absolute;
-        right: 0;
-        width: 3.5rem;
-        height: 1.4rem;
-        font-size: 12px;
-        color: #fff;
-        background-color: #ffbd52;
+        box-sizing: border-box;
+        width: 5rem;
+        height: 2.2rem;
+        font-size: 16px;
+        margin-left: 7px;
+        color: #ffbd52;
+        background-color: #fff;
+        border: 1px solid #ccc;
         border-radius: 2px;
         &.active {
+          color: #fff;
           background-color: #bbb;
         }
       }
     }
     input[type='text'],
     input[type='number'] {
-      margin-left: 10px;
-      font-size: 14px;
+      text-indent: 10px;
       color: #bbb;
+      font-size: 18px;
     }
     input[type='number'] {
-      text-indent: 6px;
+      text-indent: 16px;
     }
   }
 }
 
 .operate {
-  position: fixed;
-  top: 22.7rem;
-  left: 0;
   width: 100%;
   text-align: center;
   button {
-    width: 14.25rem;
+    width: 16.5rem;
     height: 2.2rem;
     font-size: 18px;
     color: #fff;
     line-height: 2.2rem;
-    background: linear-gradient(left bottom, #ff9367, #ffe294);
-    box-shadow: 0 4px 12px 3px #ffe5b6;
-    border-radius: 5.25rem;
+    background: #ffbd52;
+    border-radius: 4px;
     margin: auto;
   }
 }

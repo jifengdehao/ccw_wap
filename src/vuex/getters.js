@@ -26,5 +26,7 @@ export default {
   user: state => {
     return state.user || JSON.parse(getStore('userInfo'))
   },
-  addmodress: state => state.addmodress
+  addmodress: state => state.addmodress,
+  isOpenCoupon: state => state.isOpenCoupon,
+  isOpenTopBar: state => state.isOpenTopBar
 }

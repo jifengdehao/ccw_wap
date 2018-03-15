@@ -50,5 +50,13 @@ export default {
   // 选中或者修改的地址
   [types.SET_ADDMODRESS](state, addmodress) {
     state.addmodress = addmodress
+  },
+  // 优惠卷
+  [types.SET_ISOPENCOUPON](state, isOpenCoupon) {
+    state.isOpenCoupon = isOpenCoupon
+  },
+  // 下载App弹窗
+  [types.SET_ISOPENTOPBAR](state, isOpenTopBar) {
+    state.isOpenTopBar = isOpenTopBar
   }
 }

@@ -160,7 +160,8 @@ export default {
     },
     // 选择菜市场
     selectMarket(item) {
-      // console.log(item)
+      console.log('选择菜市场')
+      console.log(item)
       this.setMarket(item)
       this.$router.push('/index')
     }
