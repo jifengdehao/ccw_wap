@@ -79,7 +79,7 @@
       getAddressLocation(item) {
         if (this.addressId) {
           // 修改地址
-          console.log(item)
+          
           let params = {
             custId: JSON.parse(this.user).cust_id,
             latitude: item.location.lat,
@@ -90,10 +90,8 @@
           }
           api.putCustomAddress(params).then((res) => {
             if (res.code === 200 && res.data) {
-              console.log(res.data)
             }
           })
-          console.log(params)
         } else {
           this.setAddmodress({
             buildingName: item.name,
@@ -106,7 +104,6 @@
       },
       // 搜索
       submit() {
-        console.log(this.search)
       },
       // 清除搜索字段
       clearSearch() {
@@ -119,9 +116,10 @@
       // 获取配送范围
       getDeliverArea() {
         api.getDeliverArea().then((res) => {
+          console.log(res,'didian')
           if (res.code === 200) {
             let polygonArr = new Array(), self = this
-            for (let i = 0; i < res.data.length; i++) {
+            for (let i = 0; i < Array.of(res.data).length; i++) {
               let arj = JSON.parse(res.data[i])
               for (let j = 0; j < arj.length; j++) {
                 polygonArr.push(arj[j])
@@ -146,9 +144,8 @@
             if (this.addressId) {
               api.getCustomAddressDetails(this.addressId).then((res) => {
                 if (res.code === 200) {
-                  console.log(res.data)
                   let lnglatXY = [res.data.longitude, res.data.latitude]
-                  new AMap.Marker({  //添加maker
+                 var postionMarker =  new AMap.Marker({  //添加maker
                     map: map,
                     position: lnglatXY,
                     icon: new AMap.Icon({
@@ -167,7 +164,7 @@
                     map.addControl(geolocation)
                     // geolocation.getCurrentPosition()
                     AMap.event.addListener(geolocation, 'complete', function (data) { //返回定位信息
-                      console.log(data)
+                      console.log(data,'定位的点')
                     })
                     AMap.event.addListener(geolocation, 'error', function (data) {  //返回定位出错信息
                       if (data.info == 'FAILED') {
@@ -182,13 +179,11 @@
                       map: map
                     })
                     positionPicker.on('success', function (positionResult) {
-                      console.log(positionResult)
                       self.mapList = positionResult.regeocode.pois
                     })
                     positionPicker.on('fail', function (positionResult) {
-                      console.log(positionResult)
                     })
-                    positionPicker.start()
+                    positionPicker.start(lnglatXY)
                   })
                 }
               })
@@ -203,7 +198,6 @@
                 map.addControl(geolocation)
                 geolocation.getCurrentPosition()
                 AMap.event.addListener(geolocation, 'complete', function (data) { //返回定位信息
-                  console.log(data)
                 })
                 AMap.event.addListener(geolocation, 'error', function (data) {  //返回定位出错信息
                   if (data.info == 'FAILED') {

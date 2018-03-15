@@ -61,7 +61,7 @@
                 </p>
               </div>
             </router-link>
-            <div v-if="item.items.length === 1" class="cartIcon icon" @click="postCarts(item.productId)">
+            <div v-if="item.items.length === 1" class="cartIcon icon" @click="postCarts(item.items[0].itemId)">
               <img src="../../common/img/productIndex/shopping_ic.png" alt="">
             </div>
             <div v-else class="fontIcon icon" @click="showChang(index)">多规格</div>
@@ -77,7 +77,7 @@
       <div class="cartContent">
         <div class="left">
           <p class="first" >
-            <span>￥</span>{{cartdata.cartAmount}}</p>
+            <span>￥</span>{{cartdata.cartAmount/100}}</p>
           <!-- <p class="second">差{{cartdata.instantRebateDeliveryCost/100 - cartdata.cartAmount}}元免配送费</p> -->
         </div>
         <div class="right" @click="toCart">去支付</div>
@@ -92,7 +92,7 @@
       <x-dialog class="dialog" v-model="show">
         <div class="alertContent clearfix" >
           <h5>规格：</h5>
-          <checker v-model="demo2" default-item-class="demo2-item" selected-item-class="demo2-item-selected">
+          <checker v-model="params.skuid" default-item-class="demo2-item" selected-item-class="demo2-item-selected">
             <checker-item :value="item.itemId" v-for="(item,index) in items" :key="index" @on-item-click = "changeitem(index)">{{item.names}}</checker-item>
             <!-- <checker-item value="3">不切</checker-item> -->
           </checker>
@@ -128,7 +128,6 @@ export default {
       showCart: false,
       show: false, // 弹框
       price: '',
-      demo2: '1',
       cartdata: {}, // 购物车信息
       params: {
         // 添加商品到购物车的数据
@@ -155,7 +154,7 @@ export default {
         this.shopDesc = res.data
         setTimeout(() => {
           this.showLoading = false
-        }, 1000)
+        }, 500)
       })
     },
     // 进入店铺页面   获取该店铺产品信息
@@ -195,17 +194,18 @@ export default {
     showChang(index) {
       this.show = true
       this.items = this.products[index].items
-      this.params.skuid = this.products[index].productId
+      // this.params.skuid = this.products[index].productId
+      this.params.skuid = this.items[0].itemId
     },
     // 多规格时选择
     changeitem(index) {
       this.price = this.items[index].curPrice
-      this.params.attrId = this.items[index].itemId
+      this.params.skuid = this.items[index].itemId
     },
 
     // 添加商品进入购物车
     postCarts(skuid) {
-      if (typeof skuid == 'string') {
+      if (typeof skuid == 'number') {
         this.params.skuid = skuid
       }
       api.postCarts(this.params).then(res => {

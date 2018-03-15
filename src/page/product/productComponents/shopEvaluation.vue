@@ -16,7 +16,8 @@
         <li>商品新鲜(2)</li>
       </ul>
     </div> -->
-    <ul class="evaluationList">
+    <loading v-if="showLoading"></loading>
+    <ul class="evaluationList" v-else>
       <li v-for="(item,index) in shopRemark.records" :key="index" class="clearfix replyList">
         <div class="evaluationListLeft left">
           <img :src="item.picUrl" alt="用户头像">
@@ -50,7 +51,7 @@
           </div>
         </div>
       </li>
-      <li v-if="shopRemark.records.length === 0" class="last noComment">
+      <li v-if="!shopRemark.records" class="last noComment">
         <span>该店铺近期暂无评价</span>
       </li>
       <li class="last" v-if="shopRemark.total > shopRemark.size"><span>加载更多</span></li>
@@ -61,11 +62,13 @@
 import { Rater } from 'vux'
 import * as api from '@/api/http'
 import * as time from '@/until/time.js'
+import loading from '@/components/loading/loading'
 export default {
-  components: { Rater },
+  components: { Rater, loading },
   props: ['shopId'],
   data() {
     return {
+      showLoading: true,
       haveComment: false,
       showLabel: true, // 是否有评价标签
       name: '小赖来',
@@ -95,8 +98,7 @@ export default {
       api.getShopRemarks(this.shopId, this.params).then(res => {
         if (res.code === 200) {
           this.shopRemark = res.data
-          console.log(res);
-          
+          this.showLoading = false
         }
       })
     }

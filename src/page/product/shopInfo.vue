@@ -95,8 +95,7 @@ export default {
       listTitle: ['店铺', '评价']
     }
   },
-  created() {
-  },
+  created() {},
   mounted() {
     this.getShopDesc()
   },
@@ -114,7 +113,7 @@ export default {
         this.shopDesc = res.data
         setTimeout(() => {
           this.showLoading = false
-        }, 1000)
+        }, 500)
       })
     },
     goback() {
@@ -130,6 +129,7 @@ export default {
       )
     }
   },
+
   filfter: {},
   computed: {},
   watch: {}
