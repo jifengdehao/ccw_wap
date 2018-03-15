@@ -122,9 +122,9 @@
             <div class="title">属性：</div>
             <ul class="list">
               <li class="item"
-                  v-for="(item,index) in spec" :key="index"
+                  v-for="(item,index) in attr" :key="index"
                   @click="selectAttr(item,index)"
-                  :class="{'active':specType === index}">{{item.names}}
+                  :class="{'active':attrType === index}">{{item.attrName}}
               </li>
             </ul>
           </div>
@@ -213,7 +213,6 @@
     methods: {
       // 搜索关键字
       selectTag(item) {
-        console.log(item)
         this.search = item.tagName
         this.submit()
       },
@@ -343,8 +342,7 @@
           type: this.status
         }
         api.getHotSearchTag(params).then((res) => {
-          if (res.code === 200) {
-            console.log(res.data)
+          if (res.code === 200 && res.data.length > 0) {
             this.hotSearchTag = res.data
           }
         })
@@ -620,6 +618,7 @@
             border-radius: 5rem;
             color: #999999;
             border: 0.5px solid #e5e5e5;
+            margin-bottom: .5rem;
           }
           .active {
             color: #fff;

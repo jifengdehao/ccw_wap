@@ -16,7 +16,7 @@
         <div>
           <div v-if="swiperList.length>0">
             <slide :showDot="false">
-              <div v-for="item in swiperList">
+              <div v-for="(item,index) in swiperList" :key="index">
                 <a :href="item.linkUrl">
                   <img @load="loadImage" :src="item.picUrl" class="needsclick"/>
                 </a>
@@ -72,8 +72,8 @@
     },
     mounted() {
       setTimeout(() => {
-        this.initMap();
-      }, 20);
+        this.initMap()
+      }, 20)
     },
     methods: {
       // 加载图片
@@ -96,7 +96,6 @@
           map.addControl(geolocation)
           geolocation.getCurrentPosition()
           AMap.event.addListener(geolocation, 'complete', function (data) {  //返回定位成功信息
-            console.log(data)
             that.setLocation(data) // 保存定位信息
             that.locationName = data.formattedAddress // 位置标题信息
             let params = {
@@ -109,9 +108,9 @@
             api.isAddressCover(params).then((res) => {
               if (res.code === 200) {
                 if (!res.data[0]) {
-                  alert('当前位置不在配送范围内');
-                  that.getNearMarket(params.positionInfos[0]);
-                  that.getBanner();
+                  alert('当前位置不在配送范围内')
+                  that.getRecommendMarkets(params.positionInfos[0])
+                  that.getBanner()
                   that.showLocationTip = true
                 } else {
                   that.$router.push('/index')
@@ -127,11 +126,10 @@
           })
         })
       },
-      //获取附近的菜市场，不在配送范围内
-      getNearMarket(params) {
-        api.getNearMarket(params).then((res) => {
+      //获取推荐的菜市场，不在配送范围内
+      getRecommendMarkets(params) {
+        api.getRecommendMarkets(params).then((res) => {
           if (res.code === 200 && res.data.length > 0) {
-            console.log(res.data);
             this.marketList = res.data
           }
         })
@@ -146,16 +144,14 @@
         const type = 1
         api.getBanner(type).then((res) => {
           if (res.code === 200 && res.data.length > 0) {
-            console.log(res.data)
             this.swiperList = res.data
           }
         })
       },
       // 选择菜市场
       selectMarket(item) {
-        console.log(item)
-        this.setMarket(item);
-        this.$router.push('/index');
+        this.setMarket(item)
+        this.$router.push('/index')
       }
     }
   }

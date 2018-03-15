@@ -25,11 +25,11 @@
       }
     },
     watch: {
-//      '$route'(to, from) {
-//        if (to.fullPath === '/addAddress' && from.fullPath === '/address') {
-//          this.setAddmodress(null)
-//        }
-//      }
+      '$route'(to, from) {
+        if (to.path === '/addAddress' && from.path === '/address') {
+          this.setAddmodress(null)
+        }
+      }
     },
     created() {
       this.isWebchat()
@@ -68,6 +68,7 @@
         this.isWebchatBool = false
       },
       // ...mapMutations(['SET_LOGININFO', 'SET_ADDMODRESS'])
+
       // vux 设置或保存修改的地址
       ...mapMutations({
         setAddmodress: 'SET_ADDMODRESS',

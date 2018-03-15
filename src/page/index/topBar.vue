@@ -5,7 +5,7 @@
 * 功能：全局顶部弹窗
 */
 <template>
-  <div class="top-bar" v-if="this.isOpenTopBar">
+  <div class="top-bar" v-if="isOpenTopBar">
     <i class="close" @click.stop="close"></i>
     <div>点击打开按钮立即下载菜城APP</div>
     <button type="button" class="open" @click.stop="open">打开</button>
@@ -13,14 +13,12 @@
 </template>
 <script type="text/ecmascript-6">
   import {mapGetters, mapMutations} from 'vuex'
+  import {isAndroid} from '@/until/getApp.js'
+
+  const ANDROID = 'http://zhushou.360.cn/detail/index/soft_id/3931033'
+  const IOS = 'https://itunes.apple.com/cn/app/%E8%8F%9C%E5%9F%8E/id1290015027?mt=8'
 
   export default {
-    props: {
-      isTopBar: {
-        type: Boolean,
-        default: false
-      }
-    },
     computed: {
       ...mapGetters([
         'isOpenTopBar'
@@ -29,9 +27,14 @@
     methods: {
       close() {
         this.setIsOpenTopBar(false)
+        this.$emit('closeTopBar')
       },
       open() {
-        console.log("open")
+        if (isAndroid()) {
+          location.href = ANDROID
+        } else {
+          location.href = IOS
+        }
       },
       ...mapMutations({
         setIsOpenTopBar: 'SET_ISOPENTOPBAR'
@@ -43,14 +46,9 @@
   .top-bar {
     height: 2.2rem;
     width: 100%;
-    position: fixed;
     line-height: 2.2rem;
     text-align: center;
     font-size: .7rem;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 998;
     background: url("../../common/img/topbar/download_bg.png") no-repeat center;
     background-size: contain;
     .close {
