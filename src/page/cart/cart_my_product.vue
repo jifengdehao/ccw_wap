@@ -6,26 +6,28 @@
  */
 
 <template>
-  <div>
-    <div class="header">
-      <top-bar></top-bar>
-    </div>
-    <div class="group-item-info">
+  	<div>
+    	<div class="header">
+      	<top-bar></top-bar>
+   	</div>
       <ul>
-        <li>
-           <div class="pic">
-             <img src="../../common/img/cart/payment_wechat.png" alt="">
-           </div>
-           <div class="group-item-text">
-             <p>越南进口红心火龙果2个装大果单果约新鲜水果大果单果</p>
-             <p> <span>数量：2</span> <span>约0.5斤/份</span> </p>
-             <p>清河水果专卖店</p>
-             <p>¥16.8</p>
-           </div>
-        </li>
+        	<li v-for="item in 5" :key="item">
+            <div class="productList">
+              	<div class="productLiLeft"><img src="../../common/img/cart/payment_wechat.png" alt=""></div>
+              	<div class="productLiRight">
+						<p class="produtcname">越南进口红心火龙果2个装大果单果约新鲜水果大果单果</p>
+						<p class="productnum">数量:
+							<span class="">2</span>
+							<span>约0.5斤/份</span>
+						</p>
+						<p class="productnum">清河水果专卖店</p>
+						<p class="productprice">¥16.8</p>
+              	</div>
+					<hr style="width:100%;opacity:0.5;"/>
+            </div>
+        	</li>
       </ul>
-    </div>
-  </div>
+   </div>
 </template>
 <script>
 import topBar from '@/components/header/topBar'
@@ -42,6 +44,34 @@ export default {
 </script>
 <style lang="less" scoped>
 .header { height: 44 / 20rem; }
-.group-item-info { position: relative; }
-.group-item-info .pic { width: 70.5 / 20rem; height: 70.5 / 20rem; position: absolute; top: 0; left: 0;}
+.productList{margin: 10.5px 18px 8px 12px;height: 80/20rem;}
+.productLiLeft{
+  float: left;
+  img{
+    width: 70.5/20rem;height: 70.5/20rem;padding-top: 5px;
+  }
+}
+.productLiRight{margin-left: 18.2px;float: left;width: 253/20rem;
+  .produtcname{
+    color: #333;
+    font-size: 12px;
+    line-height: 17px;
+  }
+  .productnum{
+    color: #999;
+    font-size: 10px;
+    line-height: 14px;
+    span{
+      margin: 0 5px;
+    }
+  }
+  .productprice{
+    font-size: 16px;color: red;line-height: 22px;
+  }
+}
+
+
+
+
+
 </style>

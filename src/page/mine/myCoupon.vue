@@ -73,7 +73,7 @@
 
 
         <!-- 满减券 -->
-        <ul class="money-off" v-for="coupon in coupons">
+        <ul class="money-off" v-for="(coupon,index) in coupons" :key="index">
           <li>
             <div class="words">
               <p>￥&nbsp;<span class="emphasis">{{coupon.discount}}</span>&nbsp;&nbsp;{{coupon.useConditionString}}</p>
@@ -102,39 +102,39 @@
   </transition>
 </template>
 <script>
-import * as http from '@/api/http'
-import { Toast, Scroller } from 'vux'
-import topBar from '../../components/header/topBar'
-import { formatDate } from '@/until/time'
+import * as http from "@/api/http";
+import { Toast, Scroller } from "vux";
+import topBar from "../../components/header/topBar";
+import { formatDate } from "@/until/time";
 export default {
-  name: 'myCoupon',
+  name: "myCoupon",
   components: { topBar, Scroller, Toast },
   props: {},
   data() {
     return {
-      customerId: '',
-      marketId: '',
+      customerId: "",
+      marketId: "",
       status: 0,
       coupons: null //  优惠券数据
-    }
+    };
   },
   created() {
-    if (typeof this.$store.state.loginInfo === 'object') {
-      this.customerId = this.$store.state.loginInfo.cust_id
+    if (typeof this.$store.state.loginInfo === "object") {
+      this.customerId = this.$store.state.loginInfo.cust_id;
     } else {
-      this.customerId = JSON.parse(this.$store.state.loginInfo).cust_id
+      this.customerId = JSON.parse(this.$store.state.loginInfo).cust_id;
     }
     if (this.$store.state.market === null) {
-      this.marketId = sessionStorage.getItem('market')
-        ? JSON.parse(sessionStorage.getItem('market')).marketId
-        : ''
+      this.marketId = sessionStorage.getItem("market")
+        ? JSON.parse(sessionStorage.getItem("market")).marketId
+        : "";
     } else {
-      this.marketId = this.$store.state.market.marketId
+      this.marketId = this.$store.state.market.marketId;
     }
     if (!this.marketId || !this.customerId) {
-      this.$vux.toast.text('请确认登录且确认市场了?', 'middle')
+      this.$vux.toast.text("请确认登录且确认市场了?", "middle");
     } else {
-      this.getCoupon()
+      this.getCoupon();
     }
   },
   mounted() {},
@@ -149,20 +149,20 @@ export default {
           status: 1
         })
         .then(response => {
-          this.coupons = response.data
-        })
+          this.coupons = response.data;
+        });
     },
     filterTime(time) {
-      return formatDate(time)
+      return formatDate(time);
     }
   },
   filter: {},
   computed: {},
   watch: {}
-}
+};
 </script>
 <style lang="less" scoped>
-@import '../../common/css/variable.less';
+@import "../../common/css/variable.less";
 .coupon-box {
   box-sizing: border-box;
   padding: 44px 17px;
