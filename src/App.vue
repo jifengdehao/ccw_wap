@@ -45,7 +45,9 @@ export default {
     } else {
       if (this.isWebchatBool) {
         //  微信内置浏览器登录
-        this.$router.push('/webchat')
+        // this.$router.push('/webchat')  分销延期
+
+        this.$router.push('/login')
       } else {
         //  H5登录
         this.$router.push('/login')
@@ -55,11 +57,8 @@ export default {
   methods: {
     //  是否是微信登录
     isWebchat() {
-      let ua = window.navigator.userAgent.toLowerCase()
-      if (ua.match(/MicroMessenger/i) == 'micromessenger') {
-        this.isWebchatBool = true
-      }
-      this.isWebchatBool = false
+      this.isWebchatBool =
+        navigator.userAgent.toLowerCase().indexOf('micromessenger') !== -1
     },
     ...mapMutations(['SET_LOGININFO'])
   }

@@ -128,13 +128,11 @@ export default {
     }
   },
   created() {
-    // let loginInfo = JSON.parse(this.$store.state.loginInfo)
     if (typeof this.$store.state.loginInfo === 'object') {
       this.custId = this.$store.state.loginInfo.cust_id
     } else {
       this.custId = JSON.parse(this.$store.state.loginInfo).cust_id
     }
-    // this.custId = loginInfo.cust_id
     this.getUserCenter()
   },
   mounted() {},
