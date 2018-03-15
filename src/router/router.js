@@ -159,7 +159,7 @@ export default [
   },
   {
     path: '/myCoupon',
-    name: '我的优惠券（个人中心）',
+    name: '我的券包',
     component: myCoupon
   },
   {
