@@ -85,16 +85,14 @@
       },
       // 获取定位
       initMap() {
-        let that = this
-        let map, geolocation
+        let that = this, map, geolocation
         map = new AMap.Map('map')
         map.plugin('AMap.Geolocation', function () {
           geolocation = new AMap.Geolocation({
-            timeout: 10000,   //超过10秒后停止定位，默认：无穷大
-            maximumAge: 0, //定位结果缓存0毫秒，默认：0
-            extensions: 'all', // extensions用来设定是否需要周边POI、道路交叉口等信息，可选值'base'、'all'
-            accuracy: 500  // 精度范围
-          });
+            enableHighAccuracy: true,//是否使用高精度定位，默认:true
+            timeout: 10000,          //超过10秒后停止定位，默认：无穷大
+            maximumAge: 0           //定位结果缓存0毫秒，默认：0
+          })
           map.addControl(geolocation)
           geolocation.getCurrentPosition()
           AMap.event.addListener(geolocation, 'complete', function (data) {  //返回定位成功信息
@@ -122,6 +120,7 @@
             })
           })
           AMap.event.addListener(geolocation, 'error', function (data) {  //返回定位失败信息
+            console.log(data)
             if (data.info == 'FAILED') {
               alert('获取你当前位置失败！')
             }
@@ -131,7 +130,7 @@
       //获取附近的菜市场，不在配送范围内
       getNearMarket(params) {
         api.getNearMarket(params).then((res) => {
-          if (res.code === 200) {
+          if (res.code === 200 && res.data.length > 0) {
             console.log(res.data);
             this.marketList = res.data
           }
@@ -146,7 +145,7 @@
       getBanner() {
         const type = 1
         api.getBanner(type).then((res) => {
-          if (res.code === 200) {
+          if (res.code === 200 && res.data.length > 0) {
             console.log(res.data)
             this.swiperList = res.data
           }

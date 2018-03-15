@@ -67,8 +67,12 @@ const webpackConfig = {
       }
     ]
   },
+  // cdn
   externals: {
-    'AMap': 'AMap'
+    'AMap': 'AMap',
+    'AMapUI': 'AMapUI',
+    'vue': 'Vue',
+    'axios': 'axios'
   },
   node: {
     // prevent webpack from injecting useless setImmediate polyfill because Vue

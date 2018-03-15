@@ -37,11 +37,15 @@ export function formatDateTime(inputTime) {
   }
 }
 
-//  时间戳格式化 yyyy-MM-dd
-export function timeDate(time) {
-  let now = new Date(time)
-  let year = now.getFullYear()
-  let month = now.getMonth() + 1
-  let date = now.getDate()
-  return year + '-' + month + '-' + date
+// 时间戳格式化 yyyy-MM-dd
+export function formatDate(inputTime) {
+  if (inputTime) {
+    var date = new Date(inputTime)
+    var y = date.getFullYear()
+    var m = date.getMonth() + 1
+    m = m < 10 ? ('0' + m) : m
+    var d = date.getDate()
+    d = d < 10 ? ('0' + d) : d
+    return y + '-' + m + '-' + d
+  }
 }

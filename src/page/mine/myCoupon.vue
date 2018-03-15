@@ -94,6 +94,10 @@
       </div>
       </scroller>
       <!-- 优惠券主体 -->
+      <div v-show="!hiddeen" class="no_couponbackgroud">
+        <img :src="no_couponBackgroudImg" alt="" class="no_couponbackimg">
+        <p>您还没有优惠券</p>
+      </div>
     </div>
   </transition>
 </template>
@@ -101,7 +105,7 @@
 import * as http from '@/api/http'
 import { Toast, Scroller } from 'vux'
 import topBar from '../../components/header/topBar'
-import { timeDate } from '@/until/time'
+import { formatDate } from '@/until/time'
 export default {
   name: 'myCoupon',
   components: { topBar, Scroller, Toast },
@@ -149,7 +153,7 @@ export default {
         })
     },
     filterTime(time) {
-      return timeDate(time)
+      return formatDate(time)
     }
   },
   filter: {},
@@ -225,6 +229,20 @@ export default {
         }
       }
     }
+  }
+}
+.no_couponbackgroud {
+  width: 100%;
+  text-align: center;
+  .no_couponbackimg {
+    display: inline-block;
+    width: 100px;
+    height: 100px;
+    padding-top: 170px;
+  }
+  p {
+    padding-top: 24px;
+    font-size: 0.6rem;
   }
 }
 </style>
