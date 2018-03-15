@@ -161,7 +161,7 @@ export default {
         display: inline-block;
         width: 11px;
         height: 17px;
-        margin-left: 1.15rem;
+        margin-left: 15px;
         background-size: 11px 17px;
         background-image: url(../../common/img/login/iPhone.png);
       }
@@ -182,7 +182,7 @@ export default {
           display: inline-block;
           width: 17px;
           height: 17px;
-          margin-left: 1.15rem;
+          margin-left: 15px;
           background-size: 17px 17px;
           background-image: url(../../common/img/login/verification@2x.png);
         }
@@ -211,7 +211,7 @@ export default {
       font-size: 18px;
     }
     input[type='number'] {
-      text-indent: 16px;
+      text-indent: 12px;
     }
   }
 }
