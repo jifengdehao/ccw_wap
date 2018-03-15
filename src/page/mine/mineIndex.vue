@@ -105,7 +105,7 @@
           </div>        
           <!-- 弹框内容 -->
           <div class="down-btn">
-            <button>立即下载</button>
+            <button @click="downApp">立即下载</button>
           </div>
           <!-- 关闭 -->
           <div class="alert-close">
@@ -128,8 +128,8 @@ export default {
   data() {
     return {
       dialog: false, //  弹框bool值
-			custId: '', //  用户ID
-			
+      custId: '', //  用户ID
+      phoneId: 0, //  0是PC  1是android 2是Iphone
       data: null //  接受到的数据
     }
   },
@@ -140,6 +140,7 @@ export default {
       this.custId = JSON.parse(this.$store.state.loginInfo).cust_id
     }
     this.getUserCenter()
+    this.isPC()
   },
   mounted() {},
   activited: {},
@@ -148,13 +149,43 @@ export default {
   methods: {
     //  路由跳转
     jumpTo() {
-      this.$router.push('/myCoupon');
+      this.$router.push('/myCoupon')
     },
     //  获取个人中心数据
     getUserCenter() {
       http.getUserCenter(this.custId, {}).then(response => {
-				this.data = response.data;
-				console.log(response.data)
+        this.data = response.data
+        console.log(response.data)
+      })
+    },
+    //  判断是什么设备
+    isPC() {
+      let agent = navigator.userAgent
+      if (agent.indexOf('Android') > -1) {
+        //  安卓设备
+        this.phoneId = 1
+      } else if (agent.indexOf('iPhone') > -1) {
+        this.phoneId = 2
+      } else {
+        this.phoneId = 0
+      }
+    },
+    //  下载App
+    downApp() {
+      http.downLoadApp().then(response => {
+        let data = response.data
+        console.log(this.phoneId)
+        switch (this.phoneId) {
+          case 1:
+            //  安卓下载
+            window.open(data.androidUrl)
+            break
+          case 2:
+            //  ios下载
+            window.open(data.url)
+            break
+        }
+        this.dialog = false
       })
     }
   },
