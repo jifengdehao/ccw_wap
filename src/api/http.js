@@ -1,4 +1,4 @@
-/*
+/**
  * @Author: WuFengliang
  * @Date: 2018-01-02 11:40:39
  * DeveloperMailbox:   wufengliang@ccw163.com
@@ -240,12 +240,19 @@ export const getSearchNearSeller = (marketId, params) => {
 
 /**
  * 2018/3/14
- * author: huyong
- * email: huyong@caichengwang.com
- * 功能模块: 查询购物车内的总件数
+ * author: zhangwenlong
+ * email: zhangwenlong@ccw163.com
+ * 功能模块: 领劵中心
  */
-export const getShopStoreNum = (userId,marketId) => {
-   return http.g(`/cart/cartNum/${userId}/${marketId}`)
+export const getCouponListData = (customerId, marketId) => {
+  return http.g(`/personCenter/coupon/${customerId}/${marketId}/receiveCore`)
 }
-
-
+/**
+ * 2018/3/14
+ * author: zhangwenlong
+ * email: zhangwenlong@ccw163.com
+ * 功能模块: 领取优惠卷
+ */
+export const linQuCoupon = (customerId, couponId) => {
+  return http.p(`/personCenter/coupon/${customerId}/${couponId}/receive`)
+}

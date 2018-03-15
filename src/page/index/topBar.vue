@@ -5,13 +5,15 @@
 * 功能：全局顶部弹窗
 */
 <template>
-  <div class="top-bar" v-if="isTopBar">
+  <div class="top-bar" v-if="this.isOpenTopBar">
     <i class="close" @click.stop="close"></i>
     <div>点击打开按钮立即下载菜城APP</div>
     <button type="button" class="open" @click.stop="open">打开</button>
   </div>
 </template>
 <script type="text/ecmascript-6">
+  import {mapGetters, mapMutations} from 'vuex'
+
   export default {
     props: {
       isTopBar: {
@@ -19,13 +21,21 @@
         default: false
       }
     },
+    computed: {
+      ...mapGetters([
+        'isOpenTopBar'
+      ])
+    },
     methods: {
       close() {
-        return this.isTopBar = false
+        this.setIsOpenTopBar(false)
       },
       open() {
         console.log("open")
-      }
+      },
+      ...mapMutations({
+        setIsOpenTopBar: 'SET_ISOPENTOPBAR'
+      })
     }
   }
 </script>

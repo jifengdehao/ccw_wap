@@ -122,9 +122,9 @@ export default {
     // console.log(this.$store.state.market);
 
     // return
-		http.getShopStoreNum(userid,marketId).then(response=>{
-			console.log(response);
-		})
+		// http.getShopStoreNum(userid,marketId).then(response=>{
+		// 	console.log(response);
+		// })
 	 },
     onSeeProduct() { // 跳转我购买商品页面
       this.$router.push('cartMyProduct')

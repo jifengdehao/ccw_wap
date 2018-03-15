@@ -11,7 +11,7 @@ import Vue from 'vue'
 import { AlertPlugin } from 'vux'
 Vue.use(AlertPlugin)
 
-var ax = axios.create({
+let ax = axios.create({
   baseURL: process.env.BASE_API,
   withCredentials: true, // 跨域携带证书
   timeout: 30000,

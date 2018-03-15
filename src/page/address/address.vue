@@ -5,7 +5,6 @@
 * 功能：定位+收货地址
 */
 <template>
-  <transition name="slide">
     <div class="address">
       <m-header></m-header>
       <div class="search-wrapper border-1px">
@@ -42,7 +41,6 @@
       </div>
       <router-link tag="div" to="/addAddress" class="add-address">新建收货地址</router-link>
     </div>
-  </transition>
 </template>
 <script type="text/ecmascript-6">
   import topBar from '@/components/header/topBar'

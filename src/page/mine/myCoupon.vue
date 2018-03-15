@@ -10,9 +10,10 @@
     <div class="contain-div-box">
       <top-bar></top-bar>
       <!-- 优惠券主体 -->
-      <div class="coupon-box" v-show="hiddeen">
+      <scroller lock-x>
+      <div class="coupon-box">
         <!-- 折扣券 -->
-        <ul class="discount">
+        <!-- <ul class="discount">
           <li>
             <div class="words">
               <p><span class="emphasis">8.8</span>折&nbsp;&nbsp;满200元可用</p>
@@ -22,27 +23,27 @@
               <span>折扣券</span>
             </div>
           </li>
-        </ul>   
-        <!-- 折扣券 -->
-
+        </ul> -->
+        <!-- 折扣券 --> 
+        
         <!-- 满减券 -->
-        <ul class="money-off">
+        <!-- <ul class="money-off">
           <li>
             <div class="words">
               <p>￥&nbsp;<span class="emphasis">22</span>&nbsp;&nbsp;满200元可用</p>
-              <p><span>2017-07-01</span>至<span>2017-07-15</span></p>
+              <p><span>2017-07-01</span>至<span>2017-07-15</span></p> -->
               <!-- 新人券 LOGO -->
-              <img src="../../common/img/coupon/new_tab@2x.png" />
+              <!-- <img src="../../common/img/coupon/new_tab@2x.png" />
             </div>
             <div class="explain">
               <span>满减券</span>
             </div>
           </li>
-        </ul>
+        </ul> -->
         <!-- 满减券 -->
 
         <!-- 配送抵扣券 -->
-        <ul class="distribution">
+        <!-- <ul class="distribution">
           <li>
             <div class="words">
               <p>￥&nbsp;<span class="emphasis">22</span>&nbsp;&nbsp;满200元可用</p>
@@ -53,11 +54,11 @@
               <span>抵扣券</span>
             </div>
           </li>
-        </ul>
+        </ul> -->
         <!-- 配送抵扣券 -->
 
         <!-- 抵扣券 -->
-        <ul class="deduction">
+        <!-- <ul class="deduction">
           <li>
             <div class="words">
               <p>￥&nbsp;<span class="emphasis">22</span>&nbsp;&nbsp;满200元可用</p>
@@ -67,11 +68,31 @@
               <span>抵扣券</span>
             </div>
           </li>
+        </ul> -->
+        <!-- 抵扣券 -->
+
+
+        <!-- 满减券 -->
+        <ul class="money-off" v-for="(coupon,index) in coupons" :key="index">
+          <li>
+            <div class="words">
+              <p>￥&nbsp;<span class="emphasis">{{coupon.discount}}</span>&nbsp;&nbsp;{{coupon.useConditionString}}</p>
+              <p><span>{{filterTime(coupon.effectiveStartTime)}}</span>至<span>{{filterTime(coupon.effectiveEndTime)}}</span></p>
+              <!-- 新人券 LOGO -->
+              <img v-if="coupon.couponSet === 1" src="../../common/img/coupon/new_tab@2x.png" />
+            </div>
+            <div class="explain">
+              <span v-if="coupon.types === 1">抵扣券</span>
+              <span v-if="coupon.types === 2">折扣券</span>
+              <span v-if="coupon.types === 3">满减券</span>
+              <span v-if="coupon.types === 4">配送费</span>
+              <span v-if="coupon.types === 4">抵扣券</span>
+            </div>
+          </li>
         </ul>
-       <!-- 抵扣券 -->
-
-
+        <!-- 满减券 -->
       </div>
+      </scroller>
       <!-- 优惠券主体 -->
       <div v-show="!hiddeen" class="no_couponbackgroud">
         <img :src="no_couponBackgroudImg" alt="" class="no_couponbackimg">
@@ -81,44 +102,67 @@
   </transition>
 </template>
 <script>
-import topBar from '../../components/header/topBar'
+import * as http from "@/api/http";
+import { Toast, Scroller } from "vux";
+import topBar from "../../components/header/topBar";
+import { formatDate } from "@/until/time";
 export default {
-  name: 'myCoupon',
-  components: { topBar },
+  name: "myCoupon",
+  components: { topBar, Scroller, Toast },
   props: {},
   data() {
     return {
-      hiddeen:false,
-      no_couponBackgroudImg:'',//无优惠券背景图片
+      customerId: "",
+      marketId: "",
+      status: 0,
+      coupons: null //  优惠券数据
+    };
+  },
+  created() {
+    if (typeof this.$store.state.loginInfo === "object") {
+      this.customerId = this.$store.state.loginInfo.cust_id;
+    } else {
+      this.customerId = JSON.parse(this.$store.state.loginInfo).cust_id;
+    }
+    if (this.$store.state.market === null) {
+      this.marketId = sessionStorage.getItem("market")
+        ? JSON.parse(sessionStorage.getItem("market")).marketId
+        : "";
+    } else {
+      this.marketId = this.$store.state.market.marketId;
+    }
+    if (!this.marketId || !this.customerId) {
+      this.$vux.toast.text("请确认登录且确认市场了?", "middle");
+    } else {
+      this.getCoupon();
     }
   },
-  created() {},
-  mounted() {
-    this.getCoupon();
-    this.no_couponBackgroudImg = require('../../common/img/mine/no_coupon_ic.png')
-  },
+  mounted() {},
   activited: {},
   update: {},
   beforeRouteUpdate: {},
   methods: {
-    getCoupon(){
-      console.log(this.$store.state.loginInfo);
-      return
-      // let customerId =        //用户ID
-      // let marketId =          //市场ID
-      http.getCoupon(1,2, {}).then(response => {
-				console.log(response)
-      })
+    //  获取优惠券
+    getCoupon() {
+      http
+        .getCoupon(this.customerId, this.marketId, {
+          status: 1
+        })
+        .then(response => {
+          this.coupons = response.data;
+        });
+    },
+    filterTime(time) {
+      return formatDate(time);
     }
-
   },
   filter: {},
   computed: {},
   watch: {}
-}
+};
 </script>
 <style lang="less" scoped>
-@import '../../common/css/variable.less';
+@import "../../common/css/variable.less";
 .coupon-box {
   box-sizing: border-box;
   padding: 44px 17px;
@@ -187,19 +231,18 @@ export default {
     }
   }
 }
-.no_couponbackgroud{
-    width:100%;
-    text-align: center;
-    .no_couponbackimg{
-        display: inline-block;
-        width: 100px;
-        height: 100px;
-        padding-top: 170px;
-    }
-    p{
-      padding-top: 24px;
-      font-size: 0.6rem;
-    }
+.no_couponbackgroud {
+  width: 100%;
+  text-align: center;
+  .no_couponbackimg {
+    display: inline-block;
+    width: 100px;
+    height: 100px;
+    padding-top: 170px;
+  }
+  p {
+    padding-top: 24px;
+    font-size: 0.6rem;
+  }
 }
-
 </style>
