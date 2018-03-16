@@ -74,7 +74,7 @@
           </router-link>
           <router-link tag="div" class="cart" to="/cart">
             <i class="icon-cart">
-              <div class="badge">2</div>
+              <div class="badge" v-if="badge">{{badge}}</div>
             </i>
             <div class="text">购物车</div>
           </router-link>
@@ -89,6 +89,7 @@
   import Scroll from '@/components/scroll/scroll'
   import * as api from '@/api/http.js'
   import * as time from '@/until/time.js'
+  import {mapGetters} from 'vuex'
 
   export default {
     data() {
@@ -97,25 +98,34 @@
           return this.$route.params.id
         })(),
         type: 0, // 商品介绍 0 好评率 1
-        product: {},
-        specType: 0,
-        attrType: 0,
+        product: {},// 商品
+        specType: 0, // 当前的商品的规格的下标
+        attrType: 0, // 当前的商品属性的下标
         swiperImg: [], // 商品的轮播图
         introImg: [], // 商品的介绍图
         remarks: [], // 商品评价
         spec: [],  // 商品的规格组
         attr: [], // 商品的属性组
         currentSpec: {}, // 当前的商品的规格
-        currentAttr: {} // 当前的商品属性
+        currentAttr: {}, // 当前的商品属性
+        badge: '', // 购物车数量
       }
     },
     components: {
       Slide,
       Scroll
     },
+    computed: {
+      ...mapGetters([
+        'user',
+        'market'
+      ])
+    },
     created() {
-      this.getProductDetails()
-      this.getProductRemarks()
+      if (this.productId) {
+        this.getProductDetails(this.productId)
+        this.getProductRemarks(this.productId)
+      }
     },
     filters: {
       formatTime: function (value) {
@@ -133,7 +143,20 @@
       },
       // 添加购物车
       addCart() {
-        console.log("addCart");
+        if (this.product.shopId) {
+          let params = {
+            marketId: this.market.marketId,
+            userId: JSON.parse(this.user).cust_id,
+            shopId: this.product.shopId,
+            skuid: this.currentSpec.itemId,
+            attrId: this.currentAttr.attrId
+          }
+          api.addShopCart(params).then((res) => {
+            if (res.code === 200 && res.data) {
+              this.getProductShopCartTotal(this.product.shopId)
+            }
+          })
+        }
       },
       // 切换商品介绍和好评率
       getCurrent(type) {
@@ -154,33 +177,42 @@
         this.$router.back()
       },
       // 获取商品详情
-      getProductDetails() {
-        if (this.productId) {
-          api.getProductDetails(this.productId).then((res) => {
-            if (res.code === 200) {
-              console.log(res.data)
-              this.product = res.data
-              this.swiperImg = res.data.picUrl
-              this.introImg = res.data.introducePicUrl
-              this.spec = res.data.items
-              this.attr = res.data.attrs
-              this.currentSpec = res.data.items[0]
-              this.currentAttr = res.data.attrs[0]
-            }
-          })
-        }
+      getProductDetails(productId) {
+        api.getProductDetails(productId).then((res) => {
+          if (res.code === 200) {
+            console.log(res.data)
+            this.product = res.data
+            this.swiperImg = res.data.picUrl
+            this.introImg = res.data.introducePicUrl
+            this.spec = res.data.items
+            this.attr = res.data.attrs
+            this.currentSpec = res.data.items[0]
+            this.currentAttr = res.data.attrs[0]
+            this.getProductShopCartTotal(res.data.shopId)
+          }
+        })
       },
       // 获取商品评价
-      getProductRemarks() {
-        if (this.productId) {
-          let params = {
-            pageNum: 1,
-            pageSize: 10
+      getProductRemarks(productId) {
+        let params = {
+          pageNum: 1,
+          pageSize: 10
+        }
+        api.getProductRemarks(productId, params).then((res) => {
+          if (res.code === 200) {
+            this.remarks = res.data.records
           }
-          api.getProductRemarks(this.productId, params).then((res) => {
+        })
+      },
+      // 获取购物车的数量
+      getProductShopCartTotal(shopId) {
+        if (shopId) {
+          let params = {
+            shopId: shopId
+          }
+          api.getProductShopCartTotal(JSON.parse(this.user).cust_id, this.market.marketId, params).then((res) => {
             if (res.code === 200) {
-              console.log(res.data)
-              this.remarks = res.data.records
+              this.badge = res.data
             }
           })
         }

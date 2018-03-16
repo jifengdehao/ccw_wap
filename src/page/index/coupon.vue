@@ -90,7 +90,9 @@
       ])
     },
     created() {
-      this.getCouponData()
+      if (this.market) {
+        this.getCouponData()
+      }
     },
     methods: {
       // 获取优惠卷

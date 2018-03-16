@@ -10,13 +10,13 @@
     <div class="header">
       <div class="content">
         <router-link to="/address" tag="i" class="icon-location"></router-link>
-        <div class="select-market" @click.stop="showMarketSelect">{{market.marketName}}</div>
+        <div class="select-market" @click.stop="showMarketSelect" v-if="market">{{market.marketName}}</div>
         <router-link to="/search" class="icon-search" tag="i"></router-link>
       </div>
     </div>
-    <div class="select-bar" v-show="isShowMarketSelect" v-if="marketList.length>0">
-      <div class="mask" @click="isShowMarketSelect=!isShowMarketSelect"></div>
-      <div class="list-wrapper">
+    <div class="select-bar" v-if="marketList.length>0" v-show="isShowMarketSelect">
+      <div class="mask" @click="isShowMarketSelect = !isShowMarketSelect"></div>
+      <div class="list-wrapper" ref="selectBatList">
         <ul class="list">
           <li class="item border-1px" v-for="(item,index) in marketList" @click="selectMarket(item)" :key="index">
             {{item.marketName}}
@@ -148,7 +148,7 @@
     watch: {
       'menuList'() {
         this.$nextTick(() => {
-          this.initTabScroll();
+          this.initTabScroll()
         })
       }
     },
@@ -156,6 +156,7 @@
       // 关闭topBar
       closeTopBar() {
         this.$refs.tabContainer.style.top = 4.1 + 'rem'
+        this.$refs.selectBatList.style.top = 2 + 'rem'
       },
       initTabScroll() {
         if (this.$refs.tabList) {
@@ -225,12 +226,12 @@
       },
       // 选择菜市场
       selectMarket(item) {
-        this.setMarket(item);
-        this.isShowMarketSelect = false
+        this.setMarket(item)
         this.sellerList = []
         this.menuList = []
         this.market = item
-        this.getSeller();
+        this.isShowMarketSelect =false
+        this.getSeller()
       },
       // 选择分类
       selectType(type) {
@@ -283,7 +284,7 @@
       .list-wrapper {
         position: absolute;
         z-index: 1000;
-        top: 2rem;
+        top: 4.2rem;
         left: 50%;
         transform: translate(-50%);
         &:before {
