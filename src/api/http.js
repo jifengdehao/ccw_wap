@@ -99,6 +99,13 @@ export const getCartAmountAndNum = (userId,marketId) => {
   return http.g(`/cart/obtainCartAmountAndNum/${userId}/${marketId}`)
 }
 /**
+ * 获取购物车内总件数
+ */ 
+export const getCartNum = (userId,marketId) => {
+  return http.g(`/cart/cartNum/${userId}/${marketId}`)
+}
+
+/**
  * 获取店铺评价
  */ 
 export const getShopRemarks = (shopId,params) => {
