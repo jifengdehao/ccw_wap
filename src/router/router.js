@@ -46,12 +46,12 @@ const cartSettlementPage = anyscComponent('page/cart/settlementPage') // 购物�
 const cartmyCoupon = anyscComponent('page/cart/cart_my_coupon') //  我的优惠券
 const paymentSuccess = anyscComponent('page/cart/payment_success') // 支付成功页面
 const cartMyProduct = anyscComponent('page/cart/cart_my_product') // 我的购买商品页面
-
 const mineIndex = anyscComponent('page/mine/mineIndex') //  个人中心模块主页
-
 const myCoupon = anyscComponent('page/mine/myCoupon') //  我的优惠券
-
 const Test = anyscComponent('page/test/test') //  测试
+
+
+
 
 export default [
   {
@@ -159,7 +159,7 @@ export default [
   },
   {
     path: '/myCoupon',
-    name: '我的优惠券（个人中心）',
+    name: '我的券包',
     component: myCoupon
   },
   {
@@ -179,4 +179,15 @@ export default [
     name: '新增地址',
     component: addressDetails
   }
+
+
+
+
+
+
+
+
+
+
+  
 ]

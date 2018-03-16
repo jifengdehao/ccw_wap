@@ -13,7 +13,9 @@ export function timeFormat(now) {
   let hour = now.getHours()
   let minute = now.getMinutes()
   let second = now.getSeconds()
-  return year + '-' + month + '-' + date + ' ' + hour + ':' + minute + ':' + second
+  return (
+    year + '-' + month + '-' + date + ' ' + hour + ':' + minute + ':' + second
+  )
 }
 
 // 时间戳格式化 yyyy-MM-dd hh:mm:ss
@@ -22,15 +24,15 @@ export function formatDateTime(inputTime) {
     var date = new Date(inputTime)
     var y = date.getFullYear()
     var m = date.getMonth() + 1
-    m = m < 10 ? ('0' + m) : m
+    m = m < 10 ? '0' + m : m
     var d = date.getDate()
-    d = d < 10 ? ('0' + d) : d
+    d = d < 10 ? '0' + d : d
     var h = date.getHours()
-    h = h < 10 ? ('0' + h) : h
+    h = h < 10 ? '0' + h : h
     var minute = date.getMinutes()
     var second = date.getSeconds()
-    minute = minute < 10 ? ('0' + minute) : minute
-    second = second < 10 ? ('0' + second) : second
+    minute = minute < 10 ? '0' + minute : minute
+    second = second < 10 ? '0' + second : second
     return y + '-' + m + '-' + d + ' ' + h + ':' + minute + ':' + second
   }
 }

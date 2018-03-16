@@ -8,11 +8,12 @@
  <template>
   <transition name="fade">
     <div id="login">
-      <p class="login-header">
+      <p class="login-header" v-if="isDownLoad">
+        <a @click="isDownLoad=false"></a>
         <span>点击立即下载即可下载菜城APP</span>
-        <button>下载</button>
+        <button @click="downApp">下载</button>
       </p>
-      <div class="content-box">
+      <div class="content-box" :style="{'margin-top':isDownLoad ? '44px':'0'}">
         <scroller height="-44" lock-x ref="scroller">
           <div>
             <slot></slot>
@@ -23,6 +24,7 @@
   </transition>
 </template>
 <script>
+import * as http from '@/api/http'
 import { mapGetters } from 'vuex'
 import { Scroller } from 'vux'
 export default {
@@ -30,14 +32,48 @@ export default {
   components: { Scroller },
   props: {},
   data() {
-    return {}
+    return {
+      isDownLoad: true,
+      phoneId: 0 //  0是PC  1是android 2是Iphone
+    }
   },
-  created() {},
+  created() {
+    this.isPC()
+  },
   mounted() {},
   activited: {},
   update: {},
   beforeRouteUpdate: {},
-  methods: {},
+  methods: {
+    //  判断是什么设备
+    isPC() {
+      let agent = navigator.userAgent
+      if (agent.indexOf('Android') > -1) {
+        //  安卓设备
+        this.phoneId = 1
+      } else if (agent.indexOf('iPhone') > -1) {
+        this.phoneId = 2
+      } else {
+        this.phoneId = 0
+      }
+    },
+    //  下载App
+    downApp() {
+      http.downLoadApp().then(response => {
+        let data = response.data
+        switch (this.phoneId) {
+          case 1:
+            //  安卓下载
+            window.open(data.androidUrl)
+            break
+          case 2:
+            //  ios下载
+            window.open(data.url)
+            break
+        }
+      })
+    }
+  },
   filter: {},
   computed: {
     ...mapGetters(['name'])
@@ -63,6 +99,17 @@ export default {
     text-align: center;
     font-size: 16px;
     color: #333;
+    a {
+      display: block;
+      position: absolute;
+      width: 24px;
+      height: 24px;
+      top: 10px;
+      left: 27px;
+      cursor: pointer;
+      background-size: 24px 24px;
+      background-image: url(../../common/img/login/btn_delete@2x.png);
+    }
     &:after {
       display: block;
       content: '';
@@ -83,7 +130,6 @@ export default {
     }
   }
   .content-box {
-    margin-top: 44px;
     overflow: hidden;
   }
 }

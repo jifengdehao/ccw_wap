@@ -39,7 +39,14 @@ module.exports = {
         pathRewrith: {
           '^/personCenter': '/personCenter'
         }
-      }
+      },
+      '/cart': {
+        target: devTarget,
+        changeOrigin: true,
+        pathRewrith: {
+          '^/cart': '/cart'
+        }
+      },
     },
 
     // Various Dev Server settings

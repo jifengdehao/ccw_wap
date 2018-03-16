@@ -1,4 +1,4 @@
-/*
+/**
  * @Author: WuFengliang
  * @Date: 2018-01-02 11:40:39
  * DeveloperMailbox:   wufengliang@ccw163.com
@@ -9,6 +9,13 @@ import * as http from './instance'
 /**
  * 负责人 - By WuFengliang
  */
+
+/**
+ * 获取下载APP地址
+ */
+export const downLoadApp = params => {
+  return http.g(`/homePage/share`, params)
+}
 
 /**
  * 判断手机号是否是平台账户
@@ -216,7 +223,7 @@ export const getDefaultCustomAddress = (custId, marketId) => {
  * email: zhangwenlong@ccw163.com
  * 功能模块: 获取全部配送范围
  */
-export const getDeliverArea = (params) => {
+export const getDeliverArea = params => {
   return http.g('/homePage/deliverArea', params)
 }
 /**
