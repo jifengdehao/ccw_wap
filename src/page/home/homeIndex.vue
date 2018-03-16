@@ -16,7 +16,7 @@
         <div>
           <div v-if="swiperList.length>0">
             <slide :showDot="false">
-              <div v-for="item in swiperList">
+              <div v-for="(item,index) in swiperList" :key="index">
                 <a :href="item.linkUrl">
                   <img @load="loadImage" :src="item.picUrl" class="needsclick"/>
                 </a>
@@ -49,220 +49,206 @@
   </div>
 </template>
 <script type="text/ecmascript-6">
-import menuBar from '@/components/footer/menuBar'
-import marketList from '@/page/home/market-list'
-import loading from '@/components/loading/loading'
-import Scroll from '@/components/scroll/scroll'
-import Slide from '@/components/slide/slide'
-import AMap from 'AMap' //在页面中引入高德地图
-import * as api from '@/api/http' // http模块
-import { mapMutations } from 'vuex'
-import * as store from '@/vuex/util'
+  import menuBar from '@/components/footer/menuBar'
+  import marketList from '@/page/home/market-list'
+  import loading from '@/components/loading/loading'
+  import Scroll from '@/components/scroll/scroll'
+  import Slide from '@/components/slide/slide'
+  import AMap from 'AMap'   //在页面中引入高德地图
+  import * as api from '@/api/http' // http模块
+  import {mapMutations} from 'vuex'
+  import * as store from '@/vuex/util'
 
-export default {
-  name: 'homeIndex',
-  components: { menuBar, marketList, loading, Scroll, Slide },
-  data() {
-    return {
-      locationName: '', // 位置信息
-      swiperList: [], // 轮播图
-      marketList: [], // 市场列表
-      showLocationTip: false // 是否显示提示
-    }
-  },
-  mounted() {
-    setTimeout(() => {
-      this.initMap()
-    }, 200)
-  },
-  methods: {
-    // 加载图片
-    loadImage() {
-      if (!this.checkImg) {
-        /* 加载完一张图片时不再执行 */
-        this.checkImg = true
-        this.$refs.scroll.refresh()
+  export default {
+    name: 'homeIndex',
+    components: {menuBar, marketList, loading, Scroll, Slide},
+    data() {
+      return {
+        locationName: '', // 位置信息
+        swiperList: [], // 轮播图
+        marketList: [], // 市场列表
+        showLocationTip: false, // 是否显示提示
       }
     },
-    // 获取定位
-    initMap() {
-      let that = this,
-        map,
-        geolocation
-      map = new AMap.Map('map')
-      map.plugin('AMap.Geolocation', function() {
-        geolocation = new AMap.Geolocation({
-          enableHighAccuracy: true,
-          timeout: 10000, //超过10秒后停止定位，默认：无穷大
-          maximumAge: 0 //定位结果缓存0毫秒，默认：
-        })
-        map.addControl(geolocation)
-        geolocation.getCurrentPosition()
-        AMap.event.addListener(geolocation, 'complete', function(data) {
-          //返回定位成功信息
-          // console.log(data)
-          that.setLocation(data) // 保存定位信息
-          that.locationName = data.formattedAddress // 位置标题信息
-          let params = {
-            marketId: '-1',
-            positionInfos: [
-              {
+    mounted() {
+      setTimeout(() => {
+        this.initMap()
+      }, 20)
+    },
+    methods: {
+      // 加载图片
+      loadImage() {
+        if (!this.checkImg) {         /* 加载完一张图片时不再执行 */
+          this.checkImg = true
+          this.$refs.scroll.refresh()
+        }
+      },
+      // 获取定位
+      initMap() {
+        let that = this, map, geolocation
+        map = new AMap.Map('map')
+        map.plugin('AMap.Geolocation', function () {
+          geolocation = new AMap.Geolocation({
+            enableHighAccuracy: true,//是否使用高精度定位，默认:true
+            timeout: 10000,          //超过10秒后停止定位，默认：无穷大
+            maximumAge: 0           //定位结果缓存0毫秒，默认：0
+          })
+          map.addControl(geolocation)
+          geolocation.getCurrentPosition()
+          AMap.event.addListener(geolocation, 'complete', function (data) {  //返回定位成功信息
+            that.setLocation(data) // 保存定位信息
+            that.locationName = data.formattedAddress // 位置标题信息
+            let params = {
+              marketId: '-1',
+              positionInfos: [{
                 longitude: data.position.getLng(),
                 latitude: data.position.getLat()
+              }]
+            }
+            api.isAddressCover(params).then((res) => {
+              if (res.code === 200) {
+                if (!res.data[0]) {
+                  alert('当前位置不在配送范围内')
+                  that.getRecommendMarkets(params.positionInfos[0])
+                  that.getBanner()
+                  that.showLocationTip = true
+                } else {
+                  that.$router.push('/index')
+                }
               }
-            ]
-          }
-          api.isAddressCover(params).then(res => {
-            if (res.code === 200) {
-              if (!res.data[0]) {
-                alert('当前位置不在配送范围内')
-                that.getNearMarket(params.positionInfos[0])
-                that.getBanner()
-                that.showLocationTip = true
-              } else {
-                that.$router.push('/index')
-              }
+            })
+          })
+          AMap.event.addListener(geolocation, 'error', function (data) {  //返回定位失败信息
+            console.log(data)
+            if (data.info == 'FAILED') {
+              alert('获取你当前位置失败！')
             }
           })
         })
-        AMap.event.addListener(geolocation, 'error', function(data) {
-          //返回定位失败信息
-          if (data.info == 'FAILED') {
-            // alert('获取你当前位置失败！')
-            console.log(data)
+      },
+      //获取推荐的菜市场，不在配送范围内
+      getRecommendMarkets(params) {
+        api.getRecommendMarkets(params).then((res) => {
+          if (res.code === 200 && res.data.length > 0) {
+            this.marketList = res.data
           }
         })
-      })
-    },
-    //获取附近的菜市场，不在配送范围内
-    getNearMarket(params) {
-      api.getNearMarket(params).then(res => {
-        if (res.code === 200 && res.data.length > 0) {
-          // console.log(res.data);
-          this.marketList = res.data
-        }
-      })
-    },
-    // vux 保存位置和选择菜市场
-    ...mapMutations({
-      setLocation: 'SET_LOCATION',
-      setMarket: 'SET_MARKET'
-    }),
-    // 轮播图
-    getBanner() {
-      const type = 1
-      api.getBanner(type).then(res => {
-        if (res.code === 200 && res.data.length > 0) {
-          // console.log(res.data)
-          this.swiperList = res.data
-        }
-      })
-    },
-    // 选择菜市场
-    selectMarket(item) {
-      console.log('选择菜市场')
-      console.log(item)
-      this.setMarket(item)
-      this.$router.push('/index')
+      },
+      // vux 保存位置和选择菜市场
+      ...mapMutations({
+        setLocation: 'SET_LOCATION',
+        setMarket: 'SET_MARKET'
+      }),
+      // 轮播图
+      getBanner() {
+        const type = 1
+        api.getBanner(type).then((res) => {
+          if (res.code === 200 && res.data.length > 0) {
+            this.swiperList = res.data
+          }
+        })
+      },
+      // 选择菜市场
+      selectMarket(item) {
+        this.setMarket(item)
+        this.$router.push('/index')
+      }
     }
   }
-}
 </script>
 <style lang="less" scoped type="text/less">
-#map {
-  height: 0;
-  display: none;
-}
-
-.home {
-  height: 100%;
-  background-color: #ffffff;
-  .location {
-    height: 2.2rem;
-    line-height: 2.2rem;
-    text-align: center;
-    font-size: 0;
-    .icon-location {
-      display: inline-block;
-      width: 1rem;
-      background: url('../../common/img/home/home_location_ic.png') no-repeat
-        center;
-      background-size: contain;
-      height: 2.2rem;
-      vertical-align: top;
-    }
-    .name {
-      display: inline-block;
-      font-size: 0.6rem;
-      margin-left: 0.4rem;
-      height: 2.2rem;
-    }
+  #map {
+    height: 0;
+    display: none;
   }
-  .scroll-wrapper {
-    position: absolute;
-    top: 2.2rem;
-    left: 0;
-    right: 0;
-    bottom: 2.5rem;
-    overflow: hidden;
-    .location-tip {
-      position: fixed;
-      bottom: 2.5rem;
+
+  .home {
+    height: 100%;
+    background-color: #FFFFFF;
+    .location {
+      height: 2.2rem;
+      line-height: 2.2rem;
+      text-align: center;
+      font-size: 0;
+      .icon-location {
+        display: inline-block;
+        width: 1rem;
+        background: url("../../common/img/home/home_location_ic.png") no-repeat center;
+        background-size: contain;
+        height: 2.2rem;
+        vertical-align: top;
+      }
+      .name {
+        display: inline-block;
+        font-size: .6rem;
+        margin-left: .4rem;
+        height: 2.2rem;
+      }
+    }
+    .scroll-wrapper {
+      position: absolute;
+      top: 2.2rem;
       left: 0;
       right: 0;
-      z-index: 10;
-      height: 2.7rem;
-      background: url('../../common/img/home/home_bg.png') no-repeat center;
-      background-size: cover;
-      .close {
-        position: absolute;
-        top: 0.9rem;
-        right: 0.6rem;
-        width: 0.9rem;
-        height: 0.9rem;
-        background: url('../../common/img/home/home_close_btn.png') no-repeat
-          center;
-        background-size: contain;
-      }
-    }
-    .market-list {
-      padding: 0.6rem;
-      box-sizing: border-box;
-      .item {
-        margin-bottom: 0.6rem;
-        border-radius: 0.2rem;
-        background-color: #e5e5e5;
-        border: 0.5px solid #e5e5e5;
-        & > img {
-          width: 100%;
-          height: 9rem;
+      bottom: 2.5rem;
+      overflow: hidden;
+      .location-tip {
+        position: fixed;
+        bottom: 2.5rem;
+        left: 0;
+        right: 0;
+        z-index: 10;
+        height: 2.7rem;
+        background: url("../../common/img/home/home_bg.png") no-repeat center;
+        background-size: cover;
+        .close {
+          position: absolute;
+          top: .9rem;
+          right: .6rem;
+          width: .9rem;
+          height: .9rem;
+          background: url("../../common/img/home/home_close_btn.png") no-repeat center;
+          background-size: contain;
         }
-        .content {
-          height: 3rem;
-          width: 100%;
-          padding-top: 0.4rem;
-          padding-left: 0.5rem;
-          box-sizing: border-box;
-          padding-right: 0.3rem;
-          .na {
-            margin-bottom: 0.1rem;
-            .name {
-              font-size: 0.8rem;
-              line-height: 1.1rem;
-            }
-            .range {
-              font-size: 0.6rem;
-              line-height: 0.85rem;
-            }
+      }
+      .market-list {
+        padding: .6rem;
+        box-sizing: border-box;
+        .item {
+          margin-bottom: .6rem;
+          border-radius: .2rem;
+          background-color: #e5e5e5;
+          border: 0.5px solid #e5e5e5;
+          & > img {
+            width: 100%;
+            height: 9rem;
           }
-          .ad {
-            color: #999999;
-            font-size: 0.6rem;
-            line-height: 0.85rem;
+          .content {
+            height: 3rem;
+            width: 100%;
+            padding-top: .4rem;
+            padding-left: .5rem;
+            box-sizing: border-box;
+            padding-right: .3rem;
+            .na {
+              margin-bottom: .1rem;
+              .name {
+                font-size: .8rem;
+                line-height: 1.1rem;
+              }
+              .range {
+                font-size: .6rem;
+                line-height: .85rem;
+              }
+            }
+            .ad {
+              color: #999999;
+              font-size: .6rem;
+              line-height: .85rem;
+            }
           }
         }
       }
     }
   }
-}
 </style>

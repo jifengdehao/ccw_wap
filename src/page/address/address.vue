@@ -97,7 +97,7 @@
       getCustomAddress() {
         let userInfo = JSON.parse(this.user)
         api.getCustomAddress(userInfo.cust_id).then((res) => {
-          if (res.code === 200 && res.data.length > 0) {
+          if (res.code === 200) {
             this.customAddress = res.data
           }
         })

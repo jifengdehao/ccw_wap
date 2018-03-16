@@ -37,7 +37,7 @@
                 <span class="attr-item"
                       :class="{'active':attrType===index}"
                       @click="selectAtrr(item,index)"
-                      v-for="(item,index) in attr" :key="index">{{item.names}}</span>
+                      v-for="(item,index) in attr" :key="index">{{item.attrName}}</span>
               </div>
             </div>
             <div class="tab border-1px">
@@ -135,6 +135,7 @@
       addCart() {
         console.log("addCart");
       },
+      // 切换商品介绍和好评率
       getCurrent(type) {
         this.type = type
       },

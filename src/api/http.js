@@ -134,7 +134,7 @@ export const isAddressCover = params => {
  * email: zhangwenlong@ccw163.com
  * 功能模块: 获取附近菜市场列表
  */
-export const getNearMarket = params => {
+export const getNearMarkets = params => {
   return http.g(`/homePage/nearMarkets`, params)
 }
 /**

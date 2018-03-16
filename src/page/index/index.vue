@@ -6,11 +6,11 @@
 */
 <template>
   <div class="index">
-    <top-bar></top-bar>
+    <top-bar @closeTopBar="closeTopBar"></top-bar>
     <div class="header">
       <div class="content">
         <router-link to="/address" tag="i" class="icon-location"></router-link>
-        <div class="select-market" @click="isShowMarketSelect=!isShowMarketSelect">{{market.marketName}}</div>
+        <div class="select-market" @click.stop="showMarketSelect">{{market.marketName}}</div>
         <router-link to="/search" class="icon-search" tag="i"></router-link>
       </div>
     </div>
@@ -48,7 +48,7 @@
         </ul>
       </div>
     </div>
-    <div class="tab-container">
+    <div class="tab-container" ref="tabContainer">
       <loading v-if="!sellerList.length>0"></loading>
       <scroll ref="scroll" :data="sellerList" v-else>
         <div>
@@ -119,8 +119,7 @@
         swiperList: [],// 轮播图
         sellerList: [], // 档口列表
         marketList: [],  // 菜市场列表
-        menuList: [],  // 菜单列表
-        market: {}, // 当前菜市场
+        menuList: []  // 菜单列表
       }
     },
     components: {
@@ -134,11 +133,17 @@
     },
     computed: {
       ...mapGetters([
-        'location'
+        'location',
+        'market'
       ])
     },
     created() {
-      this.getRecommendMarkets()
+      if (this.market) {
+        this.getSeller()
+        this.getBanner()
+      } else {
+        this.getNearMarkets()
+      }
     },
     watch: {
       'menuList'() {
@@ -148,6 +153,10 @@
       }
     },
     methods: {
+      // 关闭topBar
+      closeTopBar() {
+        this.$refs.tabContainer.style.top = 4.1 + 'rem'
+      },
       initTabScroll() {
         if (this.$refs.tabList) {
           this.tabGroup = this.$refs.tabList
@@ -198,13 +207,13 @@
           })
         }
       },
-      // 获取推荐菜市场
-      getRecommendMarkets() {
+      // 获取附近菜市场 在配送范围内
+      getNearMarkets() {
         let params = {
           longitude: this.location.position.lng,
           latitude: this.location.position.lat
         };
-        api.getRecommendMarkets(params).then((res) => {
+        api.getNearMarkets(params).then((res) => {
           if (res.code === 200 && res.data.length > 0) {
             this.market = res.data[0]
             this.marketList = res.data
@@ -232,6 +241,14 @@
             this.sellerList = item.catShops
           }
         })
+      },
+      // 显示下拉菜市场选择
+      showMarketSelect() {
+        if (this.marketList.length > 0) {
+          this.isShowMarketSelect = true
+        } else {
+          this.isShowMarketSelect = false
+        }
       },
       ...mapMutations({
         setMarket: 'SET_MARKET'
@@ -433,6 +450,9 @@
             & > p {
               margin-top: .35rem;
               font-size: .6rem;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              white-space: nowrap;
             }
           }
         }
@@ -440,7 +460,7 @@
     }
     .tab-container {
       position: absolute;
-      top: 4.1rem;
+      top: 6.3rem;
       left: 0;
       right: 0;
       bottom: 2.5rem;
