@@ -107,7 +107,6 @@
       },
       // 搜索
       submit() {
-        console.log(this.search)
       },
       // 清除搜索字段
       clearSearch() {
@@ -206,7 +205,7 @@
                     })
                     map.addControl(geolocation)
                     AMap.event.addListener(geolocation, 'complete', function (data) { //返回定位信息
-                      console.log(data)
+                      console.log(data,'定位的点')
                     })
                     AMap.event.addListener(geolocation, 'error', function (data) {  //返回定位出错信息
                       if (data.info == 'FAILED') {

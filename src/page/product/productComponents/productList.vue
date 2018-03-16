@@ -6,12 +6,12 @@
  */
 <template>
   <div id="productList">
-    <div class="listSection" v-for="(item,index) in 3">
-      <p class="smallTitle">冰鲜海产</p>
+    <div class="listSection" v-for="(item,index) in productData" :key="index">
+      <p class="smallTitle">{{item.name}}</p>
       <ul class="infoList clearfix">
-        <li v-for="(imgUrl,index) in 7" :key="index" @click="toProductInfoList">
-          <img src="../../../common/img/productIndex/no_location_ic.png" alt="">
-          <p>{{productName}}</p>
+        <li v-for="(imgUrl,index) in item.threeCat" :key="index" @click="toProductInfoList(imgUrl.name)">
+          <img :src="imgUrl.pictureUrl" alt="">
+          <p>{{imgUrl.name}}</p>
         </li>
       </ul>
     </div>
@@ -20,19 +20,26 @@
 <script>
 export default {
   components: {},
-  props: {},
+  props: ['productData'],
   data() {
     return {
       productName: 'oijo'
     }
   },
+  created () {
+   
+  },
   methods: {
-    toProductInfoList(){
-      this.$router.push('productInfoList')
+    toProductInfoList(name){
+      this.$router.push('productInfoList?queryString=' + name)
     }
   },
   filfter: {},
-  computed: {},
+  computed: {
+    // listData(){
+    //   return this.productData
+    // }
+  },
   watch: {}
 }
 </script>

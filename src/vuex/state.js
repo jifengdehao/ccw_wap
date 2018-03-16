@@ -10,7 +10,7 @@ export default {
   name: '', //  登录名
   isLogin: false, //  是否登录
   menuBarH: ((percent * 2.45 + 1) * -1).toString(), //  底部菜单栏高度
-  topBarH: (percent * -2.2).toString(), //  顶部菜单高度
+  topBarH: (percent * -2.2).toString(), //  顶部菜单高度   
   loginParams: {
     isActive: false, //  是否已经开始发送验证码
     times: 60, //  发送验证码秒数

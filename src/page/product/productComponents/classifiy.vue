@@ -21,33 +21,62 @@
     <div class="classifiyList">
       <aside>
         <ul>
-          <li v-for="(item,index) in 5" :key="index" :class="{current:selected==index}" @click="changeList(index)">新鲜水果</li>
+          <li v-for="(item,index) in preantCat" :key="index" :class="{current:selected==index}" @click="changeList(index,item.spCategory_id)">{{item.name}}</li>
         </ul>
       </aside>
       <section class="classifiyInfo">
-        <product-list></product-list>
+        <product-list :productData="productData" ></product-list>
       </section>
     </div>
   </div>
 </template>
 <script>
+import * as http from '@/api/http'
 import productList from './productList'
 export default {
   components: { productList },
   props: {},
   data() {
     return {
-      selected: 0
+      selected: 0,
+      preantCat: [], // 一级分类列表
+      parentLevel: 1, // 父类ID
+      marketId: JSON.parse(sessionStorage.getItem("market")).marketId, // 菜市场id
+      productData: [] // 一级分类下面的获取的数据
     }
+  },
+  created() {
+    http.getProductCat().then(res => {
+      if (res.code === 200) {
+        this.preantCat = res.data
+      }
+    })
+    if (this.selected === 0) {
+      this.preantCat = 1
+      this.getSecondCat()
+    }
+  },
+  mounted() {
+  //  console.log(JSON.parse(sessionStorage.getItem("market")).marketId)
   },
   methods: {
     // 点击分类
-    changeList(index) {
+    changeList(index, id) {
       this.selected = index
+      this.parentLevel = id
+      this.getSecondCat()
     },
     // 点击搜索跳转到搜索定位
-    toSearch(){
+    toSearch() {
       this.$router.push('Search')
+    },
+    // 获取二级分类和三级分类
+    getSecondCat() {
+      http.getSecondProductCat(this.parentLevel, this.marketId).then(res => {
+        if (res.code === 200) {
+          this.productData = res.data
+        }
+      })
     }
   },
   filfter: {},

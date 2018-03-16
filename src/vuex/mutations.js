@@ -17,6 +17,11 @@ export default {
   SET_LOGINPHONE(state, phone) {
     state.loginParams.mobileNumber = phone
   },
+   // 修改loding状态
+  updateLoadingStatus(state, status) {
+    state.isLoading.status = status.status;
+    state.isLoading.text = status.text;
+  },
   // 保存位置信息
   [types.SET_LOCATION](state, location) {
     setStore('location', JSON.stringify(location))

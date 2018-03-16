@@ -61,6 +61,9 @@ const base = (type, url, params) => {
               onShow() {},
               onHide() {
                 //  点击确定具体操作
+                if(response.data.msg === '用户未登录'){
+                  this.$router.push('/login')
+                }
               }
             })
             break
@@ -88,9 +91,10 @@ const base = (type, url, params) => {
             Vue.$vux.alert.show({
               title: '提示',
               content: response.data.msg,
-              onShow() {},
+              onShow() {
+              },
               onHide() {
-                console.log('错误')
+                console.log('response.data.msg')
               }
             })
         }

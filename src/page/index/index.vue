@@ -62,7 +62,7 @@
           <div class="seller">
             <div class="title"></div>
             <ul class="seller-list" v-if="sellerList.length>0">
-              <router-link :to="{path: '/shopInfo/' + item.msShopId}"
+              <router-link :to="{path: '/shopProduct/' + item.msShopId}"
                            tag="li"
                            class="item border-1px"
                            v-for="(item,index) in sellerList"

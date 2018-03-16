@@ -59,9 +59,68 @@ export const getUserCenter = (custId, params) => {
  * 负责人 - By WuFengliang
  */
 
-export const getProducts = params => {
-  return http.g(`/productCat/cat`, params)
+/**
+ * 负责人 -By hushangjun
+ */ 
+/**
+ * 获取一级分类列表
+ */ 
+export const getProductCat = () => {
+  return http.g(`/productCat/cat`)
 }
+/**
+ * 获取二级或三级分类列表
+ */ 
+export const getSecondProductCat = (parentLevel,marketId) => {
+  return http.g(`/productCat/secondCat/${parentLevel}/${marketId}`)
+}
+/**
+ * 获取产品id下面的市场的产品列表
+ */ 
+export const getNearProducts = (marketId,params) => {
+  return http.g(`/homePage/nearProducts/${marketId}`,params)
+}
+/**
+ * 获取店铺的信息
+ */ 
+export const getShopDesc = (shopId) => {
+  return http.g(`/homePage/shopDesc/${shopId}`)
+}
+/**
+ * 获取店铺中所有产品的信息
+ */ 
+export const getProductByShopId = (shopId) => {
+  return http.g(`/homePage/productByShopId/${shopId}`)
+}
+/**
+ * 获取购物车内总件数，满多少减免运费和总金额
+ */ 
+export const getCartAmountAndNum = (userId,marketId) => {
+  return http.g(`/cart/obtainCartAmountAndNum/${userId}/${marketId}`)
+}
+/**
+ * 获取购物车内总件数
+ */ 
+export const getCartNum = (userId,marketId) => {
+  return http.g(`/cart/cartNum/${userId}/${marketId}`)
+}
+
+/**
+ * 获取店铺评价
+ */ 
+export const getShopRemarks = (shopId,params) => {
+  return http.g(`/homePage/shopRemarks/${shopId}`,params)
+}
+/**
+ * 添加商品到购物车
+ */ 
+export const postCarts = (params) => {
+  return http.p(`/cart/carts`,params)
+}
+
+/**
+ *  hushangjun    end
+ */
 
 /**
  *  负责人 -By zhangwenlong
