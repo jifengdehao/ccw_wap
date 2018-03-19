@@ -28,5 +28,8 @@ export default {
   },
   addmodress: state => state.addmodress,
   isOpenCoupon: state => state.isOpenCoupon,
-  isOpenTopBar: state => state.isOpenTopBar
+  isOpenTopBar: state => state.isOpenTopBar,
+  shopCart: state => {
+    return state.shopCartJSON.parse(getStore('shopCart'))
+  }
 }

@@ -38,7 +38,7 @@
               <div class="tab-item" :class="{'active':rankFlag==='monthSale'}" @click="selectType('monthSale')">销量</div>
               <div class="tab-item" :class="{'active':rankFlag==='goodRate'}" @click="selectType('goodRate')">评价</div>
             </div>
-            <show-cart></show-cart>
+            <show-cart :badge="badge"></show-cart>
             <ul class="goods-list">
               <li class="item border-1px" v-for="(item,index) in goods" :key="index">
                 <router-link tag="div" :to="/goods/+item.productId">
@@ -167,12 +167,15 @@
         noSearchGoodResultTitle: '抱歉，未能找到您搜索的商品',
         noSearchSellerResultTitle: '抱歉，未能找到您搜索的档口',
         hotSearchTag: [], // 搜索关键字
-        price: '', // 当前选中商品价格
+        price: '',// 当前选中商品价格
+        shopId: '',//当前选中商品档口的ID
+        badge: '' // 购物车数量
       }
     },
     computed: {
       ...mapGetters([
-        'market'
+        'market',
+        'user'
       ])
     },
     filters: {
@@ -209,6 +212,7 @@
           callback: this.mescroll_2_upCallback
         }
       })
+      this.getShopCartTotal()
     },
     methods: {
       // 搜索关键字
@@ -229,15 +233,29 @@
       },
       // 打开规格选择
       openSpec(item) {
-        console.log(item)
         this.isShowDialog = true
         this.spec = item.items
         this.attr = item.attrs
         this.price = item.items[0].curPrice / 100
+        this.shopId = item.shopId
+        this.currentSpec = item.items[0]
+        this.currentAttr = item.attrs[0]
       },
       // 关闭弹窗
       hideDialog() {
         this.isShowDialog = false
+        let params = {
+          marketId: this.market.marketId,
+          userId: JSON.parse(this.user).cust_id,
+          shopId: this.shopId,
+          skuid: this.currentSpec.itemId,
+          attrId: this.currentAttr ? this.currentAttr.attrId : ''
+        }
+        api.addShopCart(params).then((res) => {
+          if (res.code === 200 && res.data) {
+            this.getShopCartTotal()
+          }
+        })
       },
       mescroll_2_upCallback(page) {
         let params = {
@@ -289,12 +307,24 @@
       },
       // 添加购物车
       addCart(item) {
-        console.log(item)
+        let params = {
+          marketId: this.market.marketId,
+          userId: JSON.parse(this.user).cust_id,
+          shopId: item.shopId,
+          skuid: item.items[0].itemId,
+          attrId: item.attrs.length > 0 ? item.attrs[0].attrId : ''
+        }
+        api.addShopCart(params).then((res) => {
+          if (res.code === 200 && res.data) {
+            this.getShopCartTotal()
+          }
+        })
       },
       // 切换
       selectStatus(type) {
         this.status = type
         this.order = 0
+        this.rankFlag = 'default'
         this.getHotSearchTag()
       },
       // 搜索
@@ -344,6 +374,14 @@
         api.getHotSearchTag(params).then((res) => {
           if (res.code === 200 && res.data.length > 0) {
             this.hotSearchTag = res.data
+          }
+        })
+      },
+      // 获取购物车数量
+      getShopCartTotal() {
+        api.getProductShopCartTotal(JSON.parse(this.user).cust_id, this.market.marketId).then((res) => {
+          if (res.code === 200) {
+            this.badge = res.data
           }
         })
       }

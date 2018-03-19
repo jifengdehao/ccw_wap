@@ -42,11 +42,6 @@ export default {
     setStore('shopCart', JSON.stringify(shopCart))
     state.shopCart = shopCart
   },
-  // 添加购物车
-  [types.ADD_SHOP_CART](state, product) {
-    state.shopCart.push(product)
-    setStore('shopCart', JSON.stringify(state.shopCart))
-  },
   // 选中或者修改的地址
   [types.SET_ADDMODRESS](state, addmodress) {
     state.addmodress = addmodress

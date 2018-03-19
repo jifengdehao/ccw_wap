@@ -99,6 +99,13 @@ export const getCartAmountAndNum = (userId,marketId) => {
   return http.g(`/cart/obtainCartAmountAndNum/${userId}/${marketId}`)
 }
 /**
+ * 获取购物车内总件数
+ */ 
+export const getCartNum = (userId,marketId) => {
+  return http.g(`/cart/cartNum/${userId}/${marketId}`)
+}
+
+/**
  * 获取店铺评价
  */ 
 export const getShopRemarks = (shopId,params) => {
@@ -315,55 +322,39 @@ export const getCouponListData = (customerId, marketId) => {
 export const linQuCoupon = (customerId, couponId) => {
   return http.p(`/personCenter/coupon/${customerId}/${couponId}/receive`)
 }
-
 /**
  * 2018/3/16
- * author: huyong
- * email: huyong@ccw163.com
- * 功能模块: 查看购物车商品列表
+ * author: zhangwenlong
+ * email: zhangwenlong@ccw163.com
+ * 功能模块: 购物车列表
  */
-export const getCarGoodsList = (userId, marketId) => {
+export const getShopCartListData = (marketId, userId) => {
   return http.g(`/cart/list/${marketId}/${userId}`)
 }
-
 /**
  * 2018/3/16
- * author: huyong
- * email: huyong@ccw163.com
- * 功能模块: 清空购物车
+ * author: zhangwenlong
+ * email: zhangwenlong@ccw163.com
+ * 功能模块: 购物车内总件数、满多少减免运费和总金额
  */
-export const clearCarGoods = params => {
-  return http.p(`/cart/delCartAll`,params)
+export const getShopCartTotalData = (marketId, userId) => {
+  return http.g(`/cart/obtainCartAmountAndNum/${userId}/${marketId}`)
 }
-
 /**
  * 2018/3/16
- * author: huyong
- * email: huyong@ccw163.com
- * 功能模块: 刷新购物车
+ * author: zhangwenlong
+ * email: zhangwenlong@ccw163.com
+ * 功能模块: 添加商品到购物车
  */
-export const updateCarData = params => {
-  return http.p(`/cart/renew`,params)
+export const addShopCart = (params) => {
+  return http.p('/cart/carts', params)
 }
-
 /**
  * 2018/3/16
- * author: huyong
- * email: huyong@ccw163.com
- * 功能模块: 查询商品清单
+ * author: zhangwenlong
+ * email: zhangwenlong@ccw163.com
+ * 功能模块: 查询购物车内的总件数 (可以店铺内)
  */
-export const getGoodsRecord = (shopId,userId,marketId) => {
-  return http.g(`/cart/merchBill/${shopId}/${userId}/${marketId}`)
+export const getProductShopCartTotal = (userId, marketId, params) => {
+  return http.g(`/cart/cartNum/${userId}/${marketId}`, params)
 }
-
-/**
- * 2018/3/16
- * author: huyong
- * email: huyong@ccw163.com
- * 功能模块: 批量删除购物车多个商品
- */
-export const deleteGoodsList = params => {
-  return http.p(`/cart/delMany`)
-}
-
-

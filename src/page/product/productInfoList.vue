@@ -45,10 +45,10 @@
               <p class="last">¥{{item.items[0].curPrice/100}} <span>约{{item.items[0].names}}</span></p>
             </div>
           </router-link>
-          <div v-if="item.items.length === 1" class="cartIcon icon">
+          <div v-if="item.items.length === 1" class="cartIcon icon" @click="postCarts(item.items[0].itemId,item.shopId)">
             <img src="../../common/img/productIndex/shopping_ic.png" alt="">
           </div>
-          <div v-else class="fontIcon icon" @click="showChang(item.items)">多规格</div>
+          <div v-else class="fontIcon icon" @click="showChang(item.items,item.shopId)">多规格</div>
         </li>
         <li class="footer">
           <p>没有更多了</p>
@@ -58,19 +58,19 @@
     <!-- 购物车图标 -->
     <div class="bigCart" @click="toCart">
       <img src="../../common/img/productIndex/shopping_big_ic.png" alt="">
-      <p class="smallIcon" v-if="countIcon">12</p>
+      <p class="smallIcon" v-if="countIcon">{{countIcon}}</p>
     </div>
     <!-- 弹窗 -->
     <div class="alert">
       <x-dialog class="dialog" v-model="show">
         <div class="alertContent clearfix" >
           <h5>规格：</h5>
-          <checker v-model="demo2" default-item-class="demo2-item" selected-item-class="demo2-item-selected">
+          <checker v-model="cartparams.skuid" default-item-class="demo2-item" selected-item-class="demo2-item-selected">
             <checker-item :value="item.itemId" v-for="(item,index) in alertData" :key="index" @on-item-click = "changeitem(index)">{{item.names}}</checker-item>
             <!-- <checker-item value="2">不切</checker-item> -->
           </checker>
         </div>
-        <div class="alertFooter" @click="hideModel">
+        <div class="alertFooter" @click="postCarts">
           确定(￥{{price}})
         </div>
       </x-dialog>
@@ -90,8 +90,7 @@ export default {
       showCart: false,
       show: false,
       price: '',
-      demo2: '1', // 默认选中规格1
-      countIcon: true,
+      countIcon: 0,
       marketId: 141, // 市场id
       listData: [], // 获取的数据
       alertData: [],
@@ -101,13 +100,23 @@ export default {
         order: 0, // 升序降序,0降序 1升序
         pageNum: 1,
         pageSize: 10
+      },
+      cartparams: {
+        // 添加商品到购物车的数据
+        attrId: null, // 规格
+        marketId: JSON.parse(window.sessionStorage.market).marketId, // 市场id
+        shopId: this.$route.params.id, // 店铺id
+        skuid: null, // 产品id
+        userId: this.$store.state.loginInfo.cust_id // 用户id
       }
     }
   },
   created() {
     this.getNearProducts()
   },
-  mounted() {},
+  mounted() {
+    this.getCartNum()
+  },
   methods: {
     sort(index) {
       switch (index) {
@@ -127,20 +136,42 @@ export default {
       this.selected = index
       this.getNearProducts()
     },
+    // 获取购物车数量
+    getCartNum() {
+      http
+        .getCartNum(
+          this.$store.state.loginInfo.cust_id,
+          JSON.parse(window.sessionStorage.market).marketId
+        )
+        .then(res => {
+          if (res.code === 200) {
+            this.countIcon = res.data
+          }
+        })
+    },
+    // 添加商品进入购物车
+    postCarts(skuid, shopId) {
+      if (typeof skuid == 'number') {
+        this.cartparams.skuid = skuid
+        this.cartparams.shopId = shopId
+      }
+      http.postCarts(this.cartparams).then(res => {
+        this.getCartNum()
+        this.show = false
+      })
+    },
     // 弹出弹窗
-    showChang(data) {
+    showChang(data,shopId) {
       this.show = true
+      this.cartparams.skuid = data[0].itemId
+      this.cartparams.shopId = shopId
       // if (data.length > 1) {
       this.alertData = data
       // }
     },
     // 多规格的时候选择规格
-    changeitem(index){
+    changeitem(index) {
       this.price = this.alertData[index].curPrice
-    },
-    // 隐藏弹框
-    hideModel() {
-      this.show = false
     },
     // 点击购物车图标进入购物车
     toCart() {
@@ -151,6 +182,7 @@ export default {
       http.getNearProducts(this.marketId, this.params).then(res => {
         if (res.code === 200) {
           this.listData = res.data.records
+          console.log(this.listData)
         }
       })
     }

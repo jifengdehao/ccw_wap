@@ -12,11 +12,11 @@
         <div class="main-box" ref="mainBox">
           <div class="write-box telphone">
             <i></i>
-            <input type="number" placeholder="请输入您的手机号码" ref="telphone" v-model="mobileNumber" maxlength="11">
+            <input type="number" placeholder="请输入您的手机号码" ref="telphone" v-model.trim="mobileNumber" maxlength="11">
           </div>
           <div class="write-box verification">
             <i></i>
-            <input type="text" placeholder="验证码" ref="verification" v-model="loginParams.code">
+            <input type="text" placeholder="验证码" ref="verification" v-model.trim="loginParams.code">
             <button :class="{'active':isActive}" @click="isTelPhone">{{words}}</button>
           </div>
         </div>

@@ -20,7 +20,7 @@ export default {
   loginInfo: null, //  登录后相关信息
   location: null,   // 位置相关
   market: null,  // 菜市场
-  shopCart: [],  // 购物车
+  shopCart: null,  // 购物车
   addmodress: null,  // 新增地址保存位置
   isOpenCoupon: true,  // 优惠卷弹窗
   isOpenTopBar: true   // 下载App弹窗
