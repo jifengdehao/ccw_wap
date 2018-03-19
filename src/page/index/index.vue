@@ -16,7 +16,7 @@
     </div>
     <div class="select-bar" v-if="marketList.length>0" v-show="isShowMarketSelect">
       <div class="mask" @click="isShowMarketSelect = !isShowMarketSelect"></div>
-      <div class="list-wrapper" ref="selectBatList">
+      <div class="list-wrapper" ref="selectBarList">
         <ul class="list">
           <li class="item border-1px" v-for="(item,index) in marketList" @click="selectMarket(item)" :key="index">
             {{item.marketName}}
@@ -138,8 +138,8 @@
       ])
     },
     created() {
-      if (this.market) {
-        this.getSeller()
+      if (!sessionStorage.getItem('isShowSelectMarket') && this.market) {
+        this.getSeller(this.market)
         this.getBanner()
       } else {
         this.getNearMarkets()
@@ -156,7 +156,7 @@
       // 关闭topBar
       closeTopBar() {
         this.$refs.tabContainer.style.top = 4.1 + 'rem'
-        this.$refs.selectBatList.style.top = 2 + 'rem'
+        this.$refs.selectBarList.style.top = 2.2 + 'rem'
       },
       initTabScroll() {
         if (this.$refs.tabList) {
@@ -197,9 +197,9 @@
         }
       },
       // 获取首页分类档口
-      getSeller() {
-        if (this.market) {
-          api.getIndexStore(this.market.marketId).then(res => {
+      getSeller(market) {
+        if (market) {
+          api.getIndexStore(market.marketId).then((res) => {
             if (res.code === 200 && res.data.length > 0) {
               this.menuList = res.data
               this.menuTypeActive = res.data[0].businessType
@@ -219,25 +219,26 @@
             this.market = res.data[0]
             this.marketList = res.data
             this.setMarket(res.data[0])
+            this.getSeller(res.data[0])
             this.getBanner()
             this.getSeller()
           }
         })
       },
       // 选择菜市场
-      selectMarket(item){
+      selectMarket(item) {
         this.setMarket(item)
         this.sellerList = []
         this.menuList = []
         this.market = item
-        this.isShowMarketSelect =false
-        this.getSeller()
+        this.isShowMarketSelect = false
+        this.getSeller(item)
       },
       // 选择分类
-      selectType(type){
+      selectType(type) {
         this.menuTypeActive = type
         this.isShowClassify = false
-        this.menuList.forEach(item => {
+        this.menuList.forEach((item) => {
           if (item.businessType === type) {
             this.sellerList = item.catShops
           }
@@ -251,6 +252,7 @@
           this.isShowMarketSelect = false
         }
       },
+      // vuex 设置新的菜市场
       ...mapMutations({
         setMarket: 'SET_MARKET'
       })

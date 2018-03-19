@@ -46,7 +46,7 @@ module.exports = {
         pathRewrith: {
           '^/cart': '/cart'
         }
-      }
+      },
     },
 
     // Various Dev Server settings

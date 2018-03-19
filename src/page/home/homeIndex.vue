@@ -10,9 +10,9 @@
       <span class="icon-location"></span>
       <span class="name" v-if="locationName">{{locationName}}</span>
     </div>
-    <div class="scroll-wrapper">
-      <loading v-if="!marketList.length>0"></loading>
-      <scroll ref="scroll" :data="marketList" v-else>
+    <loading v-if="!marketList.length>0"></loading>
+    <div class="scroll-wrapper" v-else>
+      <scroll ref="scroll" :data="marketList">
         <div>
           <div v-if="swiperList.length>0">
             <slide :showDot="false">
@@ -29,7 +29,7 @@
               <div class="content">
                 <div class="na">
                   <span class="name">{{item.marketName}}</span>
-                  <span class="range">(该市场配送范围：{{item.deliverRange}})</span>
+                  <span class="range">(该市场配送范围：{{item.deliverRange/100}}km)</span>
                 </div>
                 <div class="ad clearfix">
                   <span class="fl">{{item.address}}</span>
@@ -40,9 +40,9 @@
           </div>
         </div>
       </scroll>
-      <div class="location-tip" v-show="showLocationTip">
-        <i class="close" @click="showLocationTip=!showLocationTip"></i>
-      </div>
+      <div class="location-success-notopen-tip" v-if="isOpenLocation" @click.stop="isShowTip=false"
+           v-show="isShowTip"></div>
+      <div class="location-fail-tip" v-else @click.stop="isShowTip=false" v-show="isShowTip"></div>
     </div>
     <menu-bar></menu-bar>
     <div id="map"></div>
@@ -58,6 +58,7 @@
   import * as api from '@/api/http' // http模块
   import {mapMutations} from 'vuex'
   import * as store from '@/vuex/util'
+  import {AlertModule} from 'vux'
 
   export default {
     name: 'homeIndex',
@@ -67,7 +68,8 @@
         locationName: '', // 位置信息
         swiperList: [], // 轮播图
         marketList: [], // 市场列表
-        showLocationTip: false, // 是否显示提示
+        isOpenLocation: false, // 是否定位成功
+        isShowTip: true,
       }
     },
     mounted() {
@@ -108,11 +110,17 @@
             api.isAddressCover(params).then((res) => {
               if (res.code === 200) {
                 if (!res.data[0]) {
-                  alert('当前位置不在配送范围内')
-                  that.getRecommendMarkets(params.positionInfos[0])
-                  that.getBanner()
-                  that.showLocationTip = true
+                  AlertModule.show({
+                    title: '提示',
+                    content: '当前位置不在配送范围内',
+                    onHide() {
+                      that.getRecommendMarkets(params.positionInfos[0])
+                      that.getBanner()
+                      that.showLocationTip = true
+                    }
+                  })
                 } else {
+                  sessionStorage.setItem('isShowSelectMarket', true)
                   that.$router.push('/index')
                 }
               }
@@ -121,7 +129,23 @@
           AMap.event.addListener(geolocation, 'error', function (data) {  //返回定位失败信息
             console.log(data)
             if (data.info == 'FAILED') {
-              alert('获取你当前位置失败！')
+              that.locationName = '定位失败'
+              let params = {
+                marketId: '-1',
+                positionInfos: [{
+                  longitude: 99999.0,
+                  latitude: 99999.0
+                }]
+              }
+              api.isAddressCover(params).then((res) => {
+                if (res.code === 200) {
+                  if (!res.data[0]) {
+                    that.getRecommendMarkets(params.positionInfos[0])
+                    that.getBanner()
+                    that.showLocationTip = false
+                  }
+                }
+              })
             }
           })
         })
@@ -151,12 +175,15 @@
       // 选择菜市场
       selectMarket(item) {
         this.setMarket(item)
+        sessionStorage.setItem('isShowSelectMarket', false)
         this.$router.push('/index')
       }
     }
   }
 </script>
 <style lang="less" scoped type="text/less">
+  @import "../../common/css/mixin";
+
   #map {
     height: 0;
     display: none;
@@ -192,24 +219,31 @@
       right: 0;
       bottom: 2.5rem;
       overflow: hidden;
-      .location-tip {
+      .location-success-notopen-tip {
         position: fixed;
         bottom: 2.5rem;
         left: 0;
         right: 0;
         z-index: 10;
         height: 2.7rem;
-        background: url("../../common/img/home/home_bg.png") no-repeat center;
+        .bg-image("../../common/img/home/notopen_bg");
         background-size: cover;
-        .close {
-          position: absolute;
-          top: .9rem;
-          right: .6rem;
-          width: .9rem;
-          height: .9rem;
-          background: url("../../common/img/home/home_close_btn.png") no-repeat center;
-          background-size: contain;
-        }
+        background-repeat: no-repeat;
+        background-position: center;
+        overflow: hidden;
+      }
+      .location-fail-tip {
+        position: fixed;
+        bottom: 2.5rem;
+        left: 0;
+        right: 0;
+        z-index: 10;
+        height: 2.7rem;
+        .bg-image("../../common/img/home/home_bg");
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center;
+        overflow: hidden;
       }
       .market-list {
         padding: .6rem;
