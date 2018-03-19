@@ -221,6 +221,7 @@
             this.setMarket(res.data[0])
             this.getSeller(res.data[0])
             this.getBanner()
+            this.getSeller()
           }
         })
       },
@@ -251,7 +252,7 @@
           this.isShowMarketSelect = false
         }
       },
-      // vuex 设置新的菜
+      // vuex 设置新的菜市场
       ...mapMutations({
         setMarket: 'SET_MARKET'
       })
