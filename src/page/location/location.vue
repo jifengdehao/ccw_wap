@@ -51,6 +51,7 @@
   import * as api from '@/api/http.js'
   import {mapMutations, mapGetters} from 'vuex'
   import Scroll from '@/components/scroll/scroll'
+  import {AlertModule} from 'vux'
   import Vue from 'vue'
 
   export default {
@@ -205,11 +206,21 @@
                     })
                     map.addControl(geolocation)
                     AMap.event.addListener(geolocation, 'complete', function (data) { //返回定位信息
-                      console.log(data,'定位的点')
+                      console.log(data, '定位的点')
                     })
                     AMap.event.addListener(geolocation, 'error', function (data) {  //返回定位出错信息
                       if (data.info == 'FAILED') {
-                        alert('获取你当前位置失败！')
+                        // alert('获取你当前位置失败！')
+                        AlertModule.show({
+                          title: '提示',
+                          content: '定位失败',
+                          onShow() {
+                            console.log('Module: I\'m showing')
+                          },
+                          onHide() {
+                            console.log('Module: I\'m hiding now')
+                          }
+                        })
                       }
                     })
                   })
@@ -266,7 +277,17 @@
                 })
                 AMap.event.addListener(geolocation, 'error', function (data) {  //返回定位出错信息
                   if (data.info == 'FAILED') {
-                    alert('获取你当前位置失败！')
+                    // alert('获取你当前位置失败！')
+                    AlertModule.show({
+                      title: '提示',
+                      content: '定位失败',
+                      onShow() {
+                        console.log('Module: I\'m showing')
+                      },
+                      onHide() {
+                        console.log('Module: I\'m hiding now')
+                      }
+                    })
                   }
                 })
               })

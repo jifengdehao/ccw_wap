@@ -65,7 +65,7 @@
     update: {},
     beforeRouteUpdate: {},
     methods: {
-      ...mapMutations(['SET_LOGININFO']),
+      ...mapMutations(['SET_LOGININFO','SET_USER']),
       //  检测当前是否登录
       checkIsLogin() {
         if (this.$store.state.loginInfo != null) {
@@ -111,6 +111,7 @@
         http.userLogin(this.loginParams).then(response => {
           if (response.code == 200) {
             let loginInfo = JSON.stringify(response.data)
+            this.SET_USER(loginInfo)
             this.SET_LOGININFO(loginInfo)
             sessionStorage.setItem('userInfo', JSON.stringify(loginInfo))
             this.$router.push('/home')

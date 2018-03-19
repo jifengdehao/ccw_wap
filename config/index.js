@@ -46,15 +46,11 @@ module.exports = {
         pathRewrith: {
           '^/cart': '/cart'
         }
-<<<<<<< HEAD
-      }
-=======
       },
->>>>>>> 2844842e00b5c233a46b7c4c5bd148ca714ef584
     },
 
     // Various Dev Server settings
-    host: '0.0.0.0', // can be overwritten by process.env.HOST
+    host: '127.0.0.1', // can be overwritten by process.env.HOST
     port: 8055, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
     autoOpenBrowser: true,
     errorOverlay: true,

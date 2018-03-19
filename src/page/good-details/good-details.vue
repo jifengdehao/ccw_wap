@@ -184,10 +184,14 @@
             this.product = res.data
             this.swiperImg = res.data.picUrl
             this.introImg = res.data.introducePicUrl
-            this.spec = res.data.items
-            this.attr = res.data.attrs
-            this.currentSpec = res.data.items[0]
-            this.currentAttr = res.data.attrs[0]
+            if (res.data.items.length > 0) {
+              this.spec = res.data.items
+              this.currentSpec = res.data.items[0]
+            }
+            if (res.data.attrs.length > 0) {
+              this.attr = res.data.attrs
+              this.currentAttr = res.data.attrs[0]
+            }
             this.getProductShopCartTotal(res.data.shopId)
           }
         })

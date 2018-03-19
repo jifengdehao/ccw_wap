@@ -35,14 +35,9 @@ export default {
   // 保存登录之后的个人信息
   [types.SET_USER](state, user) {
     setStore('userInfo', JSON.stringify(user))
-    state.market = user
+    state.user = user
   },
-  // 保存购物车数据
-  [types.SET_SHOP_CART](state, shopCart) {
-    setStore('shopCart', JSON.stringify(shopCart))
-    state.shopCart = shopCart
-  },
-  // 选中或者修改的地址
+  // 保存新增地址
   [types.SET_ADDMODRESS](state, addmodress) {
     state.addmodress = addmodress
   },
