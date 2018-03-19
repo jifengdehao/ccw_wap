@@ -32,9 +32,14 @@ export default {
       contMaskShow:  false
     }
   },
-  created() { },
-  // mounted: {},
+  created() { 
+
+  },
+  mounted: {
+
+  },
   methods: {
+
   }
 }
 </script>
