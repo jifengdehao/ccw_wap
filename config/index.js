@@ -46,11 +46,7 @@ module.exports = {
         pathRewrith: {
           '^/cart': '/cart'
         }
-<<<<<<< HEAD
       }
-=======
-      },
->>>>>>> 2844842e00b5c233a46b7c4c5bd148ca714ef584
     },
 
     // Various Dev Server settings

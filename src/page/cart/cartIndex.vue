@@ -19,10 +19,10 @@
 
     <!-- 购物车列表 -->
     <div class="shopping"> 
-      <div class="shop-group-item">
+      <div class="shop-group-item" v-for="(item,index) in goodList" :key="index">
         <div class="shop-name">
           <input type="checkbox" class="check">
-          <h4> <i></i> <a href="#">祈福水果店</a> </h4>
+          <h4> <i></i> <a href="#">{{item.store_name}}</a> </h4>
           <div class="pic"> <a><img src="../../common/img/cart/jump_gray_ic.png" alt=""></a> </div>
         </div>
         <div>
@@ -33,14 +33,14 @@
               </div>
               <div slot="content" class="demo-content vux-1px-t">
                 <ul>
-                  <li>
+                  <li v-for="(arr,index) in item.items_list">
                     <div class="shop-info">
-                      <div class="shop-info-img"> <img src="../../common/img/cart/select_selected_btn.png" alt=""> </div>
+                      <div class="shop-info-img"> <img :src="arr.items_image" alt=""> </div>
                       <div class="shop-info-text"> 
-                        <h4>越南进口红心火龙果2个装大果单果约新鲜水果大果单果</h4>
-                        <div class="shop-brief">  <span>约2斤/份</span> <span>不切</span>  </div> 
+                        <h4>{{arr.product_name}}</h4>
+                        <div class="shop-brief">  <span>{{arr.attrs_name}}</span></div> 
                         <div class="shop-price">
-                          <div class="shop-pices">￥<b class="price">100.00</b> </div>
+                          <div class="shop-pices">￥<b class="price">{{arr.current_price}}</b> </div>
                           <div class="shop-arithmetic">
                             <a href="javascript:void(0);" class="minus"><img src="../../common/img/cart/reduce_ic.png" alt="" @click="addProduce('reduce')"></a> <span class="num">{{ count }}</span> <a href="javascript:void(0);" class="plus" @click="addProduce('add')"><img src="../../common/img/cart/plus_ic.png" alt=""></a>
                           </div>
@@ -56,9 +56,6 @@
         </div>
       </div> 
     </div>
-    
-
-    
     <div class="payment-bar">
       <div class="price-free">满 <span>60</span> 元即免配送费</div>
       <div class="bar-price">
@@ -91,9 +88,9 @@
       </div>
     </div>
   </div>
-
 </template>
 <script>
+import * as http from '@/api/http'
 import menuBar from '@/components/footer/menuBar'
 import Alert from '@/components/alert/open_alert'
 import { GroupTitle, Swipeout, SwipeoutItem, SwipeoutButton, XButton, CheckIcon } from 'vux'
@@ -104,6 +101,7 @@ export default {
   props: {},
   data() {
     return {
+      goodList:[],//购物车列表数据
       showCartContent: true, // 显示购物车内容
       showCartBlank: false, // 显示购物车空白页
       showLoad: false, // 购物车加载失败
@@ -116,23 +114,36 @@ export default {
       this.$router.push('settlementPage')
     },
     onButtonClick (type) {
-    alert('on button click ' + type)
+       alert('on button click ' + type)
     },
     handleEvents (type) {
-      console.log('event: ', type)
+      // console.log('event: ', type)
     },
     // 购物车数量增加/ 减少
     addProduce(type) {
       if (type === 'add') {
         // this.count++
         const login = JSON.parse(JSON.parse(window.sessionStorage.getItem('userInfo')))
-        console.log(this.$store.state.market)
+        // console.log(this.$store.state.market)
       }
-    }
+    },
+    //  获取用户购物车商品列表
+    getCarGoodsList(){
+      let userid = this.$store.state.loginInfo.cust_id;
+      let marketId = this.$store.state.market.marketId; 
+      http.getCarGoodsList(userid,marketId).then(response=>{
+        if(true){
+          this.goodList = response.data;
+        }
+      })
+    },
   },
   filter: {},
   computed: {},
-  watch: {}
+  watch: {},
+  mounted(){
+    this.getCarGoodsList();
+  }
 }
 </script>
 <style lang="less" scoped>

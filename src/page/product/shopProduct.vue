@@ -170,12 +170,10 @@ export default {
     },
     // 获取购物车内总件数，满多少减免运费和总金额
     getCartAmountAndNum() {
-      api
-        .getCartAmountAndNum(
+      api.getCartAmountAndNum(
           this.$store.state.loginInfo.cust_id,
           JSON.parse(window.sessionStorage.market).marketId
-        )
-        .then(res => {
+        ).then(res => {
           this.cartdata = res.data
         })
     },

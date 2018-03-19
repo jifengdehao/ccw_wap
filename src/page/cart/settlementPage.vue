@@ -93,7 +93,6 @@ import paymentMethod from '@/page/cart/bottom_alert/payment_method'
 import outProduct from '@/page/cart/bottom_alert/out_product'
 import alertDown from '@/page/cart/bottom_alert/alert_down'
 import paymentFail from '@/page/cart/bottom_alert/payment_fail'
-import * as http from '@/api/http'
 import {mapState} from 'vuex'
 export default {
   components: { topBar, paymentMethod, outProduct, alertDown, paymentFail },
@@ -113,18 +112,7 @@ export default {
 	 onOutProduct() {},
 	//  选择配送时间
     choiceSendTime(){
-		 	this.getShopStoreNum();
-	 },
-	//  获取用户购物车数量
-	 getShopStoreNum(){
-    let userid = JSON.parse(this.$store.state.loginInfo).cust_id; 
-    let marketId = this.$store.state.market.marketId; 
-    // console.log(this.$store.state.market);
-
-    // return
-		// http.getShopStoreNum(userid,marketId).then(response=>{
-		// 	console.log(response);
-		// })
+		 	this.getCarGoodsList();
 	 },
     onSeeProduct() { // 跳转我购买商品页面
       this.$router.push('cartMyProduct')
