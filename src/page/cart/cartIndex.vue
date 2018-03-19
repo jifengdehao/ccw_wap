@@ -95,6 +95,7 @@ import menuBar from '@/components/footer/menuBar'
 import Alert from '@/components/alert/open_alert'
 import { GroupTitle, Swipeout, SwipeoutItem, SwipeoutButton, XButton, CheckIcon } from 'vux'
 import topBar from '@/components/header/topBar'
+import { parse } from 'querystring';
 export default {
   name: 'cartIndex',
   components: { menuBar, Alert, GroupTitle, Swipeout, SwipeoutItem, SwipeoutButton, XButton, CheckIcon, topBar },
@@ -128,11 +129,14 @@ export default {
       }
     },
     //  获取用户购物车商品列表
-    getCarGoodsList(){
-      let userid = this.$store.state.loginInfo.cust_id;
+    getShopCartListData(){
+      console.log(this.$store.state.market)
+      return
+      let userid = JSON.parse(this.$store.state.loginInfo).cust_id;
       let marketId = this.$store.state.market.marketId; 
-      http.getCarGoodsList(userid,marketId).then(response=>{
+      http.getShopCartListData(userid,marketId).then(response=>{
         if(true){
+          console.log(response);
           this.goodList = response.data;
         }
       })
@@ -142,7 +146,7 @@ export default {
   computed: {},
   watch: {},
   mounted(){
-    this.getCarGoodsList();
+    this.getShopCartListData();
   }
 }
 </script>

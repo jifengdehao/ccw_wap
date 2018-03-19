@@ -199,7 +199,7 @@
       // 获取首页分类档口
       getSeller() {
         if (this.market) {
-          api.getIndexStore(this.market.marketId).then((res) => {
+          api.getIndexStore(this.market.marketId).then(res => {
             if (res.code === 200 && res.data.length > 0) {
               this.menuList = res.data
               this.menuTypeActive = res.data[0].businessType
@@ -225,7 +225,7 @@
         })
       },
       // 选择菜市场
-      selectMarket(item) {
+      selectMarket(item){
         this.setMarket(item)
         this.sellerList = []
         this.menuList = []
@@ -234,10 +234,10 @@
         this.getSeller()
       },
       // 选择分类
-      selectType(type) {
+      selectType(type){
         this.menuTypeActive = type
         this.isShowClassify = false
-        this.menuList.forEach((item) => {
+        this.menuList.forEach(item => {
           if (item.businessType === type) {
             this.sellerList = item.catShops
           }
