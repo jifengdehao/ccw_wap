@@ -130,10 +130,11 @@ export default {
     },
     //  获取用户购物车商品列表
     getShopCartListData(){
-      console.log(this.$store.state.market)
-      let userid = JSON.parse(this.$store.state.loginInfo).cust_id;
-      let marketId = this.$store.state.market.marketId; 
-      http.getShopCartListData(userid,marketId).then(response=>{
+      let userid = this.$store.state.loginInfo.cust_id;
+      // let marketId = this.$store.state.market.marketId; 
+      let marketId = JSON.parse(window.sessionStorage.getItem('market')).marketId
+
+      http.getShopCartListData(marketId,userid).then(response=>{
         if(true){
           console.log(response);
           this.goodList = response.data;
