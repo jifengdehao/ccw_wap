@@ -120,7 +120,7 @@
                     }
                   })
                 } else {
-                  sessionStorage.setItem('isShowSelectMarket', true)
+                  sessionStorage.setItem('isShowSelectMarket', '1')
                   that.$router.push('/index')
                 }
               }
@@ -175,7 +175,7 @@
       // 选择菜市场
       selectMarket(item) {
         this.setMarket(item)
-        sessionStorage.setItem('isShowSelectMarket', false)
+        sessionStorage.setItem('isShowSelectMarket', '0')
         this.$router.push('/index')
       }
     }

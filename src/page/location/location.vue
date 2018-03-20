@@ -82,7 +82,7 @@
         if (this.addressId && item.isDisabled) {
           // 修改地址
           let params = {
-            custId: JSON.parse(this.user).cust_id,
+            custId: this.user.cust_id,
             latitude: item.location.lat,
             longitude: item.location.lng,
             buildingName: item.name,

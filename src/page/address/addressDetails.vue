@@ -89,7 +89,7 @@
       postCustomAddress() {
         if (this.addmodress) {
           let params = {
-            custId: JSON.parse(this.user).cust_id,
+            custId: this.user.cust_id,
           }
           this.form = Object.assign(this.form, params)
           api.postCustomAddress(this.form).then((res) => {

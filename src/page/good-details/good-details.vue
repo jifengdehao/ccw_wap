@@ -146,7 +146,7 @@
         if (this.product.shopId) {
           let params = {
             marketId: this.market.marketId,
-            userId: JSON.parse(this.user).cust_id,
+            userId: this.user.cust_id,
             shopId: this.product.shopId,
             skuid: this.currentSpec.itemId,
             attrId: this.currentAttr.attrId
@@ -214,7 +214,7 @@
           let params = {
             shopId: shopId
           }
-          api.getProductShopCartTotal(JSON.parse(this.user).cust_id, this.market.marketId, params).then((res) => {
+          api.getProductShopCartTotal(this.user.cust_id, this.market.marketId, params).then((res) => {
             if (res.code === 200) {
               this.badge = res.data
             }

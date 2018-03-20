@@ -12,12 +12,13 @@
         <div class="main-box" ref="mainBox">
           <div class="write-box telphone">
             <i></i>
-            <input type="number" placeholder="请输入您的手机号码" ref="telphone" v-model.trim="mobileNumber" maxlength="11">
+            <input type="number" placeholder="请输入您的手机号码" ref="telphone" v-model.trim="loginParams.mobileno"
+                   maxlength="11">
           </div>
           <div class="write-box verification">
             <i></i>
             <input type="text" placeholder="验证码" ref="verification" v-model.trim="loginParams.code">
-            <button :class="{'active':isActive}" @click="isTelPhone">{{words}}</button>
+            <button :class="{'active':isActive}" @click="isTelPhone" :disabled="isActive">{{words}}</button>
           </div>
         </div>
         <div class="operate" @click="userLogin">
@@ -27,56 +28,40 @@
     </login-slot>
   </div>
 </template>
-<script>
+<script type="text/ecmascript-6">
+  import {isWebchat} from '@/until/getApp.js'
   import {mapMutations} from 'vuex'
-  import {Toast, Scroller} from 'vux'
+  import {Toast} from 'vux'
   import * as http from '@/api/http'
   import loginSlot from './loginSlot'
   import {setTimeout, clearInterval} from 'timers'
-  import topBarVue from '../../components/header/topBar.vue'
 
   export default {
     name: 'LoginIndex',
-    components: {loginSlot, Toast, Scroller},
-    props: {},
+    components: {loginSlot, Toast},
     data() {
       return {
-        mobileNumber: '', //  手机号
         words: '获取验证码', //  验证码文字
         timer: null, // 定时器句柄
         telRegExp: /^[1][3,4,5,7,8][0-9]{9}$/, //  手机号正则
         sentParams: {
-          mobileno: '',
-          type: 2
+          mobileno: '', // 验证码手机
+          type: 2        // 类型
         }, //  发送验证码相关参数
         loginParams: {
-          code: '',
-          mobileno: ''
+          code: '',  // 验证码
+          mobileno: '' // 手机号
         },
         isActive: false //  是否发送验证码
       }
     },
-    created() {
-      this.checkIsLogin()
-    },
-    mounted() {
-    },
-    activited: {},
-    update: {},
-    beforeRouteUpdate: {},
     methods: {
-      ...mapMutations(['SET_LOGININFO','SET_USER']),
-      //  检测当前是否登录
-      checkIsLogin() {
-        if (this.$store.state.loginInfo != null) {
-          this.$router.back()
-        }
-      },
+      // vuex 保存用户登录信息
+      ...mapMutations(['SET_USER']),
       //  判断是否是合法手机号
       isTelPhone() {
-        if (this.telRegExp.test(this.mobileNumber)) {
+        if (this.telRegExp.test(this.loginParams.mobileno)) {
           this.$vux.toast.text('正在发送验证码', 'middle') //  toast弹框
-          sessionStorage.setItem('mobileNumber', this.mobileNumber)
           this.runClock()
           this.sendCode()
         } else {
@@ -85,7 +70,7 @@
       },
       //  定时器是否开启
       runClock() {
-        let times = 5
+        let times = 60
         this.isActive = true
         this.timer = setInterval(() => {
           this.words = `${times--}s`
@@ -98,30 +83,25 @@
       },
       //  发送验证码
       sendCode() {
-        if (this.telRegExp.test(this.mobileNumber)) {
-          this.sentParams.mobileno = this.mobileNumber
-          http.sentCode(this.sentParams).then(data => {
-            console.log(data)
+        if (this.telRegExp.test(this.loginParams.mobileno)) {
+          this.sentParams.mobileno = this.loginParams.mobileno
+          http.sentCode(this.sentParams).then(res => {
+            if (res.code === 200) {
+              console.log(res.data)
+            }
           })
         }
       },
       //  登录
       userLogin() {
-        this.loginParams.mobileno = this.mobileNumber
-        http.userLogin(this.loginParams).then(response => {
-          if (response.code == 200) {
-            let loginInfo = JSON.stringify(response.data)
-            this.SET_USER(loginInfo)
-            this.SET_LOGININFO(loginInfo)
-            sessionStorage.setItem('userInfo', JSON.stringify(loginInfo))
+        http.userLogin(this.loginParams).then(res => {
+          if (res.code == 200) {
+            this.SET_USER(res.data)
             this.$router.push('/home')
           }
         })
       }
-    },
-    filter: {},
-    computed: {},
-    watch: {}
+    }
   }
 </script>
 <style lang="less" scoped type="text/less">

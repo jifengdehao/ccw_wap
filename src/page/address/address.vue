@@ -86,8 +86,7 @@
       },
       // 删除收货地址
       onButtonClick(item) {
-        let userInfo = JSON.parse(this.user)
-        api.delCustomAddress(userInfo.cust_id, item.addrId).then((res) => {
+        api.delCustomAddress(this.user.cust_id, item.addrId).then((res) => {
           if (res.code === 200 && res.data) {
             this.getCustomAddress()
           }
@@ -95,8 +94,7 @@
       },
       // 获取用户所有的收货地址
       getCustomAddress() {
-        let userInfo = JSON.parse(this.user)
-        api.getCustomAddress(userInfo.cust_id).then((res) => {
+        api.getCustomAddress(this.user.cust_id).then((res) => {
           if (res.code === 200) {
             this.customAddress = res.data
           }

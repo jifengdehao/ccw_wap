@@ -97,7 +97,7 @@
     methods: {
       // 获取优惠卷
       getCouponData() {
-        api.getCouponListData(JSON.parse(this.user).cust_id, this.market.marketId).then((res) => {
+        api.getCouponListData(this.user.cust_id, this.market.marketId).then((res) => {
           if (res.code === 200 && res.data.length > 0) {
             this.couponList = res.data
           }
@@ -105,7 +105,7 @@
       },
       // 领取优惠卷
       linQuCoupon(item) {
-        api.linQuCoupon(JSON.parse(this.user).cust_id, item.couponId).then((res) => {
+        api.linQuCoupon(this.user.cust_id, item.couponId).then((res) => {
           if (res.code === 200) {
             if (res.data === 1) {
               this.getCouponData()
