@@ -6,7 +6,7 @@
 */
 <template>
   <div class="index">
-    <top-bar @closeTopBar="closeTopBar"></top-bar>
+    <top-bar></top-bar>
     <div class="header">
       <div class="content">
         <router-link to="/address" tag="i" class="icon-location"></router-link>
@@ -16,7 +16,7 @@
     </div>
     <div class="select-bar" v-if="marketList.length>0" v-show="isShowMarketSelect">
       <div class="mask" @click="isShowMarketSelect = !isShowMarketSelect"></div>
-      <div class="list-wrapper" ref="selectBarList">
+      <div class="list-wrapper" :class="{toTop:isOpenTopBar === false}">
         <ul class="list">
           <li class="item border-1px" v-for="(item,index) in marketList" @click="selectMarket(item)" :key="index">
             {{item.marketName}}
@@ -36,7 +36,7 @@
         <i class="icon-menu"></i>
       </div>
     </div>
-    <div class="classify" v-show="isShowClassify" v-if="menuList.length>0">
+    <div class="classify" v-show="isShowClassify" v-if="menuList.length>0" :class="{toTop:isOpenTopBar === false}">
       <div class="content">
         <div class="title border-1px">全部品类</div>
         <i class="icon-close" @click="isShowClassify=!isShowClassify"></i>
@@ -48,7 +48,7 @@
         </ul>
       </div>
     </div>
-    <div class="tab-container" ref="tabContainer">
+    <div class="tab-container" :class="{toTop:isOpenTopBar === false}">
       <loading v-if="!sellerList.length>0"></loading>
       <scroll ref="scroll" :data="sellerList" v-else>
         <div>
@@ -134,7 +134,8 @@
     computed: {
       ...mapGetters([
         'location',
-        'market'
+        'market',
+        'isOpenTopBar'
       ])
     },
     created() {
@@ -153,11 +154,6 @@
       }
     },
     methods: {
-      // 关闭topBar
-      closeTopBar() {
-        this.$refs.tabContainer.style.top = 4.1 + 'rem'
-        this.$refs.selectBarList.style.top = 2.2 + 'rem'
-      },
       initTabScroll() {
         if (this.$refs.tabList) {
           this.tabGroup = this.$refs.tabList
@@ -286,9 +282,12 @@
       .list-wrapper {
         position: absolute;
         z-index: 1000;
-        top: 4.2rem;
+        top: 4.4rem;
         left: 50%;
         transform: translate(-50%);
+        &.toTop{
+          top: 2.2rem;
+        }
         &:before {
           display: block;
           position: absolute;
@@ -411,10 +410,13 @@
       left: 0;
       right: 0;
       bottom: 0;
-      top: 2.2rem;
+      top: 4.1rem;
       z-index: 999;
       overflow: hidden;
       background: rgba(0, 0, 0, 0.35);
+      &.toTop {
+        top: 1.9rem;
+      }
       .content {
         z-index: 1000;
         background-color: #FFFFFF;
@@ -470,6 +472,9 @@
       overflow: hidden;
       .slider-wrapper {
         height: 8rem;
+      }
+      &.toTop {
+        top: 4.1rem;
       }
     }
     .seller-list {
