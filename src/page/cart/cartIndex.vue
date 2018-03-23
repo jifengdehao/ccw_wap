@@ -79,7 +79,7 @@
     	<!-- 购物车商品出错提示 -->
     	<Alert v-if="false"></Alert>
     	<!-- 购物车空白页 -->
-		<div class="cartIndex-blank" v-if="showCartBlank">
+		<div class="cartIndex-blank" v-if="!showCartContent">
 			<div class="blank-pic">
 			<img src="../../common/img/cart/no_commodity_ic.png" alt="">
 			<p>还没有添加任何商品</p>
@@ -102,8 +102,9 @@ import Alert from '@/components/alert/open_alert';
 import { GroupTitle, Swipeout, SwipeoutItem, SwipeoutButton,ConfirmPlugin, XButton, CheckIcon,Scroller,LoadingPlugin } from 'vux';
 import topBar from '@/components/header/topBar';
 import { parse } from 'querystring';
-import { SSL_OP_SSLREF2_REUSE_CERT_TYPE_BUG } from 'constants';
-import { setTimeout } from 'timers';
+// import { SSL_OP_SSLREF2_REUSE_CERT_TYPE_BUG } from 'constants';
+// import { setTimeout } from 'timers';
+// import { constants } from 'http2';
 Vue.use(ConfirmPlugin);
 Vue.use(LoadingPlugin);
 
@@ -115,7 +116,6 @@ export default {
 		return {
 			goodList:[],//购物车列表数据
 			showCartContent: true, // 显示购物车内容
-			showCartBlank: false,  // 显示购物车空白页
 			showLoad: false,       // 购物车加载失败
 			chooseGoodsList:[],		 //已选择好的商品数组数据
 			amountTotal:0,				 //购物车总金额
@@ -164,7 +164,7 @@ export default {
 		},
 		//结算接口调用
 		payShopCartGoods(){
-			let userid = this.$store.state.loginInfo.cust_id;
+			let userid = this.$store.state.user.cust_id;
 			let marketId = JSON.parse(window.sessionStorage.getItem('market')).marketId;
 			let attrs=[];
 			let arr = this.chooseGoodsList;
@@ -220,7 +220,7 @@ export default {
 			"unit":item.unit,
 			"shop_id":shop_id
 			}
-			let userid = this.$store.state.loginInfo.cust_id;
+			let userid = this.$store.state.user.cust_id;
 			let marketId = JSON.parse(window.sessionStorage.getItem('market')).marketId
 			let obj = {
 			"attrId": item.attrId,
@@ -260,17 +260,15 @@ export default {
 		},
 		// 获取用户购物车商品列表
 		getShopCartListData(){
-			let userid = this.$store.state.loginInfo.cust_id;
+			let userid = this.$store.state.user.cust_id;
 			let marketId = JSON.parse(window.sessionStorage.getItem('market')).marketId
 			http.getShopCartListData(marketId,userid).then(response=>{
 				if(response.data.length>0){
 					this.goodList = response.data;
 					this.showCartContent=true;
-					this.showCartBlank=false;
 				}else{
 					this.goodList = [];
 					this.showCartContent=false;
-					this.showCartBlank=true;
 				}
 			})
 		},
@@ -293,7 +291,7 @@ export default {
 		},
 		// 更新购物车
 		updateShopCart(val){
-			let userid = this.$store.state.loginInfo.cust_id;
+			let userid = this.$store.state.user.cust_id;
 			let marketId = JSON.parse(window.sessionStorage.getItem('market')).marketId;
 			let obj={
 			"userId":userid,
