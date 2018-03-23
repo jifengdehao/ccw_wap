@@ -5,19 +5,11 @@
  * FunctionPoint:  mutations
  */
 
-import {setStore, getStore, removeStore} from './util'
+import {setStore} from './util'
 import * as types from './mutation-types'
 
 export default {
-  //  设置登录信息
-  SET_LOGININFO(state, loginInfo) {
-    state.loginInfo = loginInfo
-  },
-  //  设置登录手机号码
-  SET_LOGINPHONE(state, phone) {
-    state.loginParams.mobileNumber = phone
-  },
-   // 修改loding状态
+  // 修改loding状态
   updateLoadingStatus(state, status) {
     state.isLoading.status = status.status;
     state.isLoading.text = status.text;
@@ -34,7 +26,7 @@ export default {
   },
   // 保存登录之后的个人信息
   [types.SET_USER](state, user) {
-    setStore('userInfo', JSON.stringify(user))
+    setStore('user', JSON.stringify(user))
     state.user = user
   },
   // 保存新增地址

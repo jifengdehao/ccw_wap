@@ -48,16 +48,14 @@ const paymentSuccess = anyscComponent('page/cart/payment_success') // 支付成�
 const cartMyProduct = anyscComponent('page/cart/cart_my_product') // 我的购买商品页面
 const mineIndex = anyscComponent('page/mine/mineIndex') //  个人中心模块主页
 const myCoupon = anyscComponent('page/mine/myCoupon') //  我的优惠券
-const Test = anyscComponent('page/test/test') //  测试
-
-
+const Author = anyscComponent('page/author/author') //  微信授权中间件
 
 
 export default [
   {
-    path: '/test',
-    name: '测试',
-    component: Test
+    path: '/author',
+    name: '微信授权中间件',
+    component: Author
   },
   {
     path: '',
@@ -165,13 +163,11 @@ export default [
   {
     path: '/login',
     name: '登录',
-    meta: true,
     component: loginIndex
   },
   {
     path: '/webchat',
     name: '升级Vip',
-    meta: true,
     component: webChat
   },
   {
@@ -179,15 +175,4 @@ export default [
     name: '新增地址',
     component: addressDetails
   }
-
-
-
-
-
-
-
-
-
-
-  
 ]

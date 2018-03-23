@@ -24,7 +24,7 @@ export default {
     return state.market || JSON.parse(getStore('market'))
   },
   user: state => {
-    return state.user || JSON.parse(getStore('userInfo'))
+    return state.user || JSON.parse(getStore('user'))
   },
   addmodress: state => state.addmodress,
   isOpenCoupon: state => state.isOpenCoupon,

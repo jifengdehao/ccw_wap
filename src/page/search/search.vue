@@ -246,7 +246,7 @@
         this.isShowDialog = false
         let params = {
           marketId: this.market.marketId,
-          userId: JSON.parse(this.user).cust_id,
+          userId: this.user.cust_id,
           shopId: this.shopId,
           skuid: this.currentSpec.itemId,
           attrId: this.currentAttr ? this.currentAttr.attrId : ''
@@ -309,7 +309,7 @@
       addCart(item) {
         let params = {
           marketId: this.market.marketId,
-          userId: JSON.parse(this.user).cust_id,
+          userId: this.user.cust_id,
           shopId: item.shopId,
           skuid: item.items[0].itemId,
           attrId: item.attrs.length > 0 ? item.attrs[0].attrId : ''
@@ -379,7 +379,7 @@
       },
       // 获取购物车数量
       getShopCartTotal() {
-        api.getProductShopCartTotal(JSON.parse(this.user).cust_id, this.market.marketId).then((res) => {
+        api.getProductShopCartTotal(this.user.cust_id, this.market.marketId).then((res) => {
           if (res.code === 200) {
             this.badge = res.data
           }

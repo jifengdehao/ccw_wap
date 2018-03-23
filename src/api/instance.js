@@ -29,7 +29,7 @@ const itr = (type, url, params) => {
   if (Object.keys(params).length > 0) {
     url = type === 'get' ? url + '?' + arg : url
   }
-  let userInfo = JSON.parse(sessionStorage.getItem('userInfo'))
+  let userInfo = JSON.parse(sessionStorage.getItem('user'))
   let token = ''
   if (userInfo) {
     userInfo = typeof userInfo === 'string' ? JSON.parse(userInfo) : userInfo
@@ -58,7 +58,6 @@ const base = (type, url, params) => {
             Vue.$vux.alert.show({
               title: '提示',
               content: response.data.msg,
-              onShow() {},
               onHide() {
                 //  点击确定具体操作
                 if(response.data.msg === '用户未登录'){
@@ -71,7 +70,6 @@ const base = (type, url, params) => {
             Vue.$vux.alert.show({
               title: '提示',
               content: response.data.msg,
-              onShow() {},
               onHide() {
                 console.log('状态码9030')
               }
@@ -81,7 +79,6 @@ const base = (type, url, params) => {
             Vue.$vux.alert.show({
               title: '提示',
               content: '您已在其他设备登录',
-              onShow() {},
               onHide() {
                 console.log('状态码9090')
               }
@@ -91,8 +88,6 @@ const base = (type, url, params) => {
             Vue.$vux.alert.show({
               title: '提示',
               content: response.data.msg,
-              onShow() {
-              },
               onHide() {
                 console.log('response.data.msg')
               }

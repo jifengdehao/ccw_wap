@@ -138,11 +138,11 @@
       ])
     },
     created() {
-      if (!sessionStorage.getItem('isShowSelectMarket') && this.market) {
+      if (sessionStorage.getItem('isShowSelectMarket') === '1') {
+        this.getNearMarkets()
+      } else if (this.market) {
         this.getSeller(this.market)
         this.getBanner()
-      } else {
-        this.getNearMarkets()
       }
     },
     watch: {

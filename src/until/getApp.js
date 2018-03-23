@@ -8,3 +8,12 @@ export function isAndroid() {
   let ua = window.navigator.userAgent
   return ua.match(/Android/i) ? true : false
 }
+
+export function isWebchat() {
+  let ua = window.navigator.userAgent
+  if (ua.match(/MicroMessenger/i) == 'micromessenger') {
+    return true
+  } else {
+    return false
+  }
+}
