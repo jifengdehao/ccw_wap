@@ -1,4 +1,5 @@
 /*
+import { truncate } from 'fs';
  * @Author: ZengFanlu 
  * @Date: 2018-01-10 10:55:10 
  * DeveloperMailbox:   zengfanlu@ccw163.com 
@@ -27,9 +28,9 @@ export default {
   // components: { },
   data () {
     return {
-      contAddImgShow: false,
-      contDeleteShow: false,
-      contMaskShow:  false
+      contAddImgShow: true,
+      contDeleteShow: true,
+      contMaskShow:  true
     }
   },
   created() { 

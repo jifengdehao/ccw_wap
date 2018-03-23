@@ -9,23 +9,23 @@
   	<div>
     	<div class="header">
       	<top-bar></top-bar>
-   	</div>
+   	  </div>
       <ul>
-        	<li v-for="item in 5" :key="item">
-            <div class="productList">
-              	<div class="productLiLeft"><img src="../../common/img/cart/payment_wechat.png" alt=""></div>
-              	<div class="productLiRight">
-						<p class="produtcname">越南进口红心火龙果2个装大果单果约新鲜水果大果单果</p>
-						<p class="productnum">数量:
-							<span class="">2</span>
-							<span>约0.5斤/份</span>
-						</p>
-						<p class="productnum">清河水果专卖店</p>
-						<p class="productprice">¥16.8</p>
-              	</div>
-					<hr style="width:100%;opacity:0.5;"/>
+        <li v-for="(item,index) in goodsList" :key="index">
+          <div class="productList">
+            <div class="productLiLeft"><img :src="item.items_image" alt=""></div>
+            <div class="productLiRight">
+              <p class="produtcname">{{item.product_name}}</p>
+              <p class="productnum">数量:
+                <span class="">{{item.unit}}</span>
+                <span>{{item.attrValue}}</span>
+              </p>
+              <p class="productnum">{{item.store_name}}</p>
+              <p class="productprice">¥{{item.current_price}}</p>
             </div>
-        	</li>
+            <hr style="width:100%;opacity:0.5;"/>
+          </div>
+        </li>
       </ul>
    </div>
 </template>
@@ -35,11 +35,16 @@ export default {
   components: { topBar },
   data () {
     return {
+      goodsList:[]
     }
   },
-  // created: {},
-  // mounted: {},
-  methods: {}
+  created: {},
+  methods: {
+
+  },
+  mounted(){
+    this.goodsList=this.$store.state.arrayList;
+  }
 }
 </script>
 <style lang="less" scoped>

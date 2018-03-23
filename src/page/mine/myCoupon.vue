@@ -142,6 +142,9 @@ export default {
   update: {},
   beforeRouteUpdate: {},
   methods: {
+    //  
+    
+    
     //  获取优惠券
     getCoupon() {
       http

@@ -43,7 +43,7 @@
 export default {
   data () {
     return {
-      showModal: false
+      showModal: true
     }
   },
   created() {

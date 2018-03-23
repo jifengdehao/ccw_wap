@@ -29,11 +29,16 @@ export default {
   components: { topBar },
   data () {
     return {
+      
     }
   },
   // created: {},
-  // mounted: {},
-  methods: {}
+  methods: {
+
+  },
+  mounted(){
+
+  }
 }
 </script>
 <style lang="less" scoped>

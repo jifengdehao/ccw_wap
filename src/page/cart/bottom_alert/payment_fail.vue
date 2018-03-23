@@ -20,7 +20,7 @@
 export default {
   data () {
     return {
-      showPaymentFail: false,
+      showPaymentFail: true,
       buttonName: '返回购物车'
     }
   },
