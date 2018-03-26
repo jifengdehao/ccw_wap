@@ -134,7 +134,7 @@ export default {
     }
   },
   created() {
-    if (typeof this.$store.state.loginInfo === 'object') {
+    if (typeof (this.$store.state.loginInfo) === 'object') {
       this.custId = this.$store.state.loginInfo.cust_id
     } else {
       this.custId = JSON.parse(this.$store.state.loginInfo).cust_id
@@ -196,7 +196,7 @@ export default {
   watch: {}
 }
 </script>
- <style lang="less" scoped>
+<style lang="less" scoped>
 .box {
   padding: 0 12px;
 }

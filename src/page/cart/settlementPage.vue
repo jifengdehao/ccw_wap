@@ -4,7 +4,6 @@
  * DeveloperMailbox:   zengfanlu@ccw163.com 
  * FunctionPoint: 结算页面 
  */
-
  <template>
    <div class="settlementPage">
     <div class="header">
@@ -15,10 +14,33 @@
       <!-- 配送地址start -->
       <div class="group-item-address">
         <p class="no-address" v-if="showNoAddress"><span>设置收货地址</span><a href="#"> &gt; </a></p>
-         <ul>
-           <li class="gray"> <p class="address-name" style="position: relative;"> <input type="radio" checked class="check" name="1"> <span>菜城专送</span></p> <p class="phone"> <span>菜城</span> <span>137 8767 3210</span> <a href="#"> &gt; </a> </p> <p class="position"> 广州市番禺区桥南街南堤东路836号自编A座206 </p> </li>
-           <li style="border-bottom: 0 !important;"> <p class="address-name" style="position: relative;"> <input type="radio" class="check" name="1"> <span>自提</span></p> <p class="phone"> <span>菜城</span> <span>137 8767 3210</span> </p> <p class="position"> 广州市番禺区桥南街南堤东路836号自编A座206 </p> </li>
-         </ul>
+        <ul>
+          <li class="gray"> 
+            <p class="address-name" style="position: relative;"> 
+              <input type="radio" checked class="check" name="1"> 
+              <span>菜城专送</span>
+            </p> 
+            <p class="phone"> 
+              <span>{{market_name}}</span> 
+              <span>{{mobileno}}</span> 
+              <a href="#"> &gt;</a> 
+            </p> 
+            <p class="position"> {{market_addrs}} </p> 
+          </li>
+          <li style="border-bottom: 0 !important;"> 
+            <p class="address-name" style="position: relative;"> 
+              <input type="radio" class="check" name="1"> 
+              <span>自提</span>
+            </p> 
+            <p class="phone"> 
+              <!-- <span>{{Zt_market_info.selfPickAddress}}</span>  -->
+              <span>{{ selfPickNumbero }}</span> 
+              <span>{{ selfPickNumbert }}</span>
+              <span>{{ selfPickNumberr }}</span>
+            </p> 
+            <p class="position"> {{selfPickAddress}} </p> 
+          </li>
+        </ul>
       </div>
       <div class="barCo"></div>
       <!-- 缺货配送 -->
@@ -33,33 +55,41 @@
         </ul>
       </div>
       <!-- 购买商品 -->
-      <div style="border-bottom: 10px solid #F5F5F5;"></div>
-      <div class="group-item-product">
-        <div class="product-name">
-          <i></i> <span>市桥水果店</span>
+      <div v-for="(item,index) in goodsList" :key="index">
+        <!-- <div style="border-bottom: 5px solid #F5F5F5;"></div> -->
+        <div class="group-item-product">
+          <div class="product-name">
+            <i></i> <span>{{item.store_name}}</span>
+          </div>
+          <ul class="item-img" @click="onSeeProduct(item)">
+            <li>
+              <img v-for="(item,index) in item.items_list" :key="index" :src="item.items_image" alt="">
+              <div class="number">共{{ item.items_list.length }}件 <span>&gt;</span></div>
+            </li>
+          </ul>
+          <p class="product-price">商品金额:￥{{item.amount}}</p>
         </div>
-        <ul class="item-img" @click="onSeeProduct">
-          <li>
-            <img src="../../common/img/cart/select_selected_btn.png" alt="">
-            <img src="../../common/img/cart/select_selected_btn.png" alt="">
-            <img src="../../common/img/cart/select_selected_btn.png" alt="">
-            <img src="../../common/img/cart/select_selected_btn.png" alt="">
-            <div class="number">共{{ num }}件 <span>&gt;</span></div>
-          </li>
-        </ul>
-        <p class="product-price"> 商品金额:￥46.5 </p>
+        <div class="bar"></div>
       </div>
-      <div class="bar"></div>
       <!-- 运费 -->
       <div class="fee-deduction">
         <ul>
-          <li> <span>优惠券</span> 
-            <!-- <i class="red">￥2</i> -->
-            <i class="gray" @click="onCoupon" style="font-size: 14px; display: inlne-block;">选择可用优惠券 <a href="#" style="margin-left: 7px;" class="gray">&gt;</a></i>
+          <li @click="onCoupon"> 
+            <span>优惠券</span> 
+            <i class="gray" style="font-size: 14px; display: inlne-block;" v-show="!show_couponNum">
+              选择可用优惠券 <a href="#" style="margin-left: 7px;" class="gray">&gt;</a>
+            </i>
+            <i class="red" style="font-size: 14px; display: inlne-block;" v-show="show_couponNum">
+               {{couponAmount}}<a href="#" style="margin-left: 7px;" class="gray">&gt;</a>
+            </i>
           </li>
-          <li> <span>订单运费</span> <i>￥2</i> </li>
+          <li> 
+            <span>订单运费</span> <i>￥{{delivery_cost}}</i> 
+          </li>
         </ul>
-        <div class="total-amount"> <span>合计：</span> <i class="red">¥480</i> </div>
+        <div class="total-amount"> 
+          <span>合计：</span> <i class="red">¥{{allShopTotalPrice}}</i> 
+        </div>
       </div>
       <div class="bar"></div>
       <!-- 备注信息 -->
@@ -72,22 +102,23 @@
       <div class="payment">
         <div class="payment-amount">
           <span> 付款：</span>
-          <i class="red">¥480</i>
+          <i class="red">¥{{allShopTotalPrice}}</i>
         </div>
         <button @click="openPayment">去支付</button>
       </div>
     </div>
     <!-- 支付弹框 -->
-    <payment-method></payment-method>
+    <payment-method v-show="show_paymentMethod"></payment-method>
     <!-- 缺货发货弹框 -->
-    <out-product></out-product>
+    <out-product v-show="show_outProduct"></out-product>
     <!-- 余额不可支付弹框 -->
-    <alert-down></alert-down>  
+    <alert-down v-show="show_alertDown"></alert-down>  
     <!-- 支付失败 -->
-    <payment-fail></payment-fail>
+    <payment-fail v-show="show_paymentFail"></payment-fail>
    </div>
  </template>
  <script>
+import * as http from '@/api/http';
 import topBar from '@/components/header/topBar'
 import paymentMethod from '@/page/cart/bottom_alert/payment_method'
 import outProduct from '@/page/cart/bottom_alert/out_product'
@@ -98,30 +129,107 @@ export default {
   components: { topBar, paymentMethod, outProduct, alertDown, paymentFail },
   data () {
     return {
-      num: 8,
-      showNoAddress: false
+      cartObj:null,//结算接口后台返回数据对象,用于渲染整个界面
+      market_name:null,
+      mobileno:null,
+      market_addrs:null,
+      selfPickNumbero:null,
+      selfPickNumbert:null,
+      selfPickNumberr:null,
+      selfPickAddress:null,
+      goodsList:[],
+      delivery_cost:0,//配送费
+      allShopTotalPrice:0,//商品总金额
+      couponAmount:0,//已经选择的优惠券金额
+      show_outProduct:false,//缺货提示弹窗
+      show_paymentMethod:false,//支付方式选择弹窗
+      show_paymentFail:false,//支付失败的弹窗
+      show_alertDown:false,//余额不可支付弹窗
     }
   },
   methods: {
-    openPayment() { // 跳转支付成功页面
+    // 跳转支付成功页面
+    openPayment() { 
       this.$router.push('paymentSuccess')
     },
-    onCoupon () { // 跳转我的优惠券页面
-      this.$router.push('cartMyCoupon')
+    // 跳转我的优惠券页面
+    onCoupon () { 
+      this.$store.commit('change_recordNum',this.allShopTotalPrice);
+      this.$router.push('cartMyCoupon');
     },
-	 onOutProduct() {},
-	//  选择配送时间
+    // 点击其它商品
+	  onOutProduct(){
+
+    },
+	  // 选择配送时间
     choiceSendTime(){
-		 	this.getCarGoodsList();
-	 },
-    onSeeProduct() { // 跳转我购买商品页面
+
+    },
+    // 跳转我购买商品页面
+    onSeeProduct(val){
+      let arrs = [];
+      let arr = val.items_list;
+      for(let i=0;i<arr.length;i++){
+          let attrId = arr[i].attrId;
+          let sku = arr[i].sku;
+          let items_image = arr[i].items_image;
+          let product_name = arr[i].product_name;
+          let unit = arr[i].unit;
+          let attrValue = arr[i].attrValue;
+          let current_price = arr[i].current_price;
+          let store_name = val.store_name;
+          let obj={
+            attrId:attrId,sku:sku,items_image:items_image,product_name:product_name,
+            unit:unit,attrValue:attrValue,current_price:current_price,store_name:store_name
+          }
+          arrs.push(obj)
+      }
+      this.$store.commit('getGoodsList',arrs)
       this.$router.push('cartMyProduct')
+    },
+    // 店铺金额数据转码
+    getDataList(){
+      let arr = JSON.parse(this.$store.state.goodsList).Shopping_stroe_info;
+      let arrlist=[];
+      for(let i=0;i<arr.length;i++){
+        let num=0;
+        let arrs = arr[i].items_list;
+        for(let j=0;j<arrs.length;j++){
+          num+=arrs[j].current_price*arrs[j].unit;
+        }
+        let store_name=arr[i].store_name;
+        let status=arr[i].status;
+        let store_id=arr[i].store_id;
+        let items_list=arr[i].items_list;
+        let obj={
+          store_name:store_name,status:status,
+          store_id:store_id,items_list:items_list,amount:num
+        }
+        arrlist.push(obj)
+      }
+      this.goodsList=arrlist
     }
   },
   computed: {
-    showModal() {
-      return this.$store.contPaymentAlertShow
+    show_couponNum:{
+      get:function(){
+        return this.$store.state.couponNum
+      }
     }
+  },
+  mounted(){
+    this.couponAmount = this.$store.state.couponNum;
+    let obj = JSON.parse(this.$store.state.goodsList);
+    this.getDataList();
+    this.market_name=obj.Zt_market_info.market_name;
+    this.mobileno=obj.Zt_market_info.mobileno;
+    this.market_addrs=obj.Zt_market_info.market_addrs;
+    this.selfPickNumbero=obj.Zt_market_info.selfPickNumber.substr(0,3);
+    this.selfPickNumbert=obj.Zt_market_info.selfPickNumber.substr(3,4);
+    this.selfPickNumberr=obj.Zt_market_info.selfPickNumber.substr(7,4);
+    this.selfPickAddress=obj.Zt_market_info.selfPickAddress;
+    this.delivery_cost = obj.delivery_cost;//商品配送费
+    this.allShopTotalPrice = obj.allShopTotalPrice-this.$store.state.couponNum;//商品总价
   }
 }
  </script>

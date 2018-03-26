@@ -18,7 +18,7 @@
 export default {
   data () {
     return {
-      showOutProduct: false
+      showOutProduct: true
     }
   },
   // created: {},

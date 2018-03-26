@@ -41,7 +41,7 @@
 export default {
   data () {
     return {
-      dialog: false
+      dialog: true
     }
   }
   // created: {},

@@ -15,5 +15,12 @@ export default {
   shopCart: null,  // 购物车
   addmodress: null,  // 新增地址保存位置
   isOpenCoupon: true,  // 优惠卷弹窗
-  isOpenTopBar: true  // 下载App弹窗
+  isOpenTopBar: true,   // 下载App弹窗
+  isShowSelectMarket: true,
+
+  goodsList:null,//购物车结算后台返回数据
+  arrayList:null,//购物车后台返回当前店铺已选择的数据
+  recordNum:'',  //订单金额用于查看用户可用优惠券
+  couponNum:0,   //选择的优惠券的金额
+
 }

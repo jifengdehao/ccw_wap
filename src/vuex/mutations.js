@@ -40,5 +40,25 @@ export default {
   // 下载App弹窗
   [types.SET_ISOPENTOPBAR](state, isOpenTopBar) {
     state.isOpenTopBar = isOpenTopBar
-  }
+  },
+
+  saveGoodsList(state,arr){
+    state.goodsList=arr;
+  },
+  getGoodsList(state,arr){
+    state.arrayList=arr;
+  },
+  change_recordNum(state,num){
+    state.recordNum=num;
+  },
+  change_couponNum(state,num){
+    state.couponNum=num;
+  },
+  
+  
+  
+
+
+
+
 }

@@ -358,3 +358,44 @@ export const addShopCart = (params) => {
 export const getProductShopCartTotal = (userId, marketId, params) => {
   return http.g(`/cart/cartNum/${userId}/${marketId}`, params)
 }
+/**
+ * 2018/3/20
+ * author: huyong
+ * email: huyong@ccw163.com
+ * 功能模块: 批量删除购物车多个商品
+ */
+export const deleteShopCartGoods = params => {
+  return http.p(`/cart/delMany`, params)
+}
+/**
+ * 2018/3/20
+ * author: huyong
+ * email: huyong@ccw163.com
+ * 功能模块: 更新购物车
+ */
+export const updateShopCart = params => {
+  return http.u(`/cart/renew`, params)
+}
+/**
+ * 2018/3/21
+ * author: huyong
+ * email: huyong@ccw163.com
+ * 功能模块: 购物车结算
+ */
+export const payShopCartGoods = params => {
+  return http.p(`/cart/confirmOrder`, params)
+}
+/**
+ * 2018/3/22
+ * author: huyong
+ * email: huyong@ccw163.com
+ * 功能模块: 查看用户个人可用优惠券
+ */
+export const getUserCanbeuseCouponList = (userId,marketId,params) => {
+  return http.g(`/personCenter/coupon/${userId}/${marketId}/usable`,params)
+}
+//     
+
+
+
+
