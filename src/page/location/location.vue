@@ -19,9 +19,8 @@
       <scroll :data="mapList">
         <div>
           <ul class="list">
-            <li class="item border-1px" v-for="(item,index) in mapList" :key="index"
-                :class="{disabled:item.isDisabled === false}"
-                @click="getAddressLocation(item)">
+            <li class="item border-1px" v-for="(item,index) in mapList" :key="index" @click="getAddressLocation(item)"
+                :class="{disabled:item.isDisabled === false}">
               <div class="name">{{item.name}}<span class="current" v-if="index === 0">当前</span></div>
               <div class="dec">{{item.address}}</div>
             </li>
@@ -214,9 +213,6 @@
                         AlertModule.show({
                           title: '提示',
                           content: '定位失败',
-                          onShow() {
-                            console.log('Module: I\'m showing')
-                          },
                           onHide() {
                             console.log('Module: I\'m hiding now')
                           }
@@ -281,9 +277,6 @@
                     AlertModule.show({
                       title: '提示',
                       content: '定位失败',
-                      onShow() {
-                        console.log('Module: I\'m showing')
-                      },
                       onHide() {
                         console.log('Module: I\'m hiding now')
                       }

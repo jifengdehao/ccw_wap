@@ -5,11 +5,11 @@
  * FunctionPoint:  路由配置导出
  */
 import Vue from 'vue'
-import Router from 'vue-router'
+import VueRouter from 'vue-router'
 import Route from './router'
 
-Vue.use(Router)
+Vue.use(VueRouter)
 
-export default new Router({
+export default new VueRouter({
   routes: Route
 })

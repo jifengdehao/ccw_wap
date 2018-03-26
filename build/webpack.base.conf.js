@@ -72,7 +72,8 @@ const webpackConfig = {
     'AMap': 'AMap',
     'AMapUI': 'AMapUI',
     'vue': 'Vue',
-    'axios': 'axios'
+    'axios': 'axios',
+    'vue-router': 'VueRouter'
   },
   node: {
     // prevent webpack from injecting useless setImmediate polyfill because Vue
